@@ -1,5 +1,6 @@
 from django import forms
 from .models import User
+from django.contrib.auth.hashers import check_password, make_password
 
 class RegisterForm(forms.ModelForm):
     # 회원가입 폼
@@ -20,11 +21,12 @@ class RegisterForm(forms.ModelForm):
 
 class LoginForm(forms.Form):
     # 로그인 폼
-    password = forms.CharField(label='password',widget=forms.PasswordInput)
     email = forms.CharField(label='email',max_length=255)     
+    password = forms.CharField(label='password',widget=forms.PasswordInput)
+
 
     def clean(self):
-        data = super.clean()
+        data = self.cleaned_data
         email = data.get('email')
         password = data.get('password')
         if password and email:
