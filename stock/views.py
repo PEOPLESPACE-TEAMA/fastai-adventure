@@ -11,11 +11,12 @@ def signup(request):
             user = user_form.save(commit = False)
             user.set_password(user_form.cleaned_data['password'])
             user.save()
+            login_form = LoginForm()
             # 회원가입이 성공적으로 되면 로그인 페이지로 이동
-            return render(request, 'stock/login.html')
+            return render(request, 'stock/login.html',{'form': login_form})
     else:
         user_form = RegisterForm()
-    return render(request, 'stock/signup.html')
+    return render(request, 'stock/signup.html',{'form': user_form})
 
 def login(request):
     if request.method =='POST':
@@ -24,7 +25,7 @@ def login(request):
             return render(request, 'stock/home.html')
     else:
         user_form = LoginForm()
-    return render(request, 'stock/login.html')
+    return render(request, 'stock/login.html',{'form': user_form})
 
 def logout(request):
     # 로그아웃 하면 로그인 화면으로 연결
