@@ -5,6 +5,11 @@ import yfinance as yf
 import pandas_datareader as pdr
 import datetime
 from .forms import RegisterForm, LoginForm
+import matplotlib.pyplot as plt
+import plotly
+# import plotly.graph_objects as go
+import plotly.express as px
+import plotly.graph_objs as go
 
 def main(request):
     return render(request, 'stock/main.html')
@@ -54,6 +59,7 @@ def market_list(request):
 def stock_detail(request):
     return render(request, 'stock/stock_detail.html')
 
+# api 관련 코드
 
 stock_type = {
         'kospi' : 'stockMkt',
@@ -76,6 +82,7 @@ def get_download_stock(market_type=None):
     download_link = download_link + '?method=download'
     download_link = download_link + '&marketType=' + market_type
     df = pd.read_html(download_link, header=0)[0]
+    # return 값에 market_type도 받아서 리스트 나누기
     return df
 
 # kospi 종목코드 목록 다운로드
@@ -119,10 +126,43 @@ def api_test(request):
 
     # get_data_yahoo API를 통해서 yahho finance의 주식 종목 데이터를 가져온다.
     # df = pdr.get_data_yahoo(code[0], '2021-01-18', '2021-01-22') 
-    # get_Data_yahoo와 download의 차이점..? get_data_yahoo도 실시간으로 불러와지는지
-    df = yf.download(tickers=code[0], period='10d', interval='5m')
+    # get_Data_yahoo와 download의 차이점..? get_data_yahoo도 실시간으로 불러와지는지 -> download()사용하기로 함. 탕탕
+    df = yf.download(tickers=code[0], period='1d', interval='1m')
     
     name = code[1]
+
+    #declare figure
+    fig = go.Figure()
+
+    #Candlestick
+    fig.add_trace(go.Candlestick(x=df.index,
+                    open=df['Open'],
+                    high=df['High'],
+                    low=df['Low'],
+                    close=df['Close'], name = 'market data'))
+
+    # Add titles
+    fig.update_layout(
+        title='삼성전자 live share price evolution',
+        yaxis_title='Stock Price (USD per Shares)')
+
+    # X-Axes
+    fig.update_xaxes(
+        rangeslider_visible=True,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=15, label="15m", step="minute", stepmode="backward"),
+                dict(count=45, label="45m", step="minute", stepmode="backward"),
+                dict(count=1, label="HTD", step="hour", stepmode="todate"),
+                dict(count=3, label="3h", step="hour", stepmode="backward"),
+                dict(step="all")
+            ])
+        )
+    )
+
+    #Show
+    fig.show()
+    fig.write_html('test.html') # 흠... 이게 아닌디....
 
     
     return render(request, 'stock/api_test.html' , {'df' : df, 'a': name})
@@ -144,14 +184,17 @@ def api_test(request):
     # excel 파일을 다운로드하는거와 동시에 pandas에 load하기
     # 흔히 사용하는 df라는 변수는 data frame을 의미합니다.
     # code_df = pd.read_html('http://kind.krx.co.kr/corpgeneral/corpList.do?method=download', header=0)[0]
-    # head()함수를 사용하면 date가장 최근 5줄만 리턴한다. tail()은 그 반대
+    # head()함수를 사용하면 date가장 최근 5줄만 리턴한다(인자에 숫자쓰면 숫자만큼 리턴). tail()은 그 반대
 
     '''
     to do list
-    1. 주식종목name을 한국거래소에서 list를 뽑아와서 txt파일에 저장한 다음에 파이썬 리스트에 한꺼번에 넣어서,
-       for loop 활용하여 download하기 -> stock detail에 들어갈 부분 (화요일)
-    2. list가 보여지고 detail로 들어가는 걸 db에 넣지 않고 구현할 수 있을지 고민 ... (이게 제일 고민쓰)
+    
+    0. plotly에 관한 충분한 이해.. 내가 원하는 경로에 html띄우는 법..
+    1. list가 보여지고 detail로 들어가는 걸 db에 넣지 않고 구현할 수 있을지 고민 ... (이게 제일 고민쓰)
        충분히 고민해보기 (화요일)
+    2. 주식종목name을 한국거래소에서 list를 뽑아와서 txt파일에 저장한 다음에 파이썬 리스트에 한꺼번에 넣어서, (코스피 100/코스닥 100 정도도
+       충분하지 않을까?)
+       for loop 활용하여 download하기 -> stock detail에 들어갈 부분 (화요일)
     3. matplotlib으로 나타내기 (수요일)
     4. 전일비를 통해 상승률 하락률 top5를 매길 수 있을 것 같은데, 이건 stock list에서만 나타낼 수 있을듯? + 직접 계산해야함
-       참고) 전일비 공식 : (현재가 - 전일종가) / 전일종가 X 100... 화이팅... (시간 남으면 )'''
+       참고) 전일비 공식 : (현재가 - 전일종가) / 전일종가 X 100... 화이팅... (시간 남으면)'''
