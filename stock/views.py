@@ -82,4 +82,4 @@ def api_test(request):
     # print(df)
     # df['Close'].plot()
 
-        return render(request, 'stock/api_test.html')
+    return render(request, 'stock/api_test.html')
