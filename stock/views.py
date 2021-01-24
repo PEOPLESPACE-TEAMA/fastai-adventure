@@ -99,5 +99,5 @@ def api_test(request):
 
     # print(df)
     # df['Close'].plot()
-
+    # plot- pandans중 하나임
     return render(request, 'stock/api_test.html')
