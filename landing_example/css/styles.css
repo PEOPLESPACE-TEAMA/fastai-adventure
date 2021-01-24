@@ -167,7 +167,7 @@ a {
   background-color: transparent;
 }
 a:hover {
-  color: #e6b301;
+  color:  #0f4c81;
   text-decoration: underline;
 }
 
@@ -10176,7 +10176,7 @@ header.masthead .masthead-heading {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: rgba(254, 209, 54, 0.9);
+  background:  #0f4c81;
   align-items: center;
   justify-content: center;
   opacity: 0;
