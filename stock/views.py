@@ -4,15 +4,33 @@ import pandas as pd
 import yfinance as yf
 import pandas_datareader as pdr
 import datetime
+from .forms import RegisterForm, LoginForm
 
 def main(request):
     return render(request, 'stock/main.html')
 
 def signup(request):
-    return render(request, 'stock/signup.html')
+    if request.method == 'POST':
+        user_form = RegisterForm(request.POST)
+        if user_form.is_valid():
+            user = user_form.save(commit = False)
+            user.set_password(user_form.cleaned_data['password'])
+            user.save()
+            login_form = LoginForm()
+            # 회원가입이 성공적으로 되면 로그인 페이지로 이동
+            return render(request, 'stock/login.html',{'form': login_form})
+    else:
+        user_form = RegisterForm()
+    return render(request, 'stock/signup.html',{'form': user_form})
 
 def login(request):
-    return render(request, 'stock/login.html')
+    if request.method =='POST':
+        user_form = LoginForm(request.POST)
+        if user_form.is_valid():
+            return render(request, 'stock/home.html')
+    else:
+        user_form = LoginForm()
+    return render(request, 'stock/login.html',{'form': user_form})
 
 def logout(request):
     # 로그아웃 하면 로그인 화면으로 연결
