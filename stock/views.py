@@ -1,15 +1,14 @@
 from django.shortcuts import render
-import numpy as np
+from .forms import RegisterForm, LoginForm
+from .models import User, Stock
 import pandas as pd
 import yfinance as yf
-import pandas_datareader as pdr
-import datetime
-from .forms import RegisterForm, LoginForm
 import matplotlib.pyplot as plt
 import plotly
 # import plotly.graph_objects as go
 import plotly.express as px
 import plotly.graph_objs as go
+import datetime
 
 def main(request):
     return render(request, 'stock/main.html')
@@ -59,21 +58,22 @@ def market_list(request):
 def stock_detail(request):
     return render(request, 'stock/stock_detail.html')
 
+
+
 # api 관련 코드
 
 stock_type = {
-        'kospi' : 'stockMkt',
-        'kosdaq' : 'kosdaqMkt'
+    'kospi': 'stockMkt',
+    'kosdaq': 'kosdaqMkt'
 }
-    
+
 
 # 회사명으로 주식 종목 코드를 획득할 수 있도록 하는 함수
 def get_code(df, name):
-    code = df.query("name=='{}'".format(name))['code'].to_string(index=False)
+    code = df.query("name=='{}'".format(name))['code'].to_string(index=False).strip()
     # 위와같이 code명을 가져오면 앞에 공백이 붙어있는 상황이 발생하여 앞뒤로 sript() 하여 공백 제거
     # 한국거래소 사이트에서 주식종목 코드만 가져오겠다 라는 의미
-    code = code.strip()
-    return code, name
+    return code
 
 # download url 조합
 def get_download_stock(market_type=None):
@@ -81,8 +81,7 @@ def get_download_stock(market_type=None):
     download_link = 'http://kind.krx.co.kr/corpgeneral/corpList.do'
     download_link = download_link + '?method=download'
     download_link = download_link + '&marketType=' + market_type
-    df = pd.read_html(download_link, header=0)[0]
-    # return 값에 market_type도 받아서 리스트 나누기
+    df = pd.read_html(download_link, header=0)[0]  # dataframe 객체 생성
     return df
 
 # kospi 종목코드 목록 다운로드
@@ -100,9 +99,8 @@ def get_download_kosdaq():
     return df
 
 
-def api_test(request):
-    
-    
+def api_test(request) :
+        
     # kospi, kosdaq 종목코드 각각 다운로드
     kospi_df = get_download_kospi()
     kosdaq_df = get_download_kosdaq()
@@ -110,91 +108,99 @@ def api_test(request):
     # data frame merge
     code_df = pd.concat([kospi_df, kosdaq_df])
 
-    # data frame정리 , 필요한 것은 "회사명"과 "종목코드"이므로 필요없은 칼럼은 제외
+    # data frame정리 
     code_df = code_df[['회사명', '종목코드']]
-
 
     # data frame title 변경 '회사명' = name, 종목코드 = 'code'
     code_df = code_df.rename(columns={'회사명': 'name', '종목코드': 'code'})
-    # 종목코드는 6자리로 구분되기때문에 0을 채워 6자리로 변경
-    # code_df.code = code_df.code.map('{:06d}'.format)
+
+    companys=code_df['name'].values.tolist()
+    codes=code_df['code'].values.tolist()
+    
+    # [중요] 초기 셋팅. db삭제하고 다시 실행할 시에 주석풀고 실행시켜야 함
+    # for company, code in zip(companys, codes) :
+    #     if Stock.objects.filter(company_name=company).exists() :
+    #         pass
+    #     else :
+    #         Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
 
 
-    # ex) 삼성전자의의 코드를 구해보기
-    code = list(get_code(code_df, '삼성전자')) 
+    # for company in companys :
+    #     Stock.objects.filter(company_name=company).update(open~volume까지))
 
+    # for문을 모델의 주식코드로 돌려,,,?
+    # 모델에 존재하는것들은 랭킹을 나타내거나, 하루에 보여지는 것들을 할때만 유효함..(?)
+    df = yf.download(tickers='005880.KS', period='1d', interval='5m')
+    print(type(df))
+    print(type(df.tail(1)))
+
+    # print(df)
+    # index가 마지막인,,, 거만 하나떼어서 open/high~각각 접근해서 하나씩 update하기 해보자.
+    print(df.tail(1))
+    print(df.tail(1).values.tolist()) # 이거다~
+    print(df.info())
+    # name = code[1]
+
+   
+
+    return render(request, 'stock/api_test.html',{'a':df} )
+
+
+    
+
+
+
+
+
+'''
+아래는 그래프 그리는 것 관련한 내용임 
+'''
+    # #declare figure
+    # fig = go.Figure()
+
+    # #Candlestick
+    # fig.add_trace(go.Candlestick(x=df.index,
+    #                 open=df['Open'],
+    #                 high=df['High'],
+    #                 low=df['Low'],
+    #                 close=df['Close'], name = 'market data'))
+
+    # # Add titles
+    # fig.update_layout(
+    #     title='삼성전자 live share price evolution',
+    #     yaxis_title='Stock Price (USD per Shares)')
+
+    # # X-Axes
+    # fig.update_xaxes(
+    #     rangeslider_visible=True,
+    #     rangeselector=dict(
+    #         buttons=list([
+    #             dict(count=15, label="15m", step="minute", stepmode="backward"),
+    #             dict(count=45, label="45m", step="minute", stepmode="backward"),
+    #             dict(count=1, label="HTD", step="hour", stepmode="todate"),
+    #             dict(count=3, label="3h", step="hour", stepmode="backward"),
+    #             dict(step="all")
+    #         ])
+    #     )
+    # )
+
+    # #Show
+    # fig.show()
+    # fig.write_html('test.html') # 흠... 이게 아닌디....
 
     # get_data_yahoo API를 통해서 yahho finance의 주식 종목 데이터를 가져온다.
-    # df = pdr.get_data_yahoo(code[0], '2021-01-18', '2021-01-22') 
+    # df = pdr.get_data_yahoo(code[0], '2021-01-18', '2021-01-22') // 여기서 pdr이 쓰이네
     # get_Data_yahoo와 download의 차이점..? get_data_yahoo도 실시간으로 불러와지는지 -> download()사용하기로 함. 탕탕
-    df = yf.download(tickers=code[0], period='1d', interval='1m')
-    
-    name = code[1]
-
-    #declare figure
-    fig = go.Figure()
-
-    #Candlestick
-    fig.add_trace(go.Candlestick(x=df.index,
-                    open=df['Open'],
-                    high=df['High'],
-                    low=df['Low'],
-                    close=df['Close'], name = 'market data'))
-
-    # Add titles
-    fig.update_layout(
-        title='삼성전자 live share price evolution',
-        yaxis_title='Stock Price (USD per Shares)')
-
-    # X-Axes
-    fig.update_xaxes(
-        rangeslider_visible=True,
-        rangeselector=dict(
-            buttons=list([
-                dict(count=15, label="15m", step="minute", stepmode="backward"),
-                dict(count=45, label="45m", step="minute", stepmode="backward"),
-                dict(count=1, label="HTD", step="hour", stepmode="todate"),
-                dict(count=3, label="3h", step="hour", stepmode="backward"),
-                dict(step="all")
-            ])
-        )
-    )
-
-    #Show
-    fig.show()
-    fig.write_html('test.html') # 흠... 이게 아닌디....
-
-    
-    return render(request, 'stock/api_test.html' , {'df' : df, 'a': name})
-
-
-
-    '''
-    #Data viz
-    import plotly.graph_objs as go
-
-    data = yf.download(tickers='UBER', period='1d', interval='60m')
-    #Print data
-    print(data)
-    print(type(list(data)))'''
-
-    # https://ai-creator.tistory.com/51 (참고자료)
-
+    # 실시간이라기엔 20분씩 늦는것으로 확인됨..
     
     # excel 파일을 다운로드하는거와 동시에 pandas에 load하기
     # 흔히 사용하는 df라는 변수는 data frame을 의미합니다.
     # code_df = pd.read_html('http://kind.krx.co.kr/corpgeneral/corpList.do?method=download', header=0)[0]
     # head()함수를 사용하면 date가장 최근 5줄만 리턴한다(인자에 숫자쓰면 숫자만큼 리턴). tail()은 그 반대
 
-    '''
-    to do list
+    # '''
+    # to do list
     
-    0. plotly에 관한 충분한 이해.. 내가 원하는 경로에 html띄우는 법..
-    1. list가 보여지고 detail로 들어가는 걸 db에 넣지 않고 구현할 수 있을지 고민 ... (이게 제일 고민쓰)
-       충분히 고민해보기 (화요일)
-    2. 주식종목name을 한국거래소에서 list를 뽑아와서 txt파일에 저장한 다음에 파이썬 리스트에 한꺼번에 넣어서, (코스피 100/코스닥 100 정도도
-       충분하지 않을까?)
-       for loop 활용하여 download하기 -> stock detail에 들어갈 부분 (화요일)
-    3. matplotlib으로 나타내기 (수요일)
-    4. 전일비를 통해 상승률 하락률 top5를 매길 수 있을 것 같은데, 이건 stock list에서만 나타낼 수 있을듯? + 직접 계산해야함
-       참고) 전일비 공식 : (현재가 - 전일종가) / 전일종가 X 100... 화이팅... (시간 남으면)'''
+    # 0. plotly에 관한 충분한 이해.. 내가 원하는 경로에 html띄우는 법..? 
+    # 5. 전일비를 통해 상승률 하락률 top5를 매길 수 있을 것 같은데, 이건 stock list에서만 나타내면 될듯? + 직접 계산해야함
+    #    참고) 전일비 공식 : (현재가 - 전일종가) / 전일종가 X 100..... (시간 남으면)'''
