@@ -71,3 +71,22 @@ class User(AbstractUser):
 
     def is_active(self):
         return self.active
+
+
+class Stock(models.Model):
+    company_name = models.CharField(max_length=20,unique=True)
+    stock_code = models.CharField(max_length=20, null=True)
+    stock_type = models.CharField(max_length=20, null=True)
+    open = models.FloatField(null=True, blank=True)
+    high = models.FloatField(null=True, blank=True)
+    low = models.FloatField(null=True, blank=True)
+    close = models.FloatField(null=True, blank=True)
+    adj_close = models.FloatField(null=True, blank=True)
+    volume = models.IntegerField(null=True, blank=True)
+    today_date = models.DateField(auto_now=True, blank=True)
+
+    def __str__(self):
+        return self.company_name
+
+
+    
