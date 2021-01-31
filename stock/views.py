@@ -117,7 +117,7 @@ def api_test(request) :
     companys=code_df['name'].values.tolist()
     codes=code_df['code'].values.tolist()
     
-    # [중요] 초기 셋팅. db삭제하고 다시 실행할 시에 주석풀고 실행시켜야 함
+    # [중요] 초기 셋팅. db삭제하거나 sqlite파일 깃에 안올렸는데 pull할 시에,  다시 실행할 시에 아래 주석풀고 실행시켜야 함
     # for company, code in zip(companys, codes) :
     #     if Stock.objects.filter(company_name=company).exists() :
     #         pass
@@ -125,25 +125,23 @@ def api_test(request) :
     #         Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
 
 
+    # 여기 시작
     # for company in companys :
     #     Stock.objects.filter(company_name=company).update(open~volume까지))
 
     # for문을 모델의 주식코드로 돌려,,,?
-    # 모델에 존재하는것들은 랭킹을 나타내거나, 하루에 보여지는 것들을 할때만 유효함..(?)
+    # 모델에 있는 open~volume 필드들은 랭킹을 나타내거나, 하루에 보여지는 것들을 할때만 유효함....
     df = yf.download(tickers='005880.KS', period='1d', interval='5m')
-    print(type(df))
-    print(type(df.tail(1)))
 
-    # print(df)
     # index가 마지막인,,, 거만 하나떼어서 open/high~각각 접근해서 하나씩 update하기 해보자.
     print(df.tail(1))
-    print(df.tail(1).values.tolist()) # 이거다~
-    print(df.info())
-    # name = code[1]
+    b=df.tail(1).values.tolist() # 이거다~
+    c=df.tail(1).values.tolist()[0]
+
+    #  download말고 get으로 전날꺼 불러오기
 
    
-
-    return render(request, 'stock/api_test.html',{'a':df} )
+    return render(request, 'stock/api_test.html',{'a':df, 'b':b, 'c':c} )
 
 
     
