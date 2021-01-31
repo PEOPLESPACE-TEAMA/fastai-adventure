@@ -81,9 +81,12 @@ class Stock(models.Model):
     high = models.FloatField(null=True, blank=True)
     low = models.FloatField(null=True, blank=True)
     close = models.FloatField(null=True, blank=True)
+    before_close = models.FloatField(null=True, blank=True)
     adj_close = models.FloatField(null=True, blank=True)
     volume = models.IntegerField(null=True, blank=True)
     today_date = models.DateField(auto_now=True, blank=True)
+    bookmark = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bookmarked", null=True, blank=True )
+    
 
     def __str__(self):
         return self.company_name
