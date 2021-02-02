@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .forms import RegisterForm, LoginForm
 from .models import User, Stock
 import pandas as pd
@@ -72,8 +72,14 @@ def market_list(request):
             pass
     return render(request, 'stock/market_list.html', )
 
-def stock_detail(request):
-    return render(request, 'stock/stock_detail.html')
+def stock_detail(request,stock_code):
+    stocks = Stock.objects.get(stock_code = stock_code)
+    labels = ['stock_type','open','high','low','close','adj_close','volume']
+    data = [stocks.stock_type,stocks.open,stocks.high,stocks.low,stocks.close,stocks.adj_close,stocks.volume]
+
+    vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume}
+    print(vals)
+    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals})
 
 
 
