@@ -60,7 +60,7 @@ def stock_detail(request):
 
 
 
-# api 관련 코드
+#### 아래는 모두 야후 파이낸스 api 불러왔던 코드 ( 이젠 쓸 일 없음 - 나중에 별도 파일로 뺄게요,,! )
 
 stock_type = {
     'kospi': 'stockMkt',
@@ -117,7 +117,8 @@ def api_test(request) :
     companys=code_df['name'].values.tolist()
     codes=code_df['code'].values.tolist()
     
-    # [중요] 초기 셋팅. db삭제하거나 sqlite파일 깃에 안올렸는데 pull할 시에,  다시 실행할 시에 아래 주석풀고 실행시켜야 함
+    # [중요] 초기 셋팅. db삭제하거나 sqlite파일 gitignore에 있는데 pull할 시에, 아래 주석풀고 실행시켜야 함
+    # create하고 나선 다시 주석처리..
     # for company, code in zip(companys, codes) :
     #     if Stock.objects.filter(company_name=company).exists() :
     #         pass
@@ -125,24 +126,17 @@ def api_test(request) :
     #         Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
 
 
-    # 여기 시작
-    # for company in companys :
-    #     Stock.objects.filter(company_name=company).update(open~volume까지))
+    # 모델에 있는 open~volume 필드들은 특정종목 detail 보여줄때만 쓰임. 차트 그리는건 그냥 view에서 바로 넘김
+    # update 부분
+    # data_stock_codes = Stock.objects.all()
+    # for data_stock_code in data_stock_codes :
+    #     df = yf.download(tickers=data_stock_code.stock_code, period='1d', interval='5m')
+    #     lists = df.tail(1).values.tolist()
+        # Stock.objects.filter(stock_code=data_stock_code).update(open=lists[0][0])
 
-    # for문을 모델의 주식코드로 돌려,,,?
-    # 모델에 있는 open~volume 필드들은 랭킹을 나타내거나, 하루에 보여지는 것들을 할때만 유효함....
-    df = yf.download(tickers='005880.KS', period='1d', interval='5m')
+    return render(request, 'stock/api_test.html',  )
 
-    # index가 마지막인,,, 거만 하나떼어서 open/high~각각 접근해서 하나씩 update하기 해보자.
-    print(df.tail(1))
-    b=df.tail(1).values.tolist() # 이거다~
-    c=df.tail(1).values.tolist()[0]
-
-    #  download말고 get으로 전날꺼 불러오기
-
-   
-    return render(request, 'stock/api_test.html',{'a':df, 'b':b, 'c':c} )
-
+# ,high=lists[0][1],low=lists[0][2],close=lists[0][3],adj_close=lists[0][4],volume=lists[0][5]
 
     
 
@@ -151,7 +145,7 @@ def api_test(request) :
 
 
 '''
-아래는 그래프 그리는 것 관련한 내용임 
+아래는 그래프 그리는 것 관련한 내용임 (구냥 구글링)
 '''
     # #declare figure
     # fig = go.Figure()
@@ -184,21 +178,10 @@ def api_test(request) :
 
     # #Show
     # fig.show()
-    # fig.write_html('test.html') # 흠... 이게 아닌디....
+    # fig.write_html('test.html') # 흠... 이게 아닌디.... 이미지로 저장해야한다.
 
-    # get_data_yahoo API를 통해서 yahho finance의 주식 종목 데이터를 가져온다.
     # df = pdr.get_data_yahoo(code[0], '2021-01-18', '2021-01-22') // 여기서 pdr이 쓰이네
     # get_Data_yahoo와 download의 차이점..? get_data_yahoo도 실시간으로 불러와지는지 -> download()사용하기로 함. 탕탕
-    # 실시간이라기엔 20분씩 늦는것으로 확인됨..
+    # 실시간이라기엔 20분씩 늦음 
     
-    # excel 파일을 다운로드하는거와 동시에 pandas에 load하기
-    # 흔히 사용하는 df라는 변수는 data frame을 의미합니다.
-    # code_df = pd.read_html('http://kind.krx.co.kr/corpgeneral/corpList.do?method=download', header=0)[0]
-    # head()함수를 사용하면 date가장 최근 5줄만 리턴한다(인자에 숫자쓰면 숫자만큼 리턴). tail()은 그 반대
-
-    # '''
-    # to do list
     
-    # 0. plotly에 관한 충분한 이해.. 내가 원하는 경로에 html띄우는 법..? 
-    # 5. 전일비를 통해 상승률 하락률 top5를 매길 수 있을 것 같은데, 이건 stock list에서만 나타내면 될듯? + 직접 계산해야함
-    #    참고) 전일비 공식 : (현재가 - 전일종가) / 전일종가 X 100..... (시간 남으면)'''
