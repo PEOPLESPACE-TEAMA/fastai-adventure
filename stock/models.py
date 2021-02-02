@@ -105,9 +105,6 @@ class Stock(models.Model):
             self.decrease = rate
             self.save()
 
-
-        self.save()
-
     def __str__(self):
         return self.company_name
 
