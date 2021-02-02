@@ -4,4 +4,12 @@ from .models import User, Stock
 
 admin.site.register(User)
 
-admin.site.register(Stock)
+class StockAdmin(admin.ModelAdmin) :
+    list_per_page = 10
+    list_display = (
+        'company_name','stock_type','open','close'
+    )
+    search_fields = ( 'stock_code' , )
+
+admin.site.register(Stock,StockAdmin)
+

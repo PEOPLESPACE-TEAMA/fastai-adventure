@@ -53,7 +53,24 @@ def market(request):
     return render(request, 'stock/market.html')
 
 def market_list(request):
-    return render(request, 'stock/market_list.html')
+    stocks = Stock.objects.all()
+    for stock in stocks :
+        stock_code=stock.stock_code
+        try:
+            pass
+            # 하루 지날때마다 업데이트,,? 로딩이 너무 김
+            # df = yf.download(tickers=stock_code, period='1d', interval='5m')
+            # lists = df.tail(1).values.tolist()
+            # stock.open=lists[0][0]
+            # stock.high=lists[0][1]
+            # stock.low=lists[0][2]
+            # stock.close=lists[0][3]
+            # stock.adj_close=lists[0][4]
+            # stock.volume=lists[0][5]
+            # stock.save()
+        except:
+            pass
+    return render(request, 'stock/market_list.html', )
 
 def stock_detail(request):
     return render(request, 'stock/stock_detail.html')
@@ -125,20 +142,8 @@ def api_test(request) :
     #     else :
     #         Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
 
+    return render(request, 'stock/api_test.html',   )
 
-    # 모델에 있는 open~volume 필드들은 특정종목 detail 보여줄때만 쓰임. 차트 그리는건 그냥 view에서 바로 넘김
-    # update 부분
-    # data_stock_codes = Stock.objects.all()
-    # for data_stock_code in data_stock_codes :
-    #     df = yf.download(tickers=data_stock_code.stock_code, period='1d', interval='5m')
-    #     lists = df.tail(1).values.tolist()
-        # Stock.objects.filter(stock_code=data_stock_code).update(open=lists[0][0])
-
-    return render(request, 'stock/api_test.html',  )
-
-# ,high=lists[0][1],low=lists[0][2],close=lists[0][3],adj_close=lists[0][4],volume=lists[0][5]
-
-    
 
 
 
