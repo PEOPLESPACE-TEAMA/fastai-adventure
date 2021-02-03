@@ -14,8 +14,13 @@
         <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="css/styles.css" rel="stylesheet" />
+        <link href="../css/styles.css" rel="stylesheet" />
+        <link href="bookmark.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>  <!--차트-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">    <!--부트스트랩 아이콘-->
     </head>
+
     <body id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
@@ -65,4 +70,79 @@
                 </div>
             </div>
         </header>
-        </nav>
+
+        <!-- container - chart -->
+        <div class="container p-5"> 
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase fs-1">bookmark</h2>
+            </div>
+            <ul class="list-inline"> 
+                <li class="section-heading text-uppercase fs-1 fw-bolder list-inline-item">Apple</li>  <!--종목이름-->
+                <li class="section-heading text-uppercase fs-2 fw-normal list-inline-item" >13250</li>   <!--현재가-->
+                <li class="section-heading text-uppercase fs-3 fw-normal list-inline-item text-danger">3.25↑</li> <!--등락률-->
+                <li class="fa fa-bell list-inline-item" aria-hidden="true"></li>    <!--색 채워진 알람-->
+                <!-- <i class="fa fa-bell-o" aria-hidden="true"></i> 빈 알람 -->
+                <li class="fa fa-star list-inline-item" aria-hidden="true"></li>    <!-- 색 채워진 별-->
+                <!-- <li class="fa fa-star-o list-inline-item" aria-hidden="true"></li> 빈 별 -->
+            </ul>
+        </div>
+        <div class="container"> 
+            <canvas id="myChart"></canvas> 
+        </div>
+            <!-- 부트스트랩 --> 
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
+            crossorigin="anonymous"></script> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" 
+            crossorigin="anonymous"></script> 
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" 
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" 
+            crossorigin="anonymous">
+        </script>
+            <!-- 차트 --> 
+        <script> 
+            var ctx = document.getElementById('myChart').getContext('2d'); 
+            var chart = new Chart(ctx, { 
+                // 챠트 종류를 선택 
+                type: 'line', 
+                // 챠트를 그릴 데이타 
+                data: { labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'], 
+                datasets: [{ 
+                    label: 'My First dataset', 
+                    backgroundColor: 'transparent', 
+                    borderColor: 'navy', data: [0, 10, 5, 20, 20, 30, 13] 
+                }] 
+                     }, 
+                // 옵션 
+                 options: {} 
+            }); 
+        </script>
+        <!-- container - comment -->
+        <br/>
+        <br/>
+        <br/>
+        <div class="container p-5">
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <h3 class="my-3">패턴 대표이미지</h3>
+                    </div>
+                    <div class="col-md-8">
+                        <h3 class="my-3 fw-bold">Pattern Prediction : Douple Top</h3>
+                        <h3 class="my-3 fw-bold">Reccomend : Buy</h3>
+                        <p class="text-muted fs-5">패턴에 대한 설명 3줄 Set up the alarm for stocks you are paying attention to. If there is any change, we will contact you via email and pop-up.</p>
+                    </div>
+                </div>
+        </div>
+       
+
+
+
+        <!-- footer -->
+
+
+       
+        
+
+     </body>
+</html>
