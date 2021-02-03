@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Fastock_stocker</title>
+        <title>Fastock_aboutUs</title>
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
@@ -31,10 +31,10 @@
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">ABOUT US</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">BOOKMARK</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#team">MARKET</a></li>
+                        <!--로그인/아웃 버튼 다듬어야 함-->
+                        <button class="btn btn-primary btn-s-right" type="button" onclick="LoginWindow();">Sign In / Log In</button>
                     </ul>
                 </div>
-                <!--로그인/아웃 버튼 다듬어야 함-->
-                <button class="btn btn-primary btn-s-right" type="button" onclick="LoginWindow();">Sign In / Log In</button>
             </div>
             <!-- LoginWindow ALERT-->
             <script>
@@ -66,7 +66,19 @@
             </div>
         </header>
         </nav>
-        <!-- about-->
+        <!-- SEARCH ALERT : 두 글자 이상 입력해주세요-->
+        <script>
+            function searchStock(){
+                let searchValue = document.getElementById('search-input').value.trim();
+                if (searchValue.length > 1){
+                    location.href="/stock/search/" + searchValue + "/";
+                }
+                else {
+                    alert('두 글자 이상 입력해주세요.');
+                }
+            };
+        </script>
+        <!-- aboutUs-->
         <section class="page-section" id="about">
             <div class="container">
                 <div class="text-center">
@@ -128,9 +140,6 @@
                     </li>
                 </ul>
             </div>
-        </section>
-        <!-- Team-->
-        <section class="page-section bg-light" id="team">
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">Our Amazing Team</h2>
@@ -149,7 +158,7 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="team-member">
-                            <img class="mx-auto rounded-circle" src="assets/img/team/2.jpg" alt="" />
+                            <img class="mx-auto rounded-circle" src="assets/img/team/cindia.jpg" alt="" />
                             <h4>Cindia Kim</h4>
                             <p class="text-muted">Lead Marketer</p>
                             <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
@@ -169,7 +178,7 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="team-member">
-                            <img class="mx-auto rounded-circle" src="assets/img/team/2.jpg" alt="" />
+                            <img class="mx-auto rounded-circle" src="assets/img/team/yura.jpg" alt="" />
                             <h4>Yura Seo</h4>
                             <p class="text-muted">Lead Developer</p>
                             <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
@@ -179,7 +188,7 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="team-member">
-                            <img class="mx-auto rounded-circle" src="assets/img/team/2.jpg" alt="" />
+                            <img class="mx-auto rounded-circle" src="assets/img/team/dongjun.jpg" alt="" />
                             <h4>DongJun Shin</h4>
                             <p class="text-muted">Lead Developer</p>
                             <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
@@ -189,7 +198,7 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="team-member">
-                            <img class="mx-auto rounded-circle" src="assets/img/team/2.jpg" alt="" />
+                            <img class="mx-auto rounded-circle" src="assets/img/team/rosaline.jpg" alt="" />
                             <h4>Rosaline Shin</h4>
                             <p class="text-muted">Lead Developer</p>
                             <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
@@ -199,7 +208,7 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="team-member">
-                            <img class="mx-auto rounded-circle" src="assets/img/team/2.jpg" alt="" />
+                            <img class="mx-auto rounded-circle" src="assets/img/team/fibi.jpg" alt="" />
                             <h4>Fibi Yu</h4>
                             <p class="text-muted">Team Leader</p>
                             <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
@@ -240,7 +249,7 @@
         <footer class="footer py-4">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-lg-4 text-lg-left">Copyright © Your Website 2020</div>
+                    <div class="col-lg-4 text-lg-left">Copyright © FASTOCK 2021</div>
                     <div class="col-lg-4 my-3 my-lg-0">
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>

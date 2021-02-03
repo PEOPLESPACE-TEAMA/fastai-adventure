@@ -170,7 +170,15 @@ a:hover {
   color:  #0f4c81;
   text-decoration: underline;
 }
-
+.link-danger {
+  color: rgb(223, 30, 30) !important;
+}
+.text-danger {
+  color: rgb(223, 30, 30) !important;
+}
+.text-navy {
+  color: navy !important;
+}
 a:not([href]):not([class]) {
   color: inherit;
   text-decoration: none;
@@ -10154,13 +10162,11 @@ header.masthead {
   padding-bottom: 6rem;
   text-align: center;
   color: #fff;
-  background-image: url("/static/assets/img/header-bg.jpg");
+  background-image: url("../assets/img/header-bg.jpg");
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;
   background-size: cover;
-
-  border: 10px solid black;
 }
 header.masthead .masthead-subheading {
   font-size: 1.5rem;
