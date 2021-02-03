@@ -91,7 +91,7 @@ def stock_detail(request,stock_code):
     labels = ['stock_type','open','high','low','close','adj_close','volume']
     data = [stocks.stock_type,stocks.open,stocks.high,stocks.low,stocks.close,stocks.adj_close,stocks.volume]
     stock_code = stocks.stock_code
-    df = yf.download(tickers=stock_code, period='1d', interval='5m')
+    df = yf.download(tickers=stock_code, period='1d', interval='2m')
     size = int(df.size/6) 
     print(size)
     data = df.values.tolist()
@@ -112,7 +112,7 @@ def stock_detail(request,stock_code):
     fig.savefig(stocks.company_name+'.png', dpi=fig.dpi)
     stocks.chart_image = stocks.company_name+'.png'
     stocks.save()
-    vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume}
+    vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume,'수정주가':stocks.adj_close}
     return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart})
 
 
