@@ -10154,11 +10154,13 @@ header.masthead {
   padding-bottom: 6rem;
   text-align: center;
   color: #fff;
-  background-image: url("{% static 'assets/img/header-bg.jpg' %}");
+  background-image: url("/static/assets/img/header-bg.jpg");
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;
   background-size: cover;
+
+  border: 10px solid black;
 }
 header.masthead .masthead-subheading {
   font-size: 1.5rem;

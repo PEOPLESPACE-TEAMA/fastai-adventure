@@ -229,6 +229,7 @@ th {
 label {
   display: inline-block;
   margin-bottom: 0.5rem;
+  
 }
 
 button {
@@ -2443,6 +2444,10 @@ fieldset:disabled a.btn {
   color: #fff;
   background-color: #0f4c81;
   border-color: #0f4c81;
+  font-family: "Roboto Slab", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 400;
+  
 }
 .btn-primary:hover {
   color: #fff;
