@@ -41,6 +41,16 @@ def logout(request):
     return render(request, 'stock/login.html')
 
 def home(request):
+    stocks = Stock.objects.all().order_by('-id')
+    q = request.POST.get('q', "") 
+    if q:
+        search = stocks.filter(company_name__icontains=q)
+        return render(request, 'stock/search.html', {'stocks' : search, 'q' : q})
+    
+    bookmarks = stocks.filter(bookmarked=True)
+    if bookmarks:
+        return render(request, 'stock/home.html',{'bookmarks': bookmarks})
+
     return render(request, 'stock/home.html')
 
 def bookmark(request):
