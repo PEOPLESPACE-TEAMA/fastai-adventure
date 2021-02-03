@@ -107,7 +107,7 @@ class Stock(models.Model):
             self.decrease = round(rate, 2)
             self.save()
 
-    def calculate_width(self):
+    def calculate_width(self): # 등라폭 계산
         self.fluctuation_width = self.open - self.before_close
         self.save()
 

@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
 from .forms import RegisterForm, LoginForm
 from django.views.generic import View
@@ -8,11 +8,13 @@ import pandas_datareader as pdr
 import yfinance as yf
 import matplotlib.pyplot as plt
 import plotly
+from functools import wraps
 # import plotly.graph_objects as go
 import plotly.express as px
 import plotly.graph_objs as go
 import datetime
 from .utils import get_plot
+from django.core.paginator import Paginator
 
 def main(request):
     return render(request, 'stock/main.html')
@@ -80,16 +82,23 @@ def market(request):
     return render(request, 'stock/market.html')
 
 def market_list(request):
-    stocks = Stock.objects.all().order_by('id')[769:786]
+
+    stocks = Stock.objects.all().order_by('company_name')
+    paginator = Paginator(stocks, 20)
+    page = request.GET.get("page",'1')
+    posts = paginator.get_page(page)
+
     today = datetime.date.today()  
     yesterday = today - datetime.timedelta(1)  
     str_yesterday = str(yesterday)
 
-    for stock in stocks :
-        stock_code=stock.stock_code
-        try:
-            pass
-            # 하루 지날때마다 업데이트 하기
+    context = {posts':posts, 'today':today}
+
+    # 하루 지날때마다 업데이트 하기
+    # for stock in stocks :
+    #     stock_code=stock.stock_code
+    #     try:
+    #         pass
             # df = yf.download(tickers=stock_code, period='1d', interval='5m')
             # lists = df.tail(1).values.tolist()
             # stock.open=lists[0][0]
@@ -103,9 +112,18 @@ def market_list(request):
             # stock.before_close=before_lists[0][3]
             # stock.save()
 
-        except:
-            pass
-    return render(request, 'stock/market_list.html', { 'stocks' : stocks , 'str':str_yesterday} )
+    #     except:
+    #         pass
+
+    # 업데이트2 ( 등락율, 등락폭 ) 
+    # incrase랑 decrease는 데이터를 싹 다 비우고 해야겠네
+
+    # for stock in stocks :
+    #     stock.calculate_rate()
+    #     stock.calculate_width()
+        
+    return render(request, 'stock/market_list.html', context )
+ 
 
 def stock_detail(request,stock_code):
     stocks = Stock.objects.get(stock_code = stock_code)
