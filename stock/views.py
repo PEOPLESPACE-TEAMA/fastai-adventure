@@ -43,7 +43,19 @@ def logout(request):
     return render(request, 'stock/login.html')
 
 def home(request):
-    return render(request, 'stock/home.html')
+    stocks = Stock.objects.all().order_by('-id')
+    # increase, decrease 계산하려면 아래 주석 풀고 테스트
+      # for stock in stocks:
+    #     stock.initialize()
+    #     stock.calculate_rate()
+    q = request.POST.get('q', "") 
+    if q:
+        search = stocks.filter(company_name__icontains=q)
+        return render(request, 'stock/search.html', {'stocks' : search, 'q' : q})
+    bookmarks = stocks.filter(bookmarked=True)
+    increases = stocks.exclude(increase=None).order_by('increase')[:5]
+    decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
+    return render(request, 'stock/home.html',{'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases})
 
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
@@ -72,7 +84,7 @@ def market_list(request):
             # stock.save()
         except:
             pass
-    return render(request, 'stock/market_list.html', )
+    return render(request, 'stock/market_list.html', { 'stocks' : stocks } )
 
 def stock_detail(request,stock_code):
     stocks = Stock.objects.get(stock_code = stock_code)
@@ -170,30 +182,23 @@ def api_test(request) :
     #     else :
     #         Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
 
-    return render(request, 'stock/api_test.html',   )
-
-
-
-
+    return render(request, 'stock/api_test.html',  )
 
 
 '''
-아래는 그래프 그리는 것 관련한 내용임 (구냥 구글링)
+아래는 그래프 그리는 것 관련한 내용임 (구냥 구글링) (반응형 차트)
 '''
-    # #declare figure
-    # fig = go.Figure()
+    # import plotly.graph_objs as go
 
-    # #Candlestick
+    # df = yf.download(tickers='특정종목의 주식코드', period='1d', interval='5m')
+
+    # fig = go.Figure()      
+    # #Candlestick (캔들차트)
     # fig.add_trace(go.Candlestick(x=df.index,
     #                 open=df['Open'],
     #                 high=df['High'],
     #                 low=df['Low'],
     #                 close=df['Close'], name = 'market data'))
-
-    # # Add titles
-    # fig.update_layout(
-    #     title='삼성전자 live share price evolution',
-    #     yaxis_title='Stock Price (USD per Shares)')
 
     # # X-Axes
     # fig.update_xaxes(

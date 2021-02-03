@@ -2,4 +2,6 @@
 <p>stock market 화면에서 더보기 눌렀을 때 나오는 리스트 화면입니다<p>
 
     
-    <p>성공하면 이 문장을 보여주세요 ... 제발요 .... </p>
+ {% for stock in stocks %}
+ <div>{{ stock }}</div>
+ {% endfor %}
