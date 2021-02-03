@@ -16,6 +16,5 @@ urlpatterns = [
     path('market/', views.market, name='market'),
     path('market-list/', views.market_list, name='market_list'),
     path('stock/<stock_code>/', views.stock_detail, name='stock_detail'),
-    path('api_test/', views.api_test, name='api_test'),
     path('search/', views.home, name='search'),
 ]

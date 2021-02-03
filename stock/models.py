@@ -85,8 +85,8 @@ class Stock(models.Model):
     volume = models.IntegerField(null=True, blank=True)
 
     before_close = models.FloatField(null=True, blank=True) # 전일종가 불러옴 ( 상승률과 하락률 계산하기 위함 )
-    increase = models.FloatField(null=True, blank=True) # 상승율  
-    decrease = models.FloatField(null=True, blank=True) # 하락율
+    increase = models.FloatField( null=True, blank=True) # 상승율  
+    decrease = models.FloatField( null=True, blank=True) # 하락율
     
     fluctuation_width = models.FloatField(null=True, blank=True) # 등락폭 구하기
 
