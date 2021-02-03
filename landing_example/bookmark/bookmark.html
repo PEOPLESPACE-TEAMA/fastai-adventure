@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Fastock_stocker</title>
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+            <div class="container">
+                <div class="navbar-brand js-scroll-trigger" href="#page-top">FASTOCK</div>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars ml-1"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav text-uppercase ml-auto-left">
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#intro">HOME</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">ABOUT US</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">BOOKMARK</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#team">MARKET</a></li>
+                    </ul>
+                </div>
+                <!--로그인/아웃 버튼 다듬어야 함-->
+                <button class="btn btn-primary btn-s-right" type="button" onclick="LoginWindow();">Sign In / Log In</button>
+            </div>
+            <!-- LoginWindow ALERT-->
+            <script>
+                function LoginWindow(){
+                    let searchValue = document.getElementById('search-input').value.trim();
+                    if (searchValue.length > 1){
+                        alert('버튼을 누르면 로그인 페이지로 이동');
+                    }
+                    else {
+                        alert('버튼을 누르면 로그인 페이지로 이동. 실패하면 alert를 보냄');
+                    }
+                };
+            </script>
+        </nav>
+        <!-- Masthead-->
+        <header class="masthead">
+            <div class="container">
+                <div class="masthead-subheading">fastai-adventure</div>
+                <div class="masthead-heading text-uppercase">Stock Pattern Predict </div>
+                <!-- SEARCH-->
+                <div class="col-md-4-center">
+                    <div class=""input-group">
+                        <input type="text" class="form-control" placeholder="Search for..." id="search-input">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary btn-l" type="button" onclick="searchStock();">OK</button>
+                            </span>
+                    </div>
+                </div>
+            </div>
+        </header>
+        </nav>
