@@ -88,6 +88,8 @@ class Stock(models.Model):
     increase = models.FloatField(null=True, blank=True) # 상승율  
     decrease = models.FloatField(null=True, blank=True) # 하락율
     
+    fluctuation_width = models.FloatField(null=True, blank=True) # 등락폭 구하기
+
     bookmarked = models.BooleanField(default=False)
 
     chart_image = models.ImageField(default=False, upload_to="")
@@ -104,6 +106,10 @@ class Stock(models.Model):
         else :
             self.decrease = rate
             self.save()
+
+    def calculate_width(self):
+        self.fluctuation_width = self.open - self.before_close
+        self.save()
 
     def initialize(self):
         # before_close나 open 값이 Null이라 오류 발생 시 아래 주석 풀고 admin 서버에서 일부만 수정해서 테스트
