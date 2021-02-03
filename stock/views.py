@@ -1,7 +1,10 @@
 from django.shortcuts import render,redirect
+from django.http import JsonResponse
 from .forms import RegisterForm, LoginForm
+from django.views.generic import View
 from .models import User, Stock
 import pandas as pd
+import pandas_datareader as pdr
 import yfinance as yf
 import matplotlib.pyplot as plt
 import plotly
@@ -9,7 +12,7 @@ import plotly
 import plotly.express as px
 import plotly.graph_objs as go
 import datetime
-
+from .utils import get_plot
 def main(request):
     return render(request, 'stock/main.html')
 
@@ -22,7 +25,7 @@ def signup(request):
             user.save()
             login_form = LoginForm()
             # 회원가입이 성공적으로 되면 로그인 페이지로 이동
-            return render(request, 'stock/login.html',{'form': login_form})
+            return redirect('login')
     else:
         user_form = RegisterForm()
     return render(request, 'stock/signup.html',{'form': user_form})
@@ -31,7 +34,7 @@ def login(request):
     if request.method =='POST':
         user_form = LoginForm(request.POST)
         if user_form.is_valid():
-            return render(request, 'stock/home.html')
+            return redirect('home')
     else:
         user_form = LoginForm()
     return render(request, 'stock/login.html',{'form': user_form})
@@ -65,12 +68,16 @@ def market(request):
     return render(request, 'stock/market.html')
 
 def market_list(request):
-    stocks = Stock.objects.all()
+    stocks = Stock.objects.all().order_by('id')[769:786]
+    today = datetime.date.today()  
+    yesterday = today - datetime.timedelta(1)  
+    str_yesterday = str(yesterday)
+
     for stock in stocks :
         stock_code=stock.stock_code
         try:
             pass
-            # 하루 지날때마다 업데이트,,? 로딩이 너무 김
+            # 하루 지날때마다 업데이트 하기
             # df = yf.download(tickers=stock_code, period='1d', interval='5m')
             # lists = df.tail(1).values.tolist()
             # stock.open=lists[0][0]
@@ -79,19 +86,43 @@ def market_list(request):
             # stock.close=lists[0][3]
             # stock.adj_close=lists[0][4]
             # stock.volume=lists[0][5]
+            # before_df = pdr.get_data_yahoo(stock_code, str_yesterday, str_yesterday)
+            # before_lists=before_df.values.tolist()
+            # stock.before_close=before_lists[0][3]
             # stock.save()
+
         except:
             pass
-    return render(request, 'stock/market_list.html', { 'stocks' : stocks } )
+    return render(request, 'stock/market_list.html', { 'stocks' : stocks , 'str':str_yesterday} )
 
 def stock_detail(request,stock_code):
     stocks = Stock.objects.get(stock_code = stock_code)
     labels = ['stock_type','open','high','low','close','adj_close','volume']
     data = [stocks.stock_type,stocks.open,stocks.high,stocks.low,stocks.close,stocks.adj_close,stocks.volume]
-
-    vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume}
-    print(vals)
-    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals})
+    stock_code = stocks.stock_code
+    df = yf.download(tickers=stock_code, period='1d', interval='2m')
+    size = int(df.size/6) 
+    print(size)
+    data = df.values.tolist()
+    time = df.index.tolist()
+    x=[]
+    y=[]
+    for i in time:
+        time_only = i.strftime("%H:%M:%S")
+        print("time:", time_only)
+        x.append(i)
+    for index in range(0,size):
+        # print(data[index][3])
+        y.append(data[index][3])
+    # 차트 만들기 
+    chart = get_plot(x,y)
+    fig = plt.gcf()
+    # 차트 저장하기
+    fig.savefig(stocks.company_name+'.png', dpi=fig.dpi)
+    stocks.chart_image = stocks.company_name+'.png'
+    stocks.save()
+    vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume,'수정주가':stocks.adj_close}
+    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart})
 
 
 

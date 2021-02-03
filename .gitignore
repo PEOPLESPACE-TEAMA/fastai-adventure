@@ -8,6 +8,8 @@
 *.pyc
 __pycache__/
 local_settings.py
+db.sqlite3
+db.sqlite3-journal
 media
 
 
@@ -152,4 +154,9 @@ dmypy.json
 # End of https://www.toptal.com/developers/gitignore/api/django
 landing_example/.DS_Store
 
+<<<<<<< HEAD
+# Pycharm
+.idea/
+=======
 get-pip.py
+>>>>>>> a9abf8ee565156a7a354e137b52f7435185a9fd7
