@@ -1,19 +1,31 @@
+{% extends "stock/base.html" %}
+{% load staticfiles %}
+
+{% block header %}
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block contents %}
 <h1>Home</h1>
 <p>시작하기/둘러보기 했을 때 나타나는 홈 화면입니다</p>
-<p>figma 목업 기준 로그인 O 루트에서 세 번째 화면</p>
+<p>검색창, 북마크된 주식 리스트(차트는 랜덤), 상승률과 하락률 top5(차트는 각각 top1)</p>
 
 <body>
+    <br>
     <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="post">
         {% csrf_token %}
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" value="{{q}}">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
     <br>
-    {% block content %}
+
         {% if not bookmarks %}
             <h3>저장된 북마크가 없습니다</h3>
         {% else %}
             <h3>북마크 간단 리스트</h3>
+            {% if bookmarkchart %}
+                <img src = "data:image/png;base64, {{bookmarkchart|safe}}" width="600">
+            {% endif %}
             {% for bookmark in bookmarks.all %}
             <div class="container"> 
                 <div class="card">
@@ -31,6 +43,7 @@
         <br>
         
         <h3>상승률 top5</h3>
+        <img src = "data:image/png;base64, {{increasechart|safe}}" width="600">
         {% for inc in increases.all %}
             <div class="container"> 
                 <div class="card">
@@ -43,6 +56,7 @@
         <br>
 
         <h3>하락률 top5</h3>
+        <img src = "data:image/png;base64, {{decreasechart|safe}}" width="600">
         {% for dec in decreases.all %}
             <div class="container"> 
                 <div class="card">
@@ -52,5 +66,7 @@
                 </div>
             </div>
         {% endfor %}
-    {% endblock %}
+
 </body>
+
+{% endblock %}

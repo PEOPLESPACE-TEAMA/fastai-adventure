@@ -31,10 +31,9 @@
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">ABOUT US</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">BOOKMARK</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#team">MARKET</a></li>
+                        <!--로그인/아웃 버튼 다듬어야 함-->
+                        <button class="btn btn-primary btn-s-right" type="button" onclick="LoginWindow();">Sign In / Log In</button>
                     </ul>
-                <!--로그인/아웃 버튼 다듬어야 함-->
-                    <i class="fas fa-bars ml-1"></i>
-                <button class="btn btn-primary btn-s-right" type="button" onclick="LoginWindow();">Sign In / Log In</button>
                 </div>
             </div>
             <!-- LoginWindow ALERT-->
@@ -86,9 +85,12 @@
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">BOOKMARK</h2>
                 </div>
+                <img class="card-img-top" src=".\bookmark2.png" alt="Card image cap">
+                <div class-card-body">
+
+                </div>
             </div>
         </section>
-        
         
         <!-- STOCK MARKET-->
         <section class="page-section" id="about">
@@ -97,7 +99,9 @@
                     <h2 class="section-heading text-uppercase">STOCK MARKET</h2>
                     <!-- 이 위치에 각종 지표 링크 버튼 만들어야 함-->
                 </div>
-
+                <img class="card-img-top" src=".\bookmark.png" alt="Card image cap">
+                <div class-card-body
+                </div>
             </div>
         </section>
         
@@ -107,8 +111,11 @@
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">상승률 top5</h2>
                     <h3 class="section-subheading text-muted">We'd like to inform you of some of the patterns that our machine has learned.</h3>
+                    </div>
+                    <img class="card-img-top" src=".\bookmark3.png" alt="Card image cap">
+                    <div class-card-body">
                 </div>
-                <div class="row"> 
+                <div class="row">
 
                 </div> 
             </div>
@@ -119,6 +126,20 @@
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">하락률 top 5</h2>
                     <h3 class="section-subheading text-muted">Our amazing team</h3>
+                    </div>
+                    <img class="card-img-top" src=".\bookmark4.png" alt="Card image cap">
+                    <div class-card-body">
+                    <div id="map" style="width:500px;height:400px;"></div>
+                    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=011ef1b63276201b4ba6b543532953b4"></script>
+                    <script>
+                        var container = document.getElementById('map');
+                        var options = {
+                            center: new kakao.maps.LatLng(33.450701, 126.570667),
+                            level: 3
+                        };
+
+                        var map = new kakao.maps.Map(container, options);
+                    </script>
                 </div>
             </div>
         </section>
