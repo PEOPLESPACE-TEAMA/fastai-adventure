@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .forms import RegisterForm, LoginForm
 from .models import User, Stock
 import pandas as pd
@@ -41,7 +41,19 @@ def logout(request):
     return render(request, 'stock/login.html')
 
 def home(request):
-    return render(request, 'stock/home.html')
+    stocks = Stock.objects.all().order_by('-id')
+    # increase, decrease 계산하려면 아래 주석 풀고 테스트
+      # for stock in stocks:
+    #     stock.initialize()
+    #     stock.calculate_rate()
+    q = request.POST.get('q', "") 
+    if q:
+        search = stocks.filter(company_name__icontains=q)
+        return render(request, 'stock/search.html', {'stocks' : search, 'q' : q})
+    bookmarks = stocks.filter(bookmarked=True)
+    increases = stocks.exclude(increase=None).order_by('increase')[:5]
+    decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
+    return render(request, 'stock/home.html',{'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases})
 
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
@@ -53,10 +65,33 @@ def market(request):
     return render(request, 'stock/market.html')
 
 def market_list(request):
-    return render(request, 'stock/market_list.html')
+    stocks = Stock.objects.all()
+    for stock in stocks :
+        stock_code=stock.stock_code
+        try:
+            pass
+            # 하루 지날때마다 업데이트,,? 로딩이 너무 김
+            # df = yf.download(tickers=stock_code, period='1d', interval='5m')
+            # lists = df.tail(1).values.tolist()
+            # stock.open=lists[0][0]
+            # stock.high=lists[0][1]
+            # stock.low=lists[0][2]
+            # stock.close=lists[0][3]
+            # stock.adj_close=lists[0][4]
+            # stock.volume=lists[0][5]
+            # stock.save()
+        except:
+            pass
+    return render(request, 'stock/market_list.html', { 'stocks' : stocks } )
 
-def stock_detail(request):
-    return render(request, 'stock/stock_detail.html')
+def stock_detail(request,stock_code):
+    stocks = Stock.objects.get(stock_code = stock_code)
+    labels = ['stock_type','open','high','low','close','adj_close','volume']
+    data = [stocks.stock_type,stocks.open,stocks.high,stocks.low,stocks.close,stocks.adj_close,stocks.volume]
+
+    vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume}
+    print(vals)
+    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals})
 
 
 
@@ -125,42 +160,23 @@ def api_test(request) :
     #     else :
     #         Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
 
-
-    # 모델에 있는 open~volume 필드들은 특정종목 detail 보여줄때만 쓰임. 차트 그리는건 그냥 view에서 바로 넘김
-    # update 부분
-    # data_stock_codes = Stock.objects.all()
-    # for data_stock_code in data_stock_codes :
-    #     df = yf.download(tickers=data_stock_code.stock_code, period='1d', interval='5m')
-    #     lists = df.tail(1).values.tolist()
-        # Stock.objects.filter(stock_code=data_stock_code).update(open=lists[0][0])
-
     return render(request, 'stock/api_test.html',  )
 
-# ,high=lists[0][1],low=lists[0][2],close=lists[0][3],adj_close=lists[0][4],volume=lists[0][5]
-
-    
-
-
-
-
 
 '''
-아래는 그래프 그리는 것 관련한 내용임 (구냥 구글링)
+아래는 그래프 그리는 것 관련한 내용임 (구냥 구글링) (반응형 차트)
 '''
-    # #declare figure
-    # fig = go.Figure()
+    # import plotly.graph_objs as go
 
-    # #Candlestick
+    # df = yf.download(tickers='특정종목의 주식코드', period='1d', interval='5m')
+
+    # fig = go.Figure()      
+    # #Candlestick (캔들차트)
     # fig.add_trace(go.Candlestick(x=df.index,
     #                 open=df['Open'],
     #                 high=df['High'],
     #                 low=df['Low'],
     #                 close=df['Close'], name = 'market data'))
-
-    # # Add titles
-    # fig.update_layout(
-    #     title='삼성전자 live share price evolution',
-    #     yaxis_title='Stock Price (USD per Shares)')
 
     # # X-Axes
     # fig.update_xaxes(
