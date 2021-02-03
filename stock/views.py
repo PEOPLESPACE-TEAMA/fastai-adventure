@@ -13,6 +13,7 @@ import plotly.express as px
 import plotly.graph_objs as go
 import datetime
 from .utils import get_plot
+
 def main(request):
     return render(request, 'stock/main.html')
 
@@ -45,18 +46,29 @@ def logout(request):
 
 def home(request):
     stocks = Stock.objects.all().order_by('-id')
-    # increase, decrease 계산하려면 아래 주석 풀고 테스트
-      # for stock in stocks:
-    #     stock.initialize()
-    #     stock.calculate_rate()
+    # increase, decrease 계산하려면 아래 주석 풀기
+    # 계산이 오래 걸려요. 한 번 계산되면 다시 주석 설정해도 됩니다!
+    # for stock in stocks:
+    #     try:
+    #         stock.initialize()
+    #         stock.calculate_rate()
+    #     except:
+    #         pass
     q = request.POST.get('q', "") 
     if q:
         search = stocks.filter(company_name__icontains=q)
         return render(request, 'stock/search.html', {'stocks' : search, 'q' : q})
-    bookmarks = stocks.filter(bookmarked=True)
-    increases = stocks.exclude(increase=None).order_by('increase')[:5]
+    bookmarks = stocks.filter(bookmarked=True).order_by('?')
+    increases = stocks.exclude(increase=None).order_by('-increase')[:5]
     decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
-    return render(request, 'stock/home.html',{'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases})
+
+    bookmark = bookmarks[0];    top = increases[0];    bottom = decreases[0]
+    bookmarkchart = draw_chart(bookmark)
+    increasechart = draw_chart(top)
+    decreasechart = draw_chart(bottom)
+
+    return render(request, 'stock/home.html', {'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases, 
+            'bookmarkchart': bookmarkchart, 'increasechart': increasechart, 'decreasechart': decreasechart})
 
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
@@ -124,6 +136,26 @@ def stock_detail(request,stock_code):
     vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume,'수정주가':stocks.adj_close}
     return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart})
 
+def draw_chart(self):
+    stock_code = self.stock_code
+    df = yf.download(tickers=stock_code, period='1d', interval='2m')
+    size = int(df.size/6) 
+    print(size)
+    data = df.values.tolist()
+    time = df.index.tolist()
+    x=[];    y=[]
+    for i in time:
+        time_only = i.strftime("%H:%M:%S")
+        print("time:", time_only)
+        x.append(i)
+    for index in range(0,size):
+        y.append(data[index][3])
+    chart = get_plot(x,y)
+    fig = plt.gcf()
+    fig.savefig(self.company_name+'.png', dpi=fig.dpi)
+    self.chart_image = self.company_name+'.png'
+    self.save()
+    return chart
 
 
 #### 아래는 모두 야후 파이낸스 api 불러왔던 코드 ( 이젠 쓸 일 없음 - 나중에 별도 파일로 뺄게요,,! )
