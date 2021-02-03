@@ -1,3 +1,11 @@
+{% extends "stock/base.html" %}
+{% load staticfiles %}
+
+{% block header %}
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block contents %}
 <h1>Home</h1>
 <p>시작하기/둘러보기 했을 때 나타나는 홈 화면입니다</p>
 <p>검색창, 북마크된 주식 리스트(차트는 랜덤), 상승률과 하락률 top5(차트는 각각 top1)</p>
@@ -10,7 +18,7 @@
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
     <br>
-    {% block content %}
+
         {% if not bookmarks %}
             <h3>저장된 북마크가 없습니다</h3>
         {% else %}
@@ -58,5 +66,7 @@
                 </div>
             </div>
         {% endfor %}
-    {% endblock %}
+
 </body>
+
+{% endblock %}
