@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .forms import RegisterForm, LoginForm
 from .models import User, Stock
 import pandas as pd
@@ -41,7 +41,19 @@ def logout(request):
     return render(request, 'stock/login.html')
 
 def home(request):
-    return render(request, 'stock/home.html')
+    stocks = Stock.objects.all().order_by('-id')
+    # increase, decrease 계산하려면 아래 주석 풀고 테스트
+      # for stock in stocks:
+    #     stock.initialize()
+    #     stock.calculate_rate()
+    q = request.POST.get('q', "") 
+    if q:
+        search = stocks.filter(company_name__icontains=q)
+        return render(request, 'stock/search.html', {'stocks' : search, 'q' : q})
+    bookmarks = stocks.filter(bookmarked=True)
+    increases = stocks.exclude(increase=None).order_by('increase')[:5]
+    decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
+    return render(request, 'stock/home.html',{'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases})
 
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
@@ -53,14 +65,37 @@ def market(request):
     return render(request, 'stock/market.html')
 
 def market_list(request):
-    return render(request, 'stock/market_list.html')
+    stocks = Stock.objects.all()
+    for stock in stocks :
+        stock_code=stock.stock_code
+        try:
+            pass
+            # 하루 지날때마다 업데이트,,? 로딩이 너무 김
+            # df = yf.download(tickers=stock_code, period='1d', interval='5m')
+            # lists = df.tail(1).values.tolist()
+            # stock.open=lists[0][0]
+            # stock.high=lists[0][1]
+            # stock.low=lists[0][2]
+            # stock.close=lists[0][3]
+            # stock.adj_close=lists[0][4]
+            # stock.volume=lists[0][5]
+            # stock.save()
+        except:
+            pass
+    return render(request, 'stock/market_list.html', { 'stocks' : stocks } )
 
-def stock_detail(request):
-    return render(request, 'stock/stock_detail.html')
+def stock_detail(request,stock_code):
+    stocks = Stock.objects.get(stock_code = stock_code)
+    labels = ['stock_type','open','high','low','close','adj_close','volume']
+    data = [stocks.stock_type,stocks.open,stocks.high,stocks.low,stocks.close,stocks.adj_close,stocks.volume]
+
+    vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume}
+    print(vals)
+    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals})
 
 
 
-# api 관련 코드
+#### 아래는 모두 야후 파이낸스 api 불러왔던 코드 ( 이젠 쓸 일 없음 - 나중에 별도 파일로 뺄게요,,! )
 
 stock_type = {
     'kospi': 'stockMkt',
@@ -117,56 +152,31 @@ def api_test(request) :
     companys=code_df['name'].values.tolist()
     codes=code_df['code'].values.tolist()
     
-    # [중요] 초기 셋팅. db삭제하거나 sqlite파일 깃에 안올렸는데 pull할 시에,  다시 실행할 시에 아래 주석풀고 실행시켜야 함
+    # [중요] 초기 셋팅. db삭제하거나 sqlite파일 gitignore에 있는데 pull할 시에, 아래 주석풀고 실행시켜야 함
+    # create하고 나선 다시 주석처리..
     # for company, code in zip(companys, codes) :
     #     if Stock.objects.filter(company_name=company).exists() :
     #         pass
     #     else :
     #         Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
 
-
-    # 여기 시작
-    # for company in companys :
-    #     Stock.objects.filter(company_name=company).update(open~volume까지))
-
-    # for문을 모델의 주식코드로 돌려,,,?
-    # 모델에 있는 open~volume 필드들은 랭킹을 나타내거나, 하루에 보여지는 것들을 할때만 유효함....
-    df = yf.download(tickers='005880.KS', period='1d', interval='5m')
-
-    # index가 마지막인,,, 거만 하나떼어서 open/high~각각 접근해서 하나씩 update하기 해보자.
-    print(df.tail(1))
-    b=df.tail(1).values.tolist() # 이거다~
-    c=df.tail(1).values.tolist()[0]
-
-    #  download말고 get으로 전날꺼 불러오기
-
-   
-    return render(request, 'stock/api_test.html',{'a':df, 'b':b, 'c':c} )
-
-
-    
-
-
-
+    return render(request, 'stock/api_test.html',  )
 
 
 '''
-아래는 그래프 그리는 것 관련한 내용임 
+아래는 그래프 그리는 것 관련한 내용임 (구냥 구글링) (반응형 차트)
 '''
-    # #declare figure
-    # fig = go.Figure()
+    # import plotly.graph_objs as go
 
-    # #Candlestick
+    # df = yf.download(tickers='특정종목의 주식코드', period='1d', interval='5m')
+
+    # fig = go.Figure()      
+    # #Candlestick (캔들차트)
     # fig.add_trace(go.Candlestick(x=df.index,
     #                 open=df['Open'],
     #                 high=df['High'],
     #                 low=df['Low'],
     #                 close=df['Close'], name = 'market data'))
-
-    # # Add titles
-    # fig.update_layout(
-    #     title='삼성전자 live share price evolution',
-    #     yaxis_title='Stock Price (USD per Shares)')
 
     # # X-Axes
     # fig.update_xaxes(
@@ -184,21 +194,10 @@ def api_test(request) :
 
     # #Show
     # fig.show()
-    # fig.write_html('test.html') # 흠... 이게 아닌디....
+    # fig.write_html('test.html') # 흠... 이게 아닌디.... 이미지로 저장해야한다.
 
-    # get_data_yahoo API를 통해서 yahho finance의 주식 종목 데이터를 가져온다.
     # df = pdr.get_data_yahoo(code[0], '2021-01-18', '2021-01-22') // 여기서 pdr이 쓰이네
     # get_Data_yahoo와 download의 차이점..? get_data_yahoo도 실시간으로 불러와지는지 -> download()사용하기로 함. 탕탕
-    # 실시간이라기엔 20분씩 늦는것으로 확인됨..
+    # 실시간이라기엔 20분씩 늦음 
     
-    # excel 파일을 다운로드하는거와 동시에 pandas에 load하기
-    # 흔히 사용하는 df라는 변수는 data frame을 의미합니다.
-    # code_df = pd.read_html('http://kind.krx.co.kr/corpgeneral/corpList.do?method=download', header=0)[0]
-    # head()함수를 사용하면 date가장 최근 5줄만 리턴한다(인자에 숫자쓰면 숫자만큼 리턴). tail()은 그 반대
-
-    # '''
-    # to do list
     
-    # 0. plotly에 관한 충분한 이해.. 내가 원하는 경로에 html띄우는 법..? 
-    # 5. 전일비를 통해 상승률 하락률 top5를 매길 수 있을 것 같은데, 이건 stock list에서만 나타내면 될듯? + 직접 계산해야함
-    #    참고) 전일비 공식 : (현재가 - 전일종가) / 전일종가 X 100..... (시간 남으면)'''

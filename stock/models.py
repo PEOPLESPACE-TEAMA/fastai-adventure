@@ -81,12 +81,37 @@ class Stock(models.Model):
     high = models.FloatField(null=True, blank=True)
     low = models.FloatField(null=True, blank=True)
     close = models.FloatField(null=True, blank=True)
-    before_close = models.FloatField(null=True, blank=True)
     adj_close = models.FloatField(null=True, blank=True)
     volume = models.IntegerField(null=True, blank=True)
-    today_date = models.DateField(auto_now=True, blank=True)
-    bookmark = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bookmarked", null=True, blank=True )
+
+    before_close = models.FloatField(null=True, blank=True) # 전일종가 불러옴 ( 상승률과 하락률 계산하기 위함 )
+    increase = models.FloatField(null=True, blank=True) # 상승율  
+    decrease = models.FloatField(null=True, blank=True) # 하락율
     
+    bookmarked = models.BooleanField(default=False)
+
+    chart_image = models.ImageField(default=False, upload_to="")
+
+    def approve(self):
+        self.bookmarked = True
+        self.save()
+
+    def calculate_rate(self): # (현재시가-전일종가)/전일종가 * 100
+        rate = (self.open - self.before_close) / self.before_close
+        if rate >= 0 :
+            self.increase = rate
+            self.save()
+        else :
+            self.decrease = rate
+            self.save()
+
+    def initialize(self):
+        # before_close나 open 값이 Null이라 오류 발생 시 아래 주석 풀고 admin 서버에서 일부만 수정해서 테스트
+        # self.before_close = 2000000.0
+        # self.open = 1500000.0
+        self.increase = None
+        self.decrease = None
+        self.save()
 
     def __str__(self):
         return self.company_name

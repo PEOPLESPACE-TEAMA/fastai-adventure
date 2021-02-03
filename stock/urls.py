@@ -15,6 +15,7 @@ urlpatterns = [
     path('bookmark-list/<int:user_id>/', views.bookmark_list, name='bookmark_list'),
     path('market/', views.market, name='market'),
     path('market-list/', views.market_list, name='market_list'),
-    path('stock/<int:pk>/', views.stock_detail, name='stock_detail'),
+    path('stock/<stock_code>/', views.stock_detail, name='stock_detail'),
     path('api_test/', views.api_test, name='api_test'),
+    path('search/', views.home, name='search'),
 ]
