@@ -42,16 +42,18 @@ def logout(request):
 
 def home(request):
     stocks = Stock.objects.all().order_by('-id')
+    # increase, decrease 계산하려면 아래 주석 풀고 테스트
+      # for stock in stocks:
+    #     stock.initialize()
+    #     stock.calculate_rate()
     q = request.POST.get('q', "") 
     if q:
         search = stocks.filter(company_name__icontains=q)
         return render(request, 'stock/search.html', {'stocks' : search, 'q' : q})
-    
     bookmarks = stocks.filter(bookmarked=True)
-    if bookmarks:
-        return render(request, 'stock/home.html',{'bookmarks': bookmarks})
-
-    return render(request, 'stock/home.html')
+    increases = stocks.exclude(increase=None).order_by('increase')[:5]
+    decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
+    return render(request, 'stock/home.html',{'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases})
 
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
