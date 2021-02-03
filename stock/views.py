@@ -1,5 +1,7 @@
 from django.shortcuts import render,redirect
+from django.http import JsonResponse
 from .forms import RegisterForm, LoginForm
+from django.views.generic import View
 from .models import User, Stock
 import pandas as pd
 import yfinance as yf
@@ -9,7 +11,7 @@ import plotly
 import plotly.express as px
 import plotly.graph_objs as go
 import datetime
-
+from .utils import get_plot
 def main(request):
     return render(request, 'stock/main.html')
 
@@ -22,7 +24,7 @@ def signup(request):
             user.save()
             login_form = LoginForm()
             # 회원가입이 성공적으로 되면 로그인 페이지로 이동
-            return render(request, 'stock/login.html',{'form': login_form})
+            return redirect('login')
     else:
         user_form = RegisterForm()
     return render(request, 'stock/signup.html',{'form': user_form})
@@ -31,7 +33,7 @@ def login(request):
     if request.method =='POST':
         user_form = LoginForm(request.POST)
         if user_form.is_valid():
-            return render(request, 'stock/home.html')
+            return redirect('home')
     else:
         user_form = LoginForm()
     return render(request, 'stock/login.html',{'form': user_form})
@@ -76,10 +78,30 @@ def stock_detail(request,stock_code):
     stocks = Stock.objects.get(stock_code = stock_code)
     labels = ['stock_type','open','high','low','close','adj_close','volume']
     data = [stocks.stock_type,stocks.open,stocks.high,stocks.low,stocks.close,stocks.adj_close,stocks.volume]
-
+    stock_code = stocks.stock_code
+    df = yf.download(tickers=stock_code, period='1d', interval='5m')
+    size = int(df.size/6) 
+    print(size)
+    data = df.values.tolist()
+    time = df.index.tolist()
+    x=[]
+    y=[]
+    for i in time:
+        time_only = i.strftime("%H:%M:%S")
+        print("time:", time_only)
+        x.append(i)
+    for index in range(0,size):
+        # print(data[index][3])
+        y.append(data[index][3])
+    # 차트 만들기 
+    chart = get_plot(x,y)
+    fig = plt.gcf()
+    # 차트 저장하기
+    fig.savefig(stocks.company_name+'.png', dpi=fig.dpi)
+    stocks.chart_image = stocks.company_name+'.png'
+    stocks.save()
     vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume}
-    print(vals)
-    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals})
+    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart})
 
 
 

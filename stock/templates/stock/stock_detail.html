@@ -4,6 +4,9 @@
 <h1>Stock detail</h1>
 <p>stock 하나 클릭했을 때 나오는 detail 화면입니다<p>
 <h2>{{ companyName }}</h2>
+{% if chart %}
+    <img src = "data:image/png;base64, {{chart|safe}}">
+{% endif %}
 <div class="row mt-5">
     <div class="col-12">
         <div class="card" style="width: 100%;">
