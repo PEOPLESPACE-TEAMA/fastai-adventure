@@ -92,7 +92,7 @@ def market_list(request):
     yesterday = today - datetime.timedelta(1)  
     str_yesterday = str(yesterday)
 
-    context = {posts':posts, 'today':today}
+    context = {'posts':posts, 'today':today}
 
     # 하루 지날때마다 업데이트 하기
     # for stock in stocks :
