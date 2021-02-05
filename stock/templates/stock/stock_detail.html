@@ -22,6 +22,10 @@
         </div>
     </div>
 </div>
+<p>예측된 패턴: {{ predictedLabel }}</p>
+<p>해당 패턴일 확률: {{ probability }}%<p>
+
+
 <h3>상승률 top5</h3>
 {% for inc in increases.all %}
 <div class="container">
