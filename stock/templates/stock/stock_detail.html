@@ -3,6 +3,10 @@
 {% block contents %}
 <h1>Stock detail</h1>
 <p>stock 하나 클릭했을 때 나오는 detail 화면입니다<p>
+    <form role="form" action="" method="POST">
+        {% csrf_token %}
+        <input type="submit" class="btn" value="Add to Bookmark" name="mybtn">
+    </form>
 <h2>{{ companyName }}</h2>
 {% if chart %}
     <img src = "data:image/png;base64, {{chart|safe}}">

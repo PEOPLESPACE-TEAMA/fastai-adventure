@@ -131,8 +131,8 @@ def bookmark_list(request):
     return render(request, 'stock/bookmark_list.html',{'bookmark':bookmark})
 
 #이거는 그냥 테스트 해볼려고 만든거 
-def addbookmark(name,stock):
-    user = User.objects.get(username=name)
+def addbookmark(user,stock):
+    # user = User.objects.get(username=name)
     print(user)
     bookmark = Bookmark()
     bookmark.user = user
@@ -189,6 +189,7 @@ def market_list(request):
  
 
 def stock_detail(request,stock_code):
+    print(request.user)
     stocks = Stock.objects.get(stock_code = stock_code)
     labels = ['stock_type','open','high','low','close','adj_close','volume']
     data = [stocks.stock_type,stocks.open,stocks.high,stocks.low,stocks.close,stocks.adj_close,stocks.volume]
@@ -202,7 +203,7 @@ def stock_detail(request,stock_code):
     y=[]
     for i in time:
         time_only = i.strftime("%H:%M:%S")
-        print("time:", time_only)
+        # print("time:", time_only)
         x.append(i)
     for index in range(0,size):
         # print(data[index][3])
@@ -217,6 +218,12 @@ def stock_detail(request,stock_code):
     vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume,'수정주가':stocks.adj_close}
 
     crop_image(stocks.chart_image)
+
+    #북마크에 저장
+    if request.method == 'POST':
+        print(request.user)
+        print(stocks)
+        addbookmark(request.user,stocks)
     
     return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart})
 
