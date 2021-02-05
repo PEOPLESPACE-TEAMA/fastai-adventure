@@ -9,7 +9,6 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 import plotly
 from functools import wraps
-# import plotly.graph_objects as go
 import plotly.express as px
 import plotly.graph_objs as go
 import datetime
@@ -145,6 +144,10 @@ def market(request):
     return render(request, 'stock/market.html')
 
 def market_list(request):
+    # 데이터 생성 및 업데이트 할 시에만 주석 풀기
+    # initial_data_create()
+    # data_update()
+
     stocks = Stock.objects.all().order_by('company_name')
     paginator = Paginator(stocks, 20)
     page = request.GET.get("page",'1')
@@ -154,36 +157,8 @@ def market_list(request):
     yesterday = today - datetime.timedelta(1)  
     str_yesterday = str(yesterday)
 
-    context = {'posts':posts, 'today':today}
-
-    # 하루 지날때마다 업데이트 하기
-    # for stock in stocks :
-    #     stock_code=stock.stock_code
-    #     try:
-    #         pass
-            # df = yf.download(tickers=stock_code, period='1d', interval='5m')
-            # lists = df.tail(1).values.tolist()
-            # stock.open=lists[0][0]
-            # stock.high=lists[0][1]
-            # stock.low=lists[0][2]
-            # stock.close=lists[0][3]
-            # stock.adj_close=lists[0][4]
-            # stock.volume=lists[0][5]
-            # before_df = pdr.get_data_yahoo(stock_code, str_yesterday, str_yesterday)
-            # before_lists=before_df.values.tolist()
-            # stock.before_close=before_lists[0][3]
-            # stock.save()
-
-    #     except:
-    #         pass
-
-    # 업데이트2 ( 등락율, 등락폭 ) 
-    # incrase랑 decrease는 데이터를 싹 다 비우고 해야겠네
-
-    # for stock in stocks :
-    #     stock.calculate_rate()
-    #     stock.calculate_width()
-        
+    context = {'posts':posts, 'today':today} # 오늘 날짜도 알려주고 싶음
+    
     return render(request, 'stock/market_list.html', context )
  
 
@@ -269,7 +244,7 @@ def get_download_kosdaq():
     return df
 
 
-def api_test(request) :
+def initial_data_create() :
         
     # kospi, kosdaq 종목코드 각각 다운로드
     kospi_df = get_download_kospi()
@@ -289,50 +264,42 @@ def api_test(request) :
     
     # [중요] 초기 셋팅. db삭제하거나 sqlite파일 gitignore에 있는데 pull할 시에, 아래 주석풀고 실행시켜야 함
     # create하고 나선 다시 주석처리..
-    # for company, code in zip(companys, codes) :
-    #     if Stock.objects.filter(company_name=company).exists() :
-    #         pass
-    #     else :
-    #         Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
-
-    return render(request, 'stock/api_test.html',  )
+    for company, code in zip(companys, codes) :
+        if Stock.objects.filter(company_name=company).exists() :
+            pass
+        else :
+            Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
 
 
-'''
-아래는 그래프 그리는 것 관련한 내용임 (구냥 구글링) (반응형 차트)
-'''
-    # import plotly.graph_objs as go
+def data_update() :
+    # 하루 지날때마다 업데이트 하기 1
+    stocks = Stock.objects.all()
 
-    # df = yf.download(tickers='특정종목의 주식코드', period='1d', interval='5m')
+    for stock in stocks :
+        stock_code=stock.stock_code
+        try:
+            pass
+            df = yf.download(tickers=stock_code, period='1d', interval='5m')
+            lists = df.tail(1).values.tolist()
+            stock.open=lists[0][0]
+            stock.high=lists[0][1]
+            stock.low=lists[0][2]
+            stock.close=lists[0][3]
+            stock.adj_close=lists[0][4]
+            stock.volume=lists[0][5]
+            before_df = pdr.get_data_yahoo(stock_code, str_yesterday, str_yesterday)
+            before_lists=before_df.values.tolist()
+            stock.before_close=before_lists[0][3]
+            stock.save()
 
-    # fig = go.Figure()      
-    # #Candlestick (캔들차트)
-    # fig.add_trace(go.Candlestick(x=df.index,
-    #                 open=df['Open'],
-    #                 high=df['High'],
-    #                 low=df['Low'],
-    #                 close=df['Close'], name = 'market data'))
+        except:
+            pass
 
-    # # X-Axes
-    # fig.update_xaxes(
-    #     rangeslider_visible=True,
-    #     rangeselector=dict(
-    #         buttons=list([
-    #             dict(count=15, label="15m", step="minute", stepmode="backward"),
-    #             dict(count=45, label="45m", step="minute", stepmode="backward"),
-    #             dict(count=1, label="HTD", step="hour", stepmode="todate"),
-    #             dict(count=3, label="3h", step="hour", stepmode="backward"),
-    #             dict(step="all")
-    #         ])
-    #     )
-    # )
+    # 업데이트2 ( 등락율, 등락폭 ) 
+    # incrase랑 decrease는 데이터를 싹 다 비우고 해야겠네 ( 아직 해결 못 함 )
 
-    # #Show
-    # fig.show()
-    # fig.write_html('test.html') # 흠... 이게 아닌디.... 이미지로 저장해야한다.
+    for stock in stocks :
+        stock.calculate_rate()
+        stock.calculate_width()
 
-    # df = pdr.get_data_yahoo(code[0], '2021-01-18', '2021-01-22') // 여기서 pdr이 쓰이네
-    # get_Data_yahoo와 download의 차이점..? get_data_yahoo도 실시간으로 불러와지는지 -> download()사용하기로 함. 탕탕
-    # 실시간이라기엔 20분씩 늦음 
-    
     
