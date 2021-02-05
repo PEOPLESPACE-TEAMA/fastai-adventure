@@ -23,3 +23,15 @@ def get_plot(x,y):
     plt.tight_layout()
     graph = get_graph()
     return graph
+
+def get_bar_graph(x,y):
+    plt.switch_backend('AGG')
+    plt.figure(figsize=(10,5))
+    plt.title("Probability for each class")
+    plt.bar(x,y)
+    plt.xticks(rotation = 45)
+    plt.xlabel('class') 
+    plt.ylabel('percentage')
+    plt.tight_layout()
+    graph = get_graph()
+    return graph
