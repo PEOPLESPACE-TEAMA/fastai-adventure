@@ -119,4 +119,6 @@ class Stock(models.Model):
     def __str__(self):
         return self.company_name
 
-    
+class Bookmark(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE, related_name="이름이름", null=True, blank=True)
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name="이름", null=True, blank=True)

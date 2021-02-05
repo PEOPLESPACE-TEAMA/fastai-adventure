@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
 from .forms import RegisterForm, LoginForm
 from django.views.generic import View
-from .models import User, Stock
+from .models import User, Stock, Bookmark
 import pandas as pd
 import pandas_datareader as pdr
 import yfinance as yf
@@ -76,7 +76,28 @@ def bookmark(request):
     return render(request, 'stock/bookmark.html')
 
 def bookmark_list(request):
-    return render(request, 'stock/bookmark_list.html')
+    if request.user.is_authenticated:
+        print('로그인 되어 있네')
+    else:
+        print('dkdlsp')
+    #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
+
+    #print(request.user)
+    user = User.objects.get(username = 'dongjun') #유저네임 바꾸기 이 로그인 에러 있어서 일단 이렇게 했는데 레어 없으면 username = request.user.username 이나 그냥 현재 로그인 유저를 특정 할수 있게 하면 됨 
+    bookmark = Bookmark.objects.filter(user = user)
+
+    return render(request, 'stock/bookmark_list.html',{'bookmark':bookmark})
+
+#이거는 그냥 테스트 해볼려고 만든거 
+def addbookmark(name,stock):
+    user = User.objects.get(username=name)
+    print(user)
+    bookmark = Bookmark()
+    bookmark.user = user
+    bookmark.stock = stock
+    print(bookmark)
+    bookmark.save()
+
 
 def market(request):
     return render(request, 'stock/market.html')
