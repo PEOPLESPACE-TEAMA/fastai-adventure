@@ -52,3 +52,10 @@ def predict(img):
     '''
     pred,pred_idx,probs = model.predict(img)
     return pred, pred_idx, probs
+
+
+def getLabels():
+    '''
+    이 모델의 라벨들을 리스트로 반환
+    '''
+    return model.dls.vocab
