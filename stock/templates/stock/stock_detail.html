@@ -22,5 +22,25 @@
         </div>
     </div>
 </div>
+<h3>상승률 top5</h3>
+{% for inc in increases.all %}
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <p>{{ inc.company_name }}, {{ inc.increase }}</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
 
+<h3>하락률 top5</h3>
+{% for dec in decreases.all %}
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <p>{{ dec.company_name }}, {{ dec.decrease }}</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
 {% endblock %}
