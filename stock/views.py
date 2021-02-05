@@ -145,7 +145,6 @@ def market(request):
     return render(request, 'stock/market.html')
 
 def market_list(request):
-
     stocks = Stock.objects.all().order_by('company_name')
     paginator = Paginator(stocks, 20)
     page = request.GET.get("page",'1')
@@ -191,32 +190,11 @@ def market_list(request):
 def stock_detail(request,stock_code):
     print(request.user)
     stocks = Stock.objects.get(stock_code = stock_code)
-    labels = ['stock_type','open','high','low','close','adj_close','volume']
-    data = [stocks.stock_type,stocks.open,stocks.high,stocks.low,stocks.close,stocks.adj_close,stocks.volume]
-    stock_code = stocks.stock_code
-    df = yf.download(tickers=stock_code, period='1d', interval='2m')
-    size = int(df.size/6) 
-    print(size)
-    data = df.values.tolist()
-    time = df.index.tolist()
-    x=[]
-    y=[]
-    for i in time:
-        time_only = i.strftime("%H:%M:%S")
-        # print("time:", time_only)
-        x.append(i)
-    for index in range(0,size):
-        # print(data[index][3])
-        y.append(data[index][3])
-    # 차트 만들기 
-    chart = get_plot(x,y)
-    fig = plt.gcf()
-    # 차트 저장하기
-    fig.savefig('graphimg/'+stocks.company_name+'.png', dpi=fig.dpi)
-    stocks.chart_image = 'graphimg/'+stocks.company_name+'.png'
-    stocks.save()
+    stock_list = Stock.objects.all().order_by('-id')
+    increases = stock_list.exclude(increase=None).order_by('-increase')[:5]
+    decreases = stock_list.exclude(decrease=None).order_by('decrease')[:5]
+    chart = draw_chart(stocks)
     vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume,'수정주가':stocks.adj_close}
-
     crop_image(stocks.chart_image)
 
     #북마크에 저장
@@ -225,7 +203,7 @@ def stock_detail(request,stock_code):
         print(stocks)
         addbookmark(request.user,stocks)
     
-    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart})
+    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases})
 
 def draw_chart(self):
     stock_code = self.stock_code
