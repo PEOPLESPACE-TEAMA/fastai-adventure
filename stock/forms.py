@@ -6,7 +6,7 @@ class RegisterForm(forms.ModelForm):
     # 회원가입 폼
     password = forms.CharField(label='password',widget=forms.PasswordInput)
     confirm_password = forms.CharField(label='confirm password',widget=forms.PasswordInput)
-
+    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
     class Meta: 
         model = User 
         fields = ['username','email']      
