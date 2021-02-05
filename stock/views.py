@@ -15,6 +15,9 @@ import plotly.graph_objs as go
 import datetime
 from .utils import get_plot
 from django.core.paginator import Paginator
+from PIL import Image
+import os
+import numpy as np
 
 def main(request):
     return render(request, 'stock/main.html')
@@ -48,6 +51,8 @@ def logout(request):
 
 def home(request):
     stocks = Stock.objects.all().order_by('-id')
+    # user = User.objects.get(username = request.user.username)
+
     # increase, decrease 계산하려면 아래 주석 풀기
     # 계산이 오래 걸려요. 한 번 계산되면 다시 주석 설정해도 됩니다!
     # for stock in stocks:
@@ -71,6 +76,37 @@ def home(request):
 
     return render(request, 'stock/home.html', {'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases, 
             'bookmarkchart': bookmarkchart, 'increasechart': increasechart, 'decreasechart': decreasechart})
+
+def crop_image(self):
+    graph = Image.open(self)
+    pattern=graph.crop((850,40,945,400)) # left, up, right, down 95*360
+    pattern.save('crop.PNG')
+    rgb_im = pattern.convert('RGB')
+    pix = np.array(rgb_im)
+    stop = False
+    r, g, b = rgb_im.getpixel((90, 180))
+    for i in range(0, 360):
+        for j in range(0, 95):
+            r, g, b = rgb_im.getpixel((j, i))
+            if r < 200:
+                stop = True
+                break
+        if stop == True:
+            break
+    top = i
+    stop = False
+    for i in range(359, 0, -1):
+        for j in range(94, 0, -1):
+            r, g, b = rgb_im.getpixel((j, i))
+            if r < 200:
+                stop = True
+                break
+        if stop == True:
+            break
+    bottom = i
+    pattern=graph.crop((850,40+top,945,40+bottom))
+    pattern.show()
+    pattern.save('newcrop.PNG')
 
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
@@ -169,10 +205,13 @@ def stock_detail(request,stock_code):
     chart = get_plot(x,y)
     fig = plt.gcf()
     # 차트 저장하기
-    fig.savefig(stocks.company_name+'.png', dpi=fig.dpi)
-    stocks.chart_image = stocks.company_name+'.png'
+    fig.savefig('graphimg/'+stocks.company_name+'.png', dpi=fig.dpi)
+    stocks.chart_image = 'graphimg/'+stocks.company_name+'.png'
     stocks.save()
     vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume,'수정주가':stocks.adj_close}
+
+    crop_image(stocks.chart_image)
+    
     return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart})
 
 def draw_chart(self):
@@ -191,8 +230,11 @@ def draw_chart(self):
         y.append(data[index][3])
     chart = get_plot(x,y)
     fig = plt.gcf()
-    fig.savefig(self.company_name+'.png', dpi=fig.dpi)
-    self.chart_image = self.company_name+'.png'
+    path = "./graphimg/"
+    if not os.path.isdir(path):                                                           
+        os.mkdir(path)
+    fig.savefig(path+self.company_name+'.png', dpi=fig.dpi)
+    self.chart_image = path+self.company_name+'.png'
     self.save()
     return chart
 
