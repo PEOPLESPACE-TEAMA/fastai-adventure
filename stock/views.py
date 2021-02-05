@@ -19,7 +19,7 @@ from PIL import Image
 import os
 import numpy as np
 from django.contrib.auth import login, authenticate
-
+from .prediction import predict, getLabels
 
 def main(request):
     return render(request, 'stock/main.html')
@@ -83,10 +83,12 @@ def home(request):
     return render(request, 'stock/home.html', {'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases, 
             'bookmarkchart': bookmarkchart, 'increasechart': increasechart, 'decreasechart': decreasechart})
 
-def crop_image(self):
+def crop_image(self,stock):
     graph = Image.open(self)
     pattern=graph.crop((850,40,945,400)) # left, up, right, down 95*360
-    pattern.save('crop.PNG')
+    stock_name = stock.company_name
+    path = "./graphimg/"
+    pattern.save(path+stock.company_name+'crop.PNG')
     rgb_im = pattern.convert('RGB')
     pix = np.array(rgb_im)
     stop = False
@@ -112,7 +114,7 @@ def crop_image(self):
     bottom = i
     pattern=graph.crop((850,40+top,945,40+bottom))
     pattern.show()
-    pattern.save('newcrop.PNG')
+    pattern.save(path+stock.company_name+'newcrop.PNG')
 
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
@@ -195,7 +197,13 @@ def stock_detail(request,stock_code):
     decreases = stock_list.exclude(decrease=None).order_by('decrease')[:5]
     chart = draw_chart(stocks)
     vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume,'수정주가':stocks.adj_close}
-    crop_image(stocks.chart_image)
+    
+    # imgForPrediction= crop_image(stocks.chart_image)
+    crop_image(stocks.chart_image,stocks)
+    img_path = "./graphimg/"+stocks.company_name+'newcrop.PNG'
+    predictedLabel,predictedIdx,probability = predict(img_path)
+    predictedProbability = round(float(probability[int(predictedIdx)])*100,2)
+    print(predictedLabel)
 
     #북마크에 저장
     if request.method == 'POST':
@@ -203,7 +211,7 @@ def stock_detail(request,stock_code):
         print(stocks)
         addbookmark(request.user,stocks)
     
-    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases})
+    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases,'predictedLabel':predictedLabel,'probability':predictedProbability})
 
 def draw_chart(self):
     stock_code = self.stock_code
