@@ -22,6 +22,9 @@
         </div>
     </div>
 </div>
+{% if bar_chart %}
+<img src="data:image/png;base64, {{bar_chart|safe}}">
+{% endif %}
 <p>예측된 패턴: {{ predictedLabel }}</p>
 <p>해당 패턴일 확률: {{ probability }}%<p>
 

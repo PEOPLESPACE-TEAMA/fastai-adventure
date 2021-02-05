@@ -12,7 +12,7 @@ from functools import wraps
 import plotly.express as px
 import plotly.graph_objs as go
 import datetime
-from .utils import get_plot
+from .utils import get_plot,get_bar_graph
 from django.core.paginator import Paginator
 from PIL import Image
 import os
@@ -172,11 +172,13 @@ def stock_detail(request,stock_code):
     decreases = stock_list.exclude(decrease=None).order_by('decrease')[:5]
     chart = draw_chart(stocks)
     vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume,'수정주가':stocks.adj_close}
-    
-    # imgForPrediction= crop_image(stocks.chart_image)
     crop_image(stocks.chart_image,stocks)
     img_path = "./graphimg/"+stocks.company_name+'newcrop.PNG'
+    #모델 예측
     predictedLabel,predictedIdx,probability = predict(img_path)
+    label_list = getLabels()
+    # 클라스마다 percentage로 바 그래프 만들기 
+    bar_chart = draw_bar_chart(stocks,probability,label_list)
     predictedProbability = round(float(probability[int(predictedIdx)])*100,2)
     print(predictedLabel)
 
@@ -186,7 +188,20 @@ def stock_detail(request,stock_code):
         print(stocks)
         addbookmark(request.user,stocks)
     
-    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases,'predictedLabel':predictedLabel,'probability':predictedProbability})
+    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
+
+def draw_bar_chart(self,probability,label_list):
+    prob_list =[]
+    print(label_list)
+    for i in probability:
+        prob_list.append(float(i))
+    print(prob_list)
+    bar_chart = get_bar_graph(label_list,prob_list)
+    fig = plt.gcf()
+    path = "./graphimg/"
+    fig.savefig(path+self.company_name+"barchart"+'.png', dpi=fig.dpi)
+    return bar_chart
+
 
 def draw_chart(self):
     stock_code = self.stock_code
