@@ -1,2 +1,604 @@
-<h1>Stock market</h1>
-<p>stock market 화면입니다<p>
+{% extends "stock/base.html" %}
+{% load staticfiles %}
+
+{% block header %}
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" />
+{% endblock %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Fastock_stocker</title>
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../static/css/main.css" rel="stylesheet" />
+        <link href="market.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>  <!--차트-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">    <!--부트스트랩 아이콘-->
+    </head>
+    <body id="page-top">
+        <!-- Navigation bar-->
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+            <div class="container">
+                <div class="navbar-brand js-scroll-trigger" href="#page-top">FASTOCK</div>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars ml-1"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav text-uppercase ml-auto-left">
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#intro">HOME</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">ABOUT US</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">BOOKMARK</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#team">MARKET</a></li>
+                    </ul>
+                    <!--로그인/아웃 버튼 다듬어야 함-->
+                    </div>
+                        <button class="btn btn-primary btn-s-right" type="button" onclick="LoginWindow();">Sign In / Log In</button>
+                    </div>
+                    </div>
+                    <!-- LoginWindow ALERT-->
+                    <script>
+                        function LoginWindow(){
+                            let searchValue = document.getElementById('search-input').value.trim();
+                            if (searchValue.length > 1){
+                                alert('버튼을 누르면 로그인 페이지로 이동');
+                            }
+                            else {
+                                alert('버튼을 누르면 로그인 페이지로 이동. 실패하면 alert를 보냄');
+                            }
+                        };
+                    </script>
+                    <!-- search button -->
+                    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+                        <div class="input-group">
+                            <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        <!-- Masthead-->
+    </div>
+        <header class="masthead">
+            </ol>
+            <div class="container">
+                <div class="masthead-heading text-uppercase">STOCK MARKET</div>
+                <div class="row">
+            </div>
+        </header>
+        <!-- section 국내 국외로 나눠서 리스트로 가도록 -->
+        <section class="page-section" id="section">
+            <div class="container">
+                <div class="row">
+                            <div class="col-xl-6 col-md-6">
+                                <div class="card bg-primary text-white mb-4">
+                                    <div class="card-body">국내</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <div class="card bg-warning text-white mb-4">
+                                    <div class="card-body">해외</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </section>
+        <!--graph-->        
+        <section class="page-section" id="graph">
+            <div class="container">
+                <div class="row">
+                    <!-- 주식 설명 -->
+                    <div class="col-sm-6">
+                        <h2 class="section-heading">Apple</h2>
+                        <h5 class="section-heading">Apple</h2>
+                    </div>
+                    <div class="col-sm-2">
+                        <table class="table"> 
+                            <tr>
+                                <th>
+                                    전일
+                                </th>
+                                <td>
+                                    4800
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    시가
+                                </th>
+                                <td>
+                                    5120
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-2">
+                        <table class="table"> 
+                            <tr>
+                                <th>
+                                    고가
+                                </th>
+                                <td>
+                                    4800
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    저가
+                                </th>
+                                <td>
+                                    5120
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-2">
+                        <table class="table"> 
+                            <tr>
+                                <th>
+                                    거래량
+                                </th>
+                                <td>
+                                    4800
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    거래대금
+                                </th>
+                                <td>
+                                    5120
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>                
+            <div class="text-left">
+            <!-- 주식시장 그래프 버튼 나타내는 부분 1d,1m,1y -->
+            <div class="row">
+                <div class="col-sm-9">
+                    <table class="table"> 
+                                     <thead>
+                                          <thead>
+                                                <div>
+                                                   <tr>
+                                                      <th>
+                                                          <div class="dropdown no-arrow float-right">
+                                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                                            <div class="dropdown-header">설정</div>
+                                                            <a class="dropdown-item" href="#">1D</a>
+                                                            <a class="dropdown-item" href="#">1M</a>
+                                                            <a class="dropdown-item" href="#">1Y</a>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a class="dropdown-item" href="#">Something else here</a>
+                                                        </div>
+                                                      </th>
+                                                   </tr>
+                                               </div>
+                                         </thead>
+                                    <!-- 그래프 들어가는 곳 -->
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                graph
+                                            </td>
+                                        </tr>
+                                    </tbody> 
+                                </table>
+                                </div>
+                                <div class="col-sm-3">
+                                    <table class="table table-condensed"> 
+                                                          <thead>
+                                                                <div>
+                                                                   <tr>
+                                                                      <th>투자정보</th>
+                                                                      <th></th>
+                                                                   </tr>
+                                                               </div>
+                                                         </thead>
+                                                    <!-- 그래프 들어가는 곳 -->
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>상한가</td>
+                                                            <td><p class="text-right">6240</p></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>하한가</td>
+                                                            <td><p class="text-right">3240</p></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>52주 최고</td>
+                                                            <td><p class="text-right">6270</p></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>52주 최저</td>
+                                                            <td><p class="text-right">1370</p></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>업종</td>
+                                                            <td><p class="text-right">운수장비</p></td>
+                                                        </tr>
+                                                    </tbody> 
+                                                </table>
+                                            </div>
+                                        </section>
+        <!--recent list-->
+        <section class="page-section" id="recent list">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Recent List</h2>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm">
+                            <thead>
+                            <tr>
+                            <th>Stock</th>
+                            <th>Present Price</th>
+                              <th>Fluctuation</th>
+                              <th>Fluctuation Rate</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Apple</td>
+                              <td>38924</td>
+                              <td>291</td>
+                              <td>3.12 ^ </td>
+                            </tr>
+                            <tr>
+                              <td>Apple</td>
+                              <td>38924</td>
+                              <td>291</td>
+                              <td>3.12 ^ </td>
+                            </tr>
+                            <tr>
+                              <td>Apple</td>
+                              <td>38924</td>
+                              <td>291</td>
+                              <td>3.12 ^ </td>
+                            </tr>
+                            <tr>
+                              <td>Apple</td>
+                              <td>38924</td>
+                              <td>291</td>
+                              <td>3.12 ^ </td>
+                            </tr>
+                            <tr>
+                              <td>Apple</td>
+                              <td>38924</td>
+                              <td>291</td>
+                              <td>3.12 ^ </td>
+                            </tr>
+                            <tr>
+                              <td>Apple</td>
+                              <td>38924</td>
+                              <td>291</td>
+                              <td>3.12 ^ </td>
+                            </tr>
+                            <tr>
+                              <td>Apple</td>
+                              <td>38924</td>
+                              <td>291</td>
+                              <td>3.12 ^ </td>
+                            </tr>
+                            <tr>
+                              <td>Apple</td>
+                              <td>38924</td>
+                              <td>291</td>
+                              <td>3.12 ^ </td>
+                            </tr>
+                            <tr>
+                              <td>Apple</td>
+                              <td>38924</td>
+                              <td>291</td>
+                              <td>3.12 ^ </td>
+                            </tr>
+                            <tr>
+                              <td>Apple</td>
+                              <td>38924</td>
+                              <td>291</td>
+                              <td>3.12 ^ </td>
+                            </tr>
+                            </tr>
+                          </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--Up Ranking-->
+        <section class="page-section" id="recent list">
+            <div class="container">
+                <div class="text-center">
+                    <div class="text-left">
+                    <h3 class="section-heading text-uppercase">인기 검색</h3>
+                </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <table class="table">
+                              <thead class="thead-light">
+                                <tr>
+                                      <th scope="col">#</th>
+                                      <th scope="col">Stock</th>
+                                      <th scope="col">Present Price</th>
+                                      <th scope="col">Fluctuation Rate</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                      <th scope="row">1</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                </tr>
+                                <tr>
+                                      <th scope="row">2</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                </tr>
+                                <tr>
+                                      <th scope="row">3</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                </tr>
+                                <tr>
+                                      <th scope="row">4</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                </tr>
+                                <tr>
+                                      <th scope="row">5</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                </tr>
+
+                              </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-6">
+                            <table class="table">
+                                  <thead class="thead-light">
+                                    <tr>
+                                      <th scope="col">#</th>
+                                      <th scope="col">Stock</th>
+                                      <th scope="col">Present Price</th>
+                                      <th scope="col">Fluctuation Rate</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <th scope="row">6</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">7</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">8</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">9</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">10</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                        </div>
+                    </div>
+       
+        </section>
+        <!--업종상위-->
+        <section class="page-section" id="recent list">
+            <div class="container">
+                <div class="text-center">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="text-left">
+                            <h3 class="section-heading text-uppercase">업종상위 - 코스닥</h3>
+                        </div>
+                            <table class="table">
+                              <thead class="thead-light">
+                                <tr>
+                                      <th scope="col">#</th>
+                                      <th scope="col">Stock</th>
+                                      <th scope="col">Present Price</th>
+                                      <th scope="col">Fluctuation Rate</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                      <th scope="row">1</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                </tr>
+                                <tr>
+                                      <th scope="row">2</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                </tr>
+                                <tr>
+                                      <th scope="row">3</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                </tr>
+                                <tr>
+                                      <th scope="row">4</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                </tr>
+                                <tr>
+                                      <th scope="row">5</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                </tr>
+
+                              </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-left">
+                            <h3 class="section-heading text-uppercase">업종상위 - 코스피</h3>
+                        </div>
+                            <table class="table">
+                                  <thead class="thead-light">
+                                    <tr>
+                                      <th scope="col">#</th>
+                                      <th scope="col">Stock</th>
+                                      <th scope="col">Present Price</th>
+                                      <th scope="col">Fluctuation Rate</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <th scope="row">1</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">2</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">3</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">4</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">5</th>
+                                      <td>Apple</td>
+                                      <td>38024</td>
+                                      <td>3.02</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                        </div>
+                    </div>
+       
+        </section>
+        <!-- Contact-->
+        <section class="page-section" id="contact">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Contact Us</h2>
+                    <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                </div>
+                <form id="contactForm" name="sentMessage" novalidate="novalidate">
+                    <div class="row align-items-stretch mb-5">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input class="form-control" id="name" type="text" placeholder="Your Name *" required="required" data-validation-required-message="Please enter your name." />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="email" type="email" placeholder="Your Email *" required="required" data-validation-required-message="Please enter your email address." />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="form-group mb-md-0">
+                                <input class="form-control" id="phone" type="tel" placeholder="Your Phone *" required="required" data-validation-required-message="Please enter your phone number." />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group form-group-textarea mb-md-0">
+                                <textarea class="form-control" id="message" placeholder="Your Message *" required="required" data-validation-required-message="Please enter a message."></textarea>
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div id="success"></div>
+                        <button class="btn btn-primary btn-xl text-uppercase" id="sendMessageButton" type="submit">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <!-- Footer-->
+        <footer class="footer py-4">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-4 text-lg-left">Copyright © Your Website 2020</div>
+                    <div class="col-lg-4 my-3 my-lg-0">
+                        <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="col-lg-4 text-lg-right">
+                        <a class="mr-3" href="#!">Privacy Policy</a>
+                        <a href="#!">Terms of Use</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Contact form JS-->
+        <script src="assets/mail/jqBootstrapValidation.js"></script>
+        <script src="assets/mail/contact_me.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
+</html>

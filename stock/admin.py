@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Stock
+from .models import User, Stock,Bookmark
 # Register your models here.
 
 admin.site.register(User)
@@ -12,4 +12,4 @@ class StockAdmin(admin.ModelAdmin) :
     search_fields = ( 'stock_code' , )
 
 admin.site.register(Stock,StockAdmin)
-
+admin.site.register(Bookmark)

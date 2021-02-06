@@ -1,18 +1,24 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
 from .forms import RegisterForm, LoginForm
 from django.views.generic import View
-from .models import User, Stock
+from .models import User, Stock, Bookmark
 import pandas as pd
 import pandas_datareader as pdr
 import yfinance as yf
 import matplotlib.pyplot as plt
 import plotly
-# import plotly.graph_objects as go
+from functools import wraps
 import plotly.express as px
 import plotly.graph_objs as go
 import datetime
-from .utils import get_plot
+from .utils import get_plot,get_bar_graph
+from django.core.paginator import Paginator
+from PIL import Image
+import os
+import numpy as np
+from django.contrib.auth import login, authenticate
+from .prediction import predict, getLabels
 
 def main(request):
     return render(request, 'stock/main.html')
@@ -21,10 +27,14 @@ def signup(request):
     if request.method == 'POST':
         user_form = RegisterForm(request.POST)
         if user_form.is_valid():
-            user = user_form.save(commit = False)
-            user.set_password(user_form.cleaned_data['password'])
+            user=user_form.save()
+            useremail = user_form.cleaned_data.get('email')
+            userpw = user_form.cleaned_data['password']
+            user.username = user_form.cleaned_data.get('username')
+            user.email=useremail
+            user.set_password(userpw)
             user.save()
-            login_form = LoginForm()
+            user = authenticate(email = useremail,password=userpw) 
             # 회원가입이 성공적으로 되면 로그인 페이지로 이동
             return redirect('login')
     else:
@@ -46,6 +56,8 @@ def logout(request):
 
 def home(request):
     stocks = Stock.objects.all().order_by('-id')
+    # user = User.objects.get(username = request.user.username)
+
     # increase, decrease 계산하려면 아래 주석 풀기
     # 계산이 오래 걸려요. 한 번 계산되면 다시 주석 설정해도 됩니다!
     # for stock in stocks:
@@ -70,71 +82,130 @@ def home(request):
     return render(request, 'stock/home.html', {'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases, 
             'bookmarkchart': bookmarkchart, 'increasechart': increasechart, 'decreasechart': decreasechart})
 
+def crop_image(self,stock):
+    graph = Image.open(self)
+    pattern=graph.crop((850,40,945,400)) # left, up, right, down 95*360
+    stock_name = stock.company_name
+    path = "./graphimg/"
+    pattern.save(path+stock.company_name+'crop.PNG')
+    rgb_im = pattern.convert('RGB')
+    pix = np.array(rgb_im)
+    stop = False
+    r, g, b = rgb_im.getpixel((90, 180))
+    for i in range(0, 360):
+        for j in range(0, 95):
+            r, g, b = rgb_im.getpixel((j, i))
+            if r < 200:
+                stop = True
+                break
+        if stop == True:
+            break
+    top = i
+    stop = False
+    for i in range(359, 0, -1):
+        for j in range(94, 0, -1):
+            r, g, b = rgb_im.getpixel((j, i))
+            if r < 200:
+                stop = True
+                break
+        if stop == True:
+            break
+    bottom = i
+    pattern=graph.crop((850,40+top,945,40+bottom))
+    pattern.show()
+    pattern.save(path+stock.company_name+'newcrop.PNG')
+
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
 
 def bookmark_list(request):
-    return render(request, 'stock/bookmark_list.html')
+    if request.user.is_authenticated:
+        print('로그인 되어 있네')
+    else:
+        print('dkdlsp')
+    #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
+
+    #print(request.user)
+    user = User.objects.get(username = 'dongjun') #유저네임 바꾸기 이 로그인 에러 있어서 일단 이렇게 했는데 레어 없으면 username = request.user.username 이나 그냥 현재 로그인 유저를 특정 할수 있게 하면 됨 
+    bookmark = Bookmark.objects.filter(user = user)
+
+    return render(request, 'stock/bookmark_list.html',{'bookmark':bookmark})
+
+#이거는 그냥 테스트 해볼려고 만든거 
+def bookmarkInOut(user,stock):
+    # user = User.objects.get(username=name)
+    #print(user,stock)
+    bookmark = Bookmark.objects.filter(user=user,stock=stock)
+    #print(bookmark)
+    if len(bookmark)>0:
+        bookmark.delete()
+    else:
+        bookmark = Bookmark()
+        bookmark.user = user
+        bookmark.stock = stock
+        bookmark.save()
+    
+
 
 def market(request):
     return render(request, 'stock/market.html')
 
 def market_list(request):
-    stocks = Stock.objects.all().order_by('id')[769:786]
+    # 데이터 생성 및 업데이트 할 시에만 주석 풀기
+    # initial_data_create()
+    # data_update_long()
+    # data_update_short()
+    
+    stocks = Stock.objects.all().order_by('company_name')
+    
+    paginator = Paginator(stocks, 20)
+    page = request.GET.get("page",'1')
+    posts = paginator.get_page(page)
+
     today = datetime.date.today()  
-    yesterday = today - datetime.timedelta(1)  
-    str_yesterday = str(yesterday)
-
-    for stock in stocks :
-        stock_code=stock.stock_code
-        try:
-            pass
-            # 하루 지날때마다 업데이트 하기
-            # df = yf.download(tickers=stock_code, period='1d', interval='5m')
-            # lists = df.tail(1).values.tolist()
-            # stock.open=lists[0][0]
-            # stock.high=lists[0][1]
-            # stock.low=lists[0][2]
-            # stock.close=lists[0][3]
-            # stock.adj_close=lists[0][4]
-            # stock.volume=lists[0][5]
-            # before_df = pdr.get_data_yahoo(stock_code, str_yesterday, str_yesterday)
-            # before_lists=before_df.values.tolist()
-            # stock.before_close=before_lists[0][3]
-            # stock.save()
-
-        except:
-            pass
-    return render(request, 'stock/market_list.html', { 'stocks' : stocks , 'str':str_yesterday} )
+    context = {'posts':posts, 'today':today} # 오늘 날짜도 알려주고 싶음
+    
+    return render(request, 'stock/market_list.html' ,context)
+ 
 
 def stock_detail(request,stock_code):
+    print(request.user)
     stocks = Stock.objects.get(stock_code = stock_code)
-    labels = ['stock_type','open','high','low','close','adj_close','volume']
-    data = [stocks.stock_type,stocks.open,stocks.high,stocks.low,stocks.close,stocks.adj_close,stocks.volume]
-    stock_code = stocks.stock_code
-    df = yf.download(tickers=stock_code, period='1d', interval='2m')
-    size = int(df.size/6) 
-    print(size)
-    data = df.values.tolist()
-    time = df.index.tolist()
-    x=[]
-    y=[]
-    for i in time:
-        time_only = i.strftime("%H:%M:%S")
-        print("time:", time_only)
-        x.append(i)
-    for index in range(0,size):
-        # print(data[index][3])
-        y.append(data[index][3])
-    # 차트 만들기 
-    chart = get_plot(x,y)
-    fig = plt.gcf()
-    # 차트 저장하기
-    fig.savefig(stocks.company_name+'.png', dpi=fig.dpi)
-    stocks.chart_image = stocks.company_name+'.png'
-    stocks.save()
+    stock_list = Stock.objects.all().order_by('-id')
+    increases = stock_list.exclude(increase=None).order_by('-increase')[:5]
+    decreases = stock_list.exclude(decrease=None).order_by('decrease')[:5]
+    chart = draw_chart(stocks)
     vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume,'수정주가':stocks.adj_close}
-    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart})
+    crop_image(stocks.chart_image,stocks)
+    img_path = "./graphimg/"+stocks.company_name+'newcrop.PNG'
+    #모델 예측
+    predictedLabel,predictedIdx,probability = predict(img_path)
+    label_list = getLabels()
+    # 클라스마다 percentage로 바 그래프 만들기 
+    bar_chart = draw_bar_chart(stocks,probability,label_list)
+    predictedProbability = round(float(probability[int(predictedIdx)])*100,2)
+    print(predictedLabel)
+
+    #북마크에 저장
+    if request.method == 'POST':
+        print(request.user)
+        print(stocks)
+        bookmarkInOut(request.user,stocks)
+    
+    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
+
+def draw_bar_chart(self,probability,label_list):
+    prob_list =[]
+    print(label_list)
+    for i in probability:
+        prob_list.append(float(i))
+    print(prob_list)
+    bar_chart = get_bar_graph(label_list,prob_list)
+    fig = plt.gcf()
+    path = "./graphimg/"
+    fig.savefig(path+self.company_name+"barchart"+'.png', dpi=fig.dpi)
+    return bar_chart
+
 
 def draw_chart(self):
     stock_code = self.stock_code
@@ -152,8 +223,11 @@ def draw_chart(self):
         y.append(data[index][3])
     chart = get_plot(x,y)
     fig = plt.gcf()
-    fig.savefig(self.company_name+'.png', dpi=fig.dpi)
-    self.chart_image = self.company_name+'.png'
+    path = "./graphimg/"
+    if not os.path.isdir(path):                                                           
+        os.mkdir(path)
+    fig.savefig(path+self.company_name+'.png', dpi=fig.dpi)
+    self.chart_image = path+self.company_name+'.png'
     self.save()
     return chart
 
@@ -197,7 +271,7 @@ def get_download_kosdaq():
     return df
 
 
-def api_test(request) :
+def initial_data_create() :
         
     # kospi, kosdaq 종목코드 각각 다운로드
     kospi_df = get_download_kospi()
@@ -217,50 +291,53 @@ def api_test(request) :
     
     # [중요] 초기 셋팅. db삭제하거나 sqlite파일 gitignore에 있는데 pull할 시에, 아래 주석풀고 실행시켜야 함
     # create하고 나선 다시 주석처리..
-    # for company, code in zip(companys, codes) :
-    #     if Stock.objects.filter(company_name=company).exists() :
-    #         pass
-    #     else :
-    #         Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
-
-    return render(request, 'stock/api_test.html',  )
+    for company, code in zip(companys, codes) :
+        if Stock.objects.filter(company_name=company).exists() :
+            pass
+        else :
+            Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
 
 
-'''
-아래는 그래프 그리는 것 관련한 내용임 (구냥 구글링) (반응형 차트)
-'''
-    # import plotly.graph_objs as go
+def data_update_long() :
 
-    # df = yf.download(tickers='특정종목의 주식코드', period='1d', interval='5m')
+    # 하루 지날때마다 업데이트 하기 1
+    today = datetime.date.today()  
+    yesterday = today - datetime.timedelta(1)  
+    str_yesterday = str(yesterday)
 
-    # fig = go.Figure()      
-    # #Candlestick (캔들차트)
-    # fig.add_trace(go.Candlestick(x=df.index,
-    #                 open=df['Open'],
-    #                 high=df['High'],
-    #                 low=df['Low'],
-    #                 close=df['Close'], name = 'market data'))
+    stocks = Stock.objects.all()
 
-    # # X-Axes
-    # fig.update_xaxes(
-    #     rangeslider_visible=True,
-    #     rangeselector=dict(
-    #         buttons=list([
-    #             dict(count=15, label="15m", step="minute", stepmode="backward"),
-    #             dict(count=45, label="45m", step="minute", stepmode="backward"),
-    #             dict(count=1, label="HTD", step="hour", stepmode="todate"),
-    #             dict(count=3, label="3h", step="hour", stepmode="backward"),
-    #             dict(step="all")
-    #         ])
-    #     )
-    # )
+    for stock in stocks :
+        stock_code=stock.stock_code
+        try:
+            df = yf.download(tickers=stock_code, period='1d', interval='1h')
+            lists = df.tail(1).values.tolist()
+            stock.open=lists[0][0]
+            stock.high=lists[0][1]
+            stock.low=lists[0][2]
+            stock.close=lists[0][3]
+            stock.adj_close=lists[0][4]
+            stock.volume=lists[0][5]
+            before_df = pdr.get_data_yahoo(stock_code, str_yesterday, str_yesterday)
+            before_lists=before_df.values.tolist()
+            stock.before_close=before_lists[0][3]
+            stock.save()
 
-    # #Show
-    # fig.show()
-    # fig.write_html('test.html') # 흠... 이게 아닌디.... 이미지로 저장해야한다.
+        except:
+            print("실패")
+            pass
+            
 
-    # df = pdr.get_data_yahoo(code[0], '2021-01-18', '2021-01-22') // 여기서 pdr이 쓰이네
-    # get_Data_yahoo와 download의 차이점..? get_data_yahoo도 실시간으로 불러와지는지 -> download()사용하기로 함. 탕탕
-    # 실시간이라기엔 20분씩 늦음 
-    
+
+def data_update_short() :
+    # 업데이트2 ( 등락율, 등락폭 ) 
+    stocks = Stock.objects.all()
+    for stock in stocks :
+        try:
+            stock.initialize()
+            stock.calculate_rate()
+            stock.calculate_width()
+        except :
+            pass
+
     

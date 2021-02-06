@@ -14,6 +14,8 @@ class UserManager(BaseUserManager):
         user_obj = self.model(
             email=self.normalize_email(email)
         )
+        user_obj.email = email
+        user_obj.username = username
         user_obj.set_password(password)
         user_obj.staff = is_staff
         user_obj.admin = is_admin
@@ -101,13 +103,13 @@ class Stock(models.Model):
     def calculate_rate(self): # (현재시가-전일종가)/전일종가 * 100
         rate = (self.open - self.before_close) / self.before_close
         if rate >= 0 :
-            self.increase = round(rate, 2)
+            self.increase = round(rate, 4)
             self.save()
         else :
-            self.decrease = round(rate, 2)
+            self.decrease = round(rate, 4)
             self.save()
 
-    def calculate_width(self):
+    def calculate_width(self): # 등라폭 계산
         self.fluctuation_width = self.open - self.before_close
         self.save()
 
@@ -119,4 +121,6 @@ class Stock(models.Model):
     def __str__(self):
         return self.company_name
 
-    
+class Bookmark(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE, related_name="이름이름", null=True, blank=True)
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name="이름", null=True, blank=True)

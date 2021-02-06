@@ -1,2 +1,53 @@
+
+{% extends "stock/base.html" %}
+{% block contents %}
 <h1>Stock detail</h1>
 <p>stock 하나 클릭했을 때 나오는 detail 화면입니다<p>
+    <form role="form" action="" method="POST">
+        {% csrf_token %}
+        <input type="submit" class="btn" value="Add to Bookmark" name="mybtn">
+    </form>
+<h2>{{ companyName }}</h2>
+{% if chart %}
+    <img src = "data:image/png;base64, {{chart|safe}}">
+{% endif %}
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card" style="width: 100%;">
+            <ul class="list-group list-group-flush">
+            {% for list in vals.items %}
+                <li class="list-group-item">{{ list }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% if bar_chart %}
+<img src="data:image/png;base64, {{bar_chart|safe}}">
+{% endif %}
+<p>예측된 패턴: {{ predictedLabel }}</p>
+<p>해당 패턴일 확률: {{ probability }}%<p>
+
+
+<h3>상승률 top5</h3>
+{% for inc in increases.all %}
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <p>{{ inc.company_name }}, {{ inc.increase }}</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<h3>하락률 top5</h3>
+{% for dec in decreases.all %}
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <p>{{ dec.company_name }}, {{ dec.decrease }}</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
