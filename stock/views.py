@@ -153,20 +153,19 @@ def market(request):
 def market_list(request):
     # 데이터 생성 및 업데이트 할 시에만 주석 풀기
     # initial_data_create()
-    # data_update()
-
+    # data_update_long()
+    # data_update_short()
+    
     stocks = Stock.objects.all().order_by('company_name')
+    
     paginator = Paginator(stocks, 20)
     page = request.GET.get("page",'1')
     posts = paginator.get_page(page)
 
     today = datetime.date.today()  
-    yesterday = today - datetime.timedelta(1)  
-    str_yesterday = str(yesterday)
-
     context = {'posts':posts, 'today':today} # 오늘 날짜도 알려주고 싶음
     
-    return render(request, 'stock/market_list.html', context )
+    return render(request, 'stock/market_list.html' ,context)
  
 
 def stock_detail(request,stock_code):
@@ -299,15 +298,19 @@ def initial_data_create() :
             Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
 
 
-def data_update() :
+def data_update_long() :
+
     # 하루 지날때마다 업데이트 하기 1
+    today = datetime.date.today()  
+    yesterday = today - datetime.timedelta(1)  
+    str_yesterday = str(yesterday)
+
     stocks = Stock.objects.all()
 
     for stock in stocks :
         stock_code=stock.stock_code
         try:
-            pass
-            df = yf.download(tickers=stock_code, period='1d', interval='5m')
+            df = yf.download(tickers=stock_code, period='1d', interval='1h')
             lists = df.tail(1).values.tolist()
             stock.open=lists[0][0]
             stock.high=lists[0][1]
@@ -321,13 +324,20 @@ def data_update() :
             stock.save()
 
         except:
+            print("실패")
             pass
+            
 
+
+def data_update_short() :
     # 업데이트2 ( 등락율, 등락폭 ) 
-    # incrase랑 decrease는 데이터를 싹 다 비우고 해야겠네 ( 아직 해결 못 함 )
-
+    stocks = Stock.objects.all()
     for stock in stocks :
-        stock.calculate_rate()
-        stock.calculate_width()
+        try:
+            stock.initialize()
+            stock.calculate_rate()
+            stock.calculate_width()
+        except :
+            pass
 
     
