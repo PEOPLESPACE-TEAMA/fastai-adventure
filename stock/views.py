@@ -153,13 +153,13 @@ def bookmarkInOut(user,stock):
     
 
 
-def market_list(request):
+def market_list_cospi(request):
     # 데이터 생성 및 업데이트 할 시에만 주석 풀기
     # initial_data_create()
     # data_update_long()
     # data_update_short()
     
-    stocks = Stock.objects.all().order_by('company_name')
+    stocks = Stock.objects.all().filter(stock_type='S').order_by('company_name')
     
     paginator = Paginator(stocks, 20)
     page = request.GET.get("page",'1')
@@ -168,8 +168,14 @@ def market_list(request):
     today = datetime.date.today()  
     context = {'posts':posts, 'today':today} # 오늘 날짜도 알려주고 싶음
     
-    return render(request, 'stock/market_list.html' ,context)
+    return render(request, 'stock/market_list_cospi.html' ,context)
  
+
+def market_list_cosdaq(request):
+    pass
+
+def market_list_nasdaq(request):
+    pass 
 
 def stock_detail(request,stock_code):
     print(request.user)
