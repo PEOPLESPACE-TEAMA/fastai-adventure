@@ -74,8 +74,13 @@ def home(request):
     increases = stocks.exclude(increase=None).order_by('-increase')[:5]
     decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
 
-    bookmark = bookmarks[0];    top = increases[0];    bottom = decreases[0]
-    bookmarkchart = draw_chart(bookmark)
+    if bookmarks.exists():
+        bookmark = bookmarks[0];  
+        bookmarkchart = draw_chart(bookmark)  
+    else :
+        bookmark="북마크한 종목이 없습니다"
+        bookmarkchart=" "
+    top = increases[0];    bottom = decreases[0]
     increasechart = draw_chart(top)
     decreasechart = draw_chart(bottom)
 
@@ -125,11 +130,15 @@ def bookmark_list(request):
         print('dkdlsp')
     #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
 
-    #print(request.user)
-    user = User.objects.get(username = 'dongjun') #유저네임 바꾸기 이 로그인 에러 있어서 일단 이렇게 했는데 레어 없으면 username = request.user.username 이나 그냥 현재 로그인 유저를 특정 할수 있게 하면 됨 
-    bookmark = Bookmark.objects.filter(user = user)
+    # print(request.user)
+    # user = User.objects.all().filter(username = request.user.username) #유저네임 바꾸기 이 로그인 에러 있어서 일단 이렇게 했는데 레어 없으면 username = request.user.username 이나 그냥 현재 로그인 유저를 특정 할수 있게 하면 됨 
+    # print(user)
+    bookmarks = Bookmark.objects.all().filter(user=request.user)
+    print(bookmarks)
+    print(type(bookmarks))
 
-    return render(request, 'stock/bookmark_list.html',{'bookmark':bookmark})
+
+    return render(request, 'stock/bookmark_list.html',{'bookmarks':bookmarks, } )
 
 #이거는 그냥 테스트 해볼려고 만든거 
 def bookmarkInOut(user,stock):
@@ -191,6 +200,8 @@ def stock_detail(request,stock_code):
         print(request.user)
         print(stocks)
         bookmarkInOut(request.user,stocks)
+        print("북마크 저장됨")
+        
     
     return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
 
@@ -232,7 +243,7 @@ def draw_chart(self):
     return chart
 
 
-#### 아래는 모두 야후 파이낸스 api 불러왔던 코드 ( 이젠 쓸 일 없음 - 나중에 별도 파일로 뺄게요,,! )
+#### 아래는 모두 야후 파이낸스 api 불러왔던 코드 
 
 stock_type = {
     'kospi': 'stockMkt',
