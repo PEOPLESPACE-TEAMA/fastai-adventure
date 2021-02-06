@@ -103,10 +103,10 @@ class Stock(models.Model):
     def calculate_rate(self): # (현재시가-전일종가)/전일종가 * 100
         rate = (self.open - self.before_close) / self.before_close
         if rate >= 0 :
-            self.increase = round(rate, 2)
+            self.increase = round(rate, 4)
             self.save()
         else :
-            self.decrease = round(rate, 2)
+            self.decrease = round(rate, 4)
             self.save()
 
     def calculate_width(self): # 등라폭 계산
