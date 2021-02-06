@@ -12,7 +12,7 @@ from functools import wraps
 import plotly.express as px
 import plotly.graph_objs as go
 import datetime
-from .utils import get_plot
+from .utils import get_plot,get_bar_graph
 from django.core.paginator import Paginator
 from PIL import Image
 import os
@@ -74,8 +74,13 @@ def home(request):
     increases = stocks.exclude(increase=None).order_by('-increase')[:5]
     decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
 
-    bookmark = bookmarks[0];    top = increases[0];    bottom = decreases[0]
-    bookmarkchart = draw_chart(bookmark)
+    if bookmarks.exists():
+        bookmark = bookmarks[0];  
+        bookmarkchart = draw_chart(bookmark)  
+    else :
+        bookmark="북마크한 종목이 없습니다"
+        bookmarkchart=" "
+    top = increases[0];    bottom = decreases[0]
     increasechart = draw_chart(top)
     decreasechart = draw_chart(bottom)
 
@@ -125,21 +130,30 @@ def bookmark_list(request):
         print('dkdlsp')
     #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
 
-    #print(request.user)
-    user = User.objects.get(username = 'dongjun') #유저네임 바꾸기 이 로그인 에러 있어서 일단 이렇게 했는데 레어 없으면 username = request.user.username 이나 그냥 현재 로그인 유저를 특정 할수 있게 하면 됨 
-    bookmark = Bookmark.objects.filter(user = user)
+    # print(request.user)
+    # user = User.objects.all().filter(username = request.user.username) #유저네임 바꾸기 이 로그인 에러 있어서 일단 이렇게 했는데 레어 없으면 username = request.user.username 이나 그냥 현재 로그인 유저를 특정 할수 있게 하면 됨 
+    # print(user)
+    bookmarks = Bookmark.objects.all().filter(user=request.user)
+    print(bookmarks)
+    print(type(bookmarks))
 
-    return render(request, 'stock/bookmark_list.html',{'bookmark':bookmark})
+
+    return render(request, 'stock/bookmark_list.html',{'bookmarks':bookmarks, } )
 
 #이거는 그냥 테스트 해볼려고 만든거 
-def addbookmark(user,stock):
+def bookmarkInOut(user,stock):
     # user = User.objects.get(username=name)
-    print(user)
-    bookmark = Bookmark()
-    bookmark.user = user
-    bookmark.stock = stock
-    print(bookmark)
-    bookmark.save()
+    #print(user,stock)
+    bookmark = Bookmark.objects.filter(user=user,stock=stock)
+    #print(bookmark)
+    if len(bookmark)>0:
+        bookmark.delete()
+    else:
+        bookmark = Bookmark()
+        bookmark.user = user
+        bookmark.stock = stock
+        bookmark.save()
+    
 
 
 def market(request):
@@ -148,20 +162,19 @@ def market(request):
 def market_list(request):
     # 데이터 생성 및 업데이트 할 시에만 주석 풀기
     # initial_data_create()
-    # data_update()
-
+    # data_update_long()
+    # data_update_short()
+    
     stocks = Stock.objects.all().order_by('company_name')
+    
     paginator = Paginator(stocks, 20)
     page = request.GET.get("page",'1')
     posts = paginator.get_page(page)
 
     today = datetime.date.today()  
-    yesterday = today - datetime.timedelta(1)  
-    str_yesterday = str(yesterday)
-
     context = {'posts':posts, 'today':today} # 오늘 날짜도 알려주고 싶음
     
-    return render(request, 'stock/market_list.html', context )
+    return render(request, 'stock/market_list.html' ,context)
  
 
 def stock_detail(request,stock_code):
@@ -172,11 +185,13 @@ def stock_detail(request,stock_code):
     decreases = stock_list.exclude(decrease=None).order_by('decrease')[:5]
     chart = draw_chart(stocks)
     vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume,'수정주가':stocks.adj_close}
-    
-    # imgForPrediction= crop_image(stocks.chart_image)
     crop_image(stocks.chart_image,stocks)
     img_path = "./graphimg/"+stocks.company_name+'newcrop.PNG'
+    #모델 예측
     predictedLabel,predictedIdx,probability = predict(img_path)
+    label_list = getLabels()
+    # 클라스마다 percentage로 바 그래프 만들기 
+    bar_chart = draw_bar_chart(stocks,probability,label_list)
     predictedProbability = round(float(probability[int(predictedIdx)])*100,2)
     print(predictedLabel)
 
@@ -184,9 +199,24 @@ def stock_detail(request,stock_code):
     if request.method == 'POST':
         print(request.user)
         print(stocks)
-        addbookmark(request.user,stocks)
+        bookmarkInOut(request.user,stocks)
+        print("북마크 저장됨")
+        
     
-    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases,'predictedLabel':predictedLabel,'probability':predictedProbability})
+    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
+
+def draw_bar_chart(self,probability,label_list):
+    prob_list =[]
+    print(label_list)
+    for i in probability:
+        prob_list.append(float(i))
+    print(prob_list)
+    bar_chart = get_bar_graph(label_list,prob_list)
+    fig = plt.gcf()
+    path = "./graphimg/"
+    fig.savefig(path+self.company_name+"barchart"+'.png', dpi=fig.dpi)
+    return bar_chart
+
 
 def draw_chart(self):
     stock_code = self.stock_code
@@ -213,7 +243,7 @@ def draw_chart(self):
     return chart
 
 
-#### 아래는 모두 야후 파이낸스 api 불러왔던 코드 ( 이젠 쓸 일 없음 - 나중에 별도 파일로 뺄게요,,! )
+#### 아래는 모두 야후 파이낸스 api 불러왔던 코드 
 
 stock_type = {
     'kospi': 'stockMkt',
@@ -279,15 +309,19 @@ def initial_data_create() :
             Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
 
 
-def data_update() :
+def data_update_long() :
+
     # 하루 지날때마다 업데이트 하기 1
+    today = datetime.date.today()  
+    yesterday = today - datetime.timedelta(1)  
+    str_yesterday = str(yesterday)
+
     stocks = Stock.objects.all()
 
     for stock in stocks :
         stock_code=stock.stock_code
         try:
-            pass
-            df = yf.download(tickers=stock_code, period='1d', interval='5m')
+            df = yf.download(tickers=stock_code, period='1d', interval='1h')
             lists = df.tail(1).values.tolist()
             stock.open=lists[0][0]
             stock.high=lists[0][1]
@@ -301,13 +335,20 @@ def data_update() :
             stock.save()
 
         except:
+            print("실패")
             pass
+            
 
+
+def data_update_short() :
     # 업데이트2 ( 등락율, 등락폭 ) 
-    # incrase랑 decrease는 데이터를 싹 다 비우고 해야겠네 ( 아직 해결 못 함 )
-
+    stocks = Stock.objects.all()
     for stock in stocks :
-        stock.calculate_rate()
-        stock.calculate_width()
+        try:
+            stock.initialize()
+            stock.calculate_rate()
+            stock.calculate_width()
+        except :
+            pass
 
     
