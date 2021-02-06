@@ -65,8 +65,14 @@ def market(request):
     #         pass
     q = request.POST.get('q', "") 
     if q:
+        stocks=Stock.objects.all()
         search = stocks.filter(company_name__icontains=q)
-        return render(request, 'stock/search.html', {'stocks' : search, 'q' : q})
+
+        context ={
+            'stocks':search,
+        }
+
+        return render(request, 'stock/market_list_for_search.html', context )
 
     bookmarks = stocks.filter(bookmarked=True).order_by('?')
     increases = stocks.exclude(increase=None).order_by('-increase')[:5]
@@ -84,6 +90,21 @@ def market(request):
 
     return render(request, 'stock/market.html', {'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases, 
             'bookmarkchart': bookmarkchart, 'increasechart': increasechart, 'decreasechart': decreasechart})
+
+
+def market_list_for_search(request):
+    q = request.POST.get('q', "") 
+    if q:
+        stocks=Stock.objects.all()
+        search = stocks.filter(company_name__icontains=q)
+        context ={
+            'stocks':search,
+        }
+        return render(request, 'stock/market_list_for_search.html', context )
+    else :
+        return render(request, 'stock/market_list_for_search.html')
+
+
 
 def crop_image(self,stock):
     graph = Image.open(self)
@@ -153,13 +174,20 @@ def bookmarkInOut(user,stock):
         bookmark.save()
     
 
-
 def market_list_cospi(request):
     # 데이터 생성 및 업데이트 할 시에만 주석 풀기
     # initial_data_create()
     # data_update_long()
     # data_update_short()
-    
+    q = request.POST.get('q', "") 
+    if q:
+        stocks=Stock.objects.all()
+        search = stocks.filter(company_name__icontains=q).filter(stock_type='S')
+        context ={
+            'stocks':search,
+        }
+        return render(request, 'stock/market_list_for_search.html', context )
+
     stocks = Stock.objects.all().filter(stock_type='S').order_by('company_name')
     
     paginator = Paginator(stocks, 20)

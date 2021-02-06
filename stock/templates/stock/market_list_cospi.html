@@ -18,6 +18,13 @@
 
     <h2 class=cosqi_tile >코스피 종목 목록</h2>
 
+
+    <form class="form-inline my-2 my-lg-0" action="{% url 'market_list_for_search' %}" method="post">
+        {% csrf_token %}
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" value="{{q}}">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
     <!-- <span>종목이름 <span>등락폭</span> <span>등락율(상승/하락)</span> -->
     <div class="container my-3">
         <table class="table">
