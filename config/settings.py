@@ -135,3 +135,4 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'autota87@gmail.com'
 EMAIL_HOST_PASSWORD = 'wkehd123'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
