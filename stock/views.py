@@ -51,7 +51,7 @@ def logout(request):
     # 로그아웃 하면 로그인 화면으로 연결
     return render(request, 'stock/login.html')
 
-def home(request):
+def market(request):
     stocks = Stock.objects.all().order_by('-id')
     # user = User.objects.get(username = request.user.username)
 
@@ -67,6 +67,7 @@ def home(request):
     if q:
         search = stocks.filter(company_name__icontains=q)
         return render(request, 'stock/search.html', {'stocks' : search, 'q' : q})
+
     bookmarks = stocks.filter(bookmarked=True).order_by('?')
     increases = stocks.exclude(increase=None).order_by('-increase')[:5]
     decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
@@ -75,13 +76,13 @@ def home(request):
         bookmark = bookmarks[0];  
         bookmarkchart = draw_chart(bookmark)  
     else :
-        bookmark="북마크한 종목이 없습니다"
+        bookmark=" "
         bookmarkchart=" "
     top = increases[0];    bottom = decreases[0]
     increasechart = draw_chart(top)
     decreasechart = draw_chart(bottom)
 
-    return render(request, 'stock/home.html', {'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases, 
+    return render(request, 'stock/market.html', {'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases, 
             'bookmarkchart': bookmarkchart, 'increasechart': increasechart, 'decreasechart': decreasechart})
 
 def crop_image(self,stock):
@@ -153,16 +154,13 @@ def bookmarkInOut(user,stock):
     
 
 
-def market(request):
-    return render(request, 'stock/market.html')
-
-def market_list(request):
+def market_list_cospi(request):
     # 데이터 생성 및 업데이트 할 시에만 주석 풀기
     # initial_data_create()
     # data_update_long()
     # data_update_short()
     
-    stocks = Stock.objects.all().order_by('company_name')
+    stocks = Stock.objects.all().filter(stock_type='S').order_by('company_name')
     
     paginator = Paginator(stocks, 20)
     page = request.GET.get("page",'1')
@@ -171,8 +169,14 @@ def market_list(request):
     today = datetime.date.today()  
     context = {'posts':posts, 'today':today} # 오늘 날짜도 알려주고 싶음
     
-    return render(request, 'stock/market_list.html' ,context)
+    return render(request, 'stock/market_list_cospi.html' ,context)
  
+
+def market_list_cosdaq(request):
+    pass
+
+def market_list_nasdaq(request):
+    pass 
 
 def stock_detail(request,stock_code):
     print(request.user)
