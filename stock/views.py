@@ -17,7 +17,7 @@ from django.core.paginator import Paginator
 from PIL import Image
 import os
 import numpy as np
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login as login_a, authenticate
 from .prediction import predict, getLabels
 
 def main(request):
@@ -27,14 +27,9 @@ def signup(request):
     if request.method == 'POST':
         user_form = RegisterForm(request.POST)
         if user_form.is_valid():
-            user=user_form.save()
-            useremail = user_form.cleaned_data.get('email')
-            userpw = user_form.cleaned_data['password']
-            user.username = user_form.cleaned_data.get('username')
-            user.email=useremail
-            user.set_password(userpw)
+            user=user_form.save(commit=False)
+            user.email = user_form.cleaned_data.get('email')
             user.save()
-            user = authenticate(email = useremail,password=userpw) 
             # 회원가입이 성공적으로 되면 로그인 페이지로 이동
             return redirect('login')
     else:
@@ -43,8 +38,9 @@ def signup(request):
 
 def login(request):
     if request.method =='POST':
-        user_form = LoginForm(request.POST)
+        user_form = LoginForm(request,request.POST)
         if user_form.is_valid():
+            login_a(request, user_form.get_user(), backend='django.contrib.auth.backends.ModelBackend') 
             return redirect('home')
     else:
         user_form = LoginForm()
