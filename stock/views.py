@@ -42,7 +42,7 @@ def login(request):
         user_form = LoginForm(request,request.POST)
         if user_form.is_valid():
             login_a(request, user_form.get_user(), backend='django.contrib.auth.backends.ModelBackend') 
-            return redirect('home')
+            return redirect('market')
     else:
         user_form = LoginForm()
     return render(request, 'stock/login.html',{'form': user_form})
@@ -56,7 +56,7 @@ def market(request):
     # user = User.objects.get(username = request.user.username)
 
     # increase, decrease 계산하려면 아래 주석 풀기
-    # 계산이 오래 걸려요. 한 번 계산되면 다시 주석 설정해도 됩니다!
+    # 계산이 오래 걸려요. 테스트 때는 한 번 계산되면 다시 주석 설정해도 됩니다!
     # for stock in stocks:
     #     try:
     #         stock.initialize()
@@ -68,7 +68,7 @@ def market(request):
         search = stocks.filter(company_name__icontains=q)
         return render(request, 'stock/search.html', {'stocks' : search, 'q' : q})
 
-    bookmarks = stocks.filter(bookmarked=True).order_by('?')
+    bookmarks = Bookmark.objects.filter(user=request.user).order_by('?')
     increases = stocks.exclude(increase=None).order_by('-increase')[:5]
     decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
 
@@ -90,7 +90,6 @@ def crop_image(self,stock):
     pattern=graph.crop((850,40,945,400)) # left, up, right, down 95*360
     stock_name = stock.company_name
     path = "./graphimg/"
-    pattern.save(path+stock.company_name+'crop.PNG')
     rgb_im = pattern.convert('RGB')
     pix = np.array(rgb_im)
     stop = False
@@ -116,7 +115,7 @@ def crop_image(self,stock):
     bottom = i
     pattern=graph.crop((850,40+top,945,40+bottom))
     pattern.show()
-    pattern.save(path+stock.company_name+'newcrop.PNG')
+    pattern.save(path+stock.company_name+'crop.PNG')
 
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
@@ -187,7 +186,7 @@ def stock_detail(request,stock_code):
     chart = draw_chart(stocks)
     vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume,'수정주가':stocks.adj_close}
     crop_image(stocks.chart_image,stocks)
-    img_path = "./graphimg/"+stocks.company_name+'newcrop.PNG'
+    img_path = "./graphimg/"+stocks.company_name+'crop.PNG'
     #모델 예측
     predictedLabel,predictedIdx,probability = predict(img_path)
     label_list = getLabels()
