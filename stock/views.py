@@ -132,14 +132,19 @@ def bookmark_list(request):
     return render(request, 'stock/bookmark_list.html',{'bookmark':bookmark})
 
 #이거는 그냥 테스트 해볼려고 만든거 
-def addbookmark(user,stock):
+def bookmarkInOut(user,stock):
     # user = User.objects.get(username=name)
-    print(user)
-    bookmark = Bookmark()
-    bookmark.user = user
-    bookmark.stock = stock
-    print(bookmark)
-    bookmark.save()
+    #print(user,stock)
+    bookmark = Bookmark.objects.filter(user=user,stock=stock)
+    #print(bookmark)
+    if len(bookmark)>0:
+        bookmark.delete()
+    else:
+        bookmark = Bookmark()
+        bookmark.user = user
+        bookmark.stock = stock
+        bookmark.save()
+    
 
 
 def market(request):
@@ -186,7 +191,7 @@ def stock_detail(request,stock_code):
     if request.method == 'POST':
         print(request.user)
         print(stocks)
-        addbookmark(request.user,stocks)
+        bookmarkInOut(request.user,stocks)
     
     return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
 
