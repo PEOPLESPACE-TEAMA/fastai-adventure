@@ -19,7 +19,7 @@ import os
 import numpy as np
 from django.contrib.auth import login as login_a, authenticate
 from .prediction import predict, getLabels
-#from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
+# from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
 def main(request):
     return render(request, 'stock/main.html')
@@ -53,8 +53,6 @@ def logout(request):
 
 def market(request):
     stocks = Stock.objects.all().order_by('-id')
-    # user = User.objects.get(username = request.user.username)
-
     # increase, decrease 계산하려면 아래 주석 풀기
     # 계산이 오래 걸려요. 테스트 때는 한 번 계산되면 다시 주석 설정해도 됩니다!
     # for stock in stocks:
@@ -69,12 +67,16 @@ def market(request):
         return render(request, 'stock/search.html', {'stocks' : search, 'q' : q})
 
     bookmarks = Bookmark.objects.filter(user=request.user).order_by('?')
+    bm_list = []
+    for bm in bookmarks:
+        bm_list.append(bm)
+    bookmarks = stocks.filter(company_name__in=bm_list)
     increases = stocks.exclude(increase=None).order_by('-increase')[:5]
     decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
 
     if bookmarks.exists():
-        bookmark = bookmarks[0];  
-        bookmarkchart = draw_chart(bookmark)  
+        bookmark = bookmarks[0]
+        bookmarkchart = draw_chart(bookmark)
     else :
         bookmark=" "
         bookmarkchart=" "
@@ -84,6 +86,18 @@ def market(request):
 
     return render(request, 'stock/market.html', {'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases, 
             'bookmarkchart': bookmarkchart, 'increasechart': increasechart, 'decreasechart': decreasechart})
+
+def market_list_for_search(request):
+    q = request.POST.get('q', "") 
+    if q:
+        stocks=Stock.objects.all()
+        search = stocks.filter(company_name__icontains=q)
+        context ={
+            'stocks':search,
+        }
+        return render(request, 'stock/market_list_for_search.html', context )
+    else :
+        return render(request, 'stock/market_list_for_search.html')
 
 def crop_image(self,stock):
     graph = Image.open(self)
