@@ -63,8 +63,14 @@ def market(request):
     #         pass
     q = request.POST.get('q', "") 
     if q:
+        stocks=Stock.objects.all()
         search = stocks.filter(company_name__icontains=q)
-        return render(request, 'stock/search.html', {'stocks' : search, 'q' : q})
+
+        context ={
+            'stocks':search,
+        }
+
+        return render(request, 'stock/market_list_for_search.html', context )
 
     bookmarks = Bookmark.objects.filter(user=request.user).order_by('?')
     bm_list = []
@@ -166,13 +172,20 @@ def bookmarkInOut(user,stock):
         bookmark.save()
     
 
-
 def market_list_cospi(request):
     # 데이터 생성 및 업데이트 할 시에만 주석 풀기
     # initial_data_create()
     # data_update_long()
     # data_update_short()
-    
+    q = request.POST.get('q', "") 
+    if q:
+        stocks=Stock.objects.all()
+        search = stocks.filter(company_name__icontains=q).filter(stock_type='S')
+        context ={
+            'stocks':search,
+        }
+        return render(request, 'stock/market_list_for_search.html', context )
+
     stocks = Stock.objects.all().filter(stock_type='S').order_by('company_name')
     
     paginator = Paginator(stocks, 20)
