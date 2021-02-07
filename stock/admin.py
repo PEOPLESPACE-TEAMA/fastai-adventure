@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Stock,Bookmark
+from .models import User, Stock, Bookmark, Question, Answer
 # Register your models here.
 
 admin.site.register(User)
@@ -13,3 +13,5 @@ class StockAdmin(admin.ModelAdmin) :
 
 admin.site.register(Stock,StockAdmin)
 admin.site.register(Bookmark)
+admin.site.register(Question)
+admin.site.register(Answer)
