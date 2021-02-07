@@ -95,7 +95,8 @@ class Stock(models.Model):
     bookmarked = models.BooleanField(default=False)
 
     chart_image = models.ImageField(default=False, upload_to="")
-
+    last_pattern = models.CharField(max_length=50,blank=True)
+    increase_or_decrease = models.CharField(max_length=50,blank=True)
     def approve(self):
         self.bookmarked = True
         self.save()
