@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
 from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm
 from django.views.generic import View
+
 from .models import User, Stock, Bookmark, Question, Answer,News
 import pandas as pd
 import pandas_datareader as pdr
@@ -277,7 +278,7 @@ def getIncreaseDecreaseResult(predictedLabel):
         return 'increase'
     else:
         return 'decrease'
-    
+
 def draw_bar_chart(self,probability,label_list):
     prob_list =[]
     print(label_list)
