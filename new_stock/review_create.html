@@ -365,8 +365,6 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Review</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-pencil-alt fa-sm text-white-50"></i> </a>
                     </div>
                 <div class="container">
                     <!-- Content Row -->
@@ -374,7 +372,7 @@
                         <!-- //이름 입력 폼 -->
                         <div class="col-md-4"> 
                         <div class="form-group"> 
-                        <label for="name">NAME</label> 
+                        <label for="name" class="text-primary">NAME</label> 
                         <input type="text" class="form-control" name="name" id="name" placeholder="Enter name"> 
                         </div> 
                         </div> 
@@ -383,26 +381,25 @@
                         <!-- //비밀번호 입력 폼  -->
                         <div class="col-md-4"> 
                         <div class="form-group"> 
-                        <label for="pass">Password</label> 
+                        <label for="pass" class="text-primary">Password</label> 
                         <input type="password" class="form-control" name="pass" id="pass" placeholder="Enter password"> 
                         </div> 
                         </div> 
 
                         <!-- //이메일 입력 폼 -->
                         <div class="col-md-4 form-group"> 
-                        <label for="email">Email address</label> 
+                        <label for="email" class="text-primary">Email address</label> 
                         <input type="email" class="form-control" name ="email" id="email" placeholder="Enter email"> 
                         </div> 
 
                         <!-- //글내용 입력 폼  -->
-                        <div class="col-md-12 form-group "> 
-                        <label for="content">Comment:</label> 
+                        <div class="col-md-12 form-group">  
+                        <label for="content" class="text-primary">Comment:</label> 
                         <textarea class="form-control" rows="10" name="content" id="content"></textarea>
                         </div> 
-                        <!-- //버튼 저장하기, 다시쓰기 -->
-                        <div class="container" style='width:200px'> 
-                        <input class="btn btn-outline-primary btn-icon-split " type="submit" value=" 저장하기 "> 
-                        <input class="btn btn-outline-primary btn-icon-split" type="reset" value=" 다시쓰기 "> 
+                        <!-- //버튼 저장하기 -->
+                        <div class="container " style='width:100px'> 
+                        <input class="btn btn-primary" type="submit" value=" save "> 
                         </div>  
             
                     </div>
