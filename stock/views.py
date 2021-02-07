@@ -19,6 +19,7 @@ import os
 import numpy as np
 from django.contrib.auth import login as login_a, authenticate
 from .prediction import predict, getLabels
+# from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
 def main(request):
     return render(request, 'stock/main.html')
@@ -41,7 +42,7 @@ def login(request):
         user_form = LoginForm(request,request.POST)
         if user_form.is_valid():
             login_a(request, user_form.get_user(), backend='django.contrib.auth.backends.ModelBackend') 
-            return redirect('home')
+            return redirect('market')
     else:
         user_form = LoginForm()
     return render(request, 'stock/login.html',{'form': user_form})
@@ -50,12 +51,10 @@ def logout(request):
     # 로그아웃 하면 로그인 화면으로 연결
     return render(request, 'stock/login.html')
 
-def home(request):
+def market(request):
     stocks = Stock.objects.all().order_by('-id')
-    # user = User.objects.get(username = request.user.username)
-
     # increase, decrease 계산하려면 아래 주석 풀기
-    # 계산이 오래 걸려요. 한 번 계산되면 다시 주석 설정해도 됩니다!
+    # 계산이 오래 걸려요. 테스트 때는 한 번 계산되면 다시 주석 설정해도 됩니다!
     # for stock in stocks:
     #     try:
     #         stock.initialize()
@@ -64,26 +63,53 @@ def home(request):
     #         pass
     q = request.POST.get('q', "") 
     if q:
+        stocks=Stock.objects.all()
         search = stocks.filter(company_name__icontains=q)
-        return render(request, 'stock/search.html', {'stocks' : search, 'q' : q})
-    bookmarks = stocks.filter(bookmarked=True).order_by('?')
+
+        context ={
+            'stocks':search,
+        }
+
+        return render(request, 'stock/market_list_for_search.html', context )
+
+    bookmarks = Bookmark.objects.filter(user=request.user).order_by('?')
+    bm_list = []
+    for bm in bookmarks:
+        bm_list.append(bm)
+    bookmarks = stocks.filter(company_name__in=bm_list)
     increases = stocks.exclude(increase=None).order_by('-increase')[:5]
     decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
 
-    bookmark = bookmarks[0];    top = increases[0];    bottom = decreases[0]
-    bookmarkchart = draw_chart(bookmark)
+    if bookmarks.exists():
+        bookmark = bookmarks[0]
+        bookmarkchart = draw_chart(bookmark)
+    else :
+        bookmark=" "
+        bookmarkchart=" "
+    top = increases[0];    bottom = decreases[0]
     increasechart = draw_chart(top)
     decreasechart = draw_chart(bottom)
 
-    return render(request, 'stock/home.html', {'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases, 
+    return render(request, 'stock/market.html', {'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases, 
             'bookmarkchart': bookmarkchart, 'increasechart': increasechart, 'decreasechart': decreasechart})
+
+def market_list_for_search(request):
+    q = request.POST.get('q', "") 
+    if q:
+        stocks=Stock.objects.all()
+        search = stocks.filter(company_name__icontains=q)
+        context ={
+            'stocks':search,
+        }
+        return render(request, 'stock/market_list_for_search.html', context )
+    else :
+        return render(request, 'stock/market_list_for_search.html')
 
 def crop_image(self,stock):
     graph = Image.open(self)
     pattern=graph.crop((850,40,945,400)) # left, up, right, down 95*360
     stock_name = stock.company_name
     path = "./graphimg/"
-    pattern.save(path+stock.company_name+'crop.PNG')
     rgb_im = pattern.convert('RGB')
     pix = np.array(rgb_im)
     stop = False
@@ -109,7 +135,7 @@ def crop_image(self,stock):
     bottom = i
     pattern=graph.crop((850,40+top,945,40+bottom))
     pattern.show()
-    pattern.save(path+stock.company_name+'newcrop.PNG')
+    pattern.save(path+stock.company_name+'crop.PNG')
 
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
@@ -121,44 +147,62 @@ def bookmark_list(request):
         print('dkdlsp')
     #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
 
-    #print(request.user)
-    user = User.objects.get(username = 'dongjun') #유저네임 바꾸기 이 로그인 에러 있어서 일단 이렇게 했는데 레어 없으면 username = request.user.username 이나 그냥 현재 로그인 유저를 특정 할수 있게 하면 됨 
-    bookmark = Bookmark.objects.filter(user = user)
+    # print(request.user)
+    # user = User.objects.all().filter(username = request.user.username) #유저네임 바꾸기 이 로그인 에러 있어서 일단 이렇게 했는데 레어 없으면 username = request.user.username 이나 그냥 현재 로그인 유저를 특정 할수 있게 하면 됨 
+    # print(user)
+    bookmarks = Bookmark.objects.all().filter(user=request.user)
+    print(bookmarks)
+    print(type(bookmarks))
 
-    return render(request, 'stock/bookmark_list.html',{'bookmark':bookmark})
+
+    return render(request, 'stock/bookmark_list.html',{'bookmarks':bookmarks, } )
 
 #이거는 그냥 테스트 해볼려고 만든거 
-def addbookmark(user,stock):
+def bookmarkInOut(user,stock):
     # user = User.objects.get(username=name)
-    print(user)
-    bookmark = Bookmark()
-    bookmark.user = user
-    bookmark.stock = stock
-    print(bookmark)
-    bookmark.save()
+    #print(user,stock)
+    bookmark = Bookmark.objects.filter(user=user,stock=stock)
+    #print(bookmark)
+    if len(bookmark)>0:
+        bookmark.delete()
+    else:
+        bookmark = Bookmark()
+        bookmark.user = user
+        bookmark.stock = stock
+        bookmark.save()
+    
 
-
-def market(request):
-    return render(request, 'stock/market.html')
-
-def market_list(request):
+def market_list_cospi(request):
     # 데이터 생성 및 업데이트 할 시에만 주석 풀기
     # initial_data_create()
-    # data_update()
+    # data_update_long()
+    # data_update_short()
+    q = request.POST.get('q', "") 
+    if q:
+        stocks=Stock.objects.all()
+        search = stocks.filter(company_name__icontains=q).filter(stock_type='S')
+        context ={
+            'stocks':search,
+        }
+        return render(request, 'stock/market_list_for_search.html', context )
 
-    stocks = Stock.objects.all().order_by('company_name')
+    stocks = Stock.objects.all().filter(stock_type='S').order_by('company_name')
+    
     paginator = Paginator(stocks, 20)
     page = request.GET.get("page",'1')
     posts = paginator.get_page(page)
 
     today = datetime.date.today()  
-    yesterday = today - datetime.timedelta(1)  
-    str_yesterday = str(yesterday)
-
     context = {'posts':posts, 'today':today} # 오늘 날짜도 알려주고 싶음
     
-    return render(request, 'stock/market_list.html', context )
+    return render(request, 'stock/market_list_cospi.html' ,context)
  
+
+def market_list_cosdaq(request):
+    pass
+
+def market_list_nasdaq(request):
+    pass 
 
 def stock_detail(request,stock_code):
     print(request.user)
@@ -169,7 +213,7 @@ def stock_detail(request,stock_code):
     chart = draw_chart(stocks)
     vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume,'수정주가':stocks.adj_close}
     crop_image(stocks.chart_image,stocks)
-    img_path = "./graphimg/"+stocks.company_name+'newcrop.PNG'
+    img_path = "./graphimg/"+stocks.company_name+'crop.PNG'
     #모델 예측
     predictedLabel,predictedIdx,probability = predict(img_path)
     label_list = getLabels()
@@ -177,15 +221,25 @@ def stock_detail(request,stock_code):
     bar_chart = draw_bar_chart(stocks,probability,label_list)
     predictedProbability = round(float(probability[int(predictedIdx)])*100,2)
     print(predictedLabel)
-
+    stocks.last_pattern = predictedLabel
+    stocks.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
+    stocks.save()
     #북마크에 저장
     if request.method == 'POST':
         print(request.user)
         print(stocks)
-        addbookmark(request.user,stocks)
+        bookmarkInOut(request.user,stocks)
+        print("북마크 저장됨")
+        
     
     return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
 
+def getIncreaseDecreaseResult(predictedLabel):
+    increase = ['DoubleBottom','InverseHeadAndShoulders','r_FallingWedge','c_FallingWedge','BullishPennant','BullishRectangle']
+    if predictedLabel in increase:
+        return 'increase'
+    else:
+        return 'decrease'
 def draw_bar_chart(self,probability,label_list):
     prob_list =[]
     print(label_list)
@@ -224,7 +278,7 @@ def draw_chart(self):
     return chart
 
 
-#### 아래는 모두 야후 파이낸스 api 불러왔던 코드 ( 이젠 쓸 일 없음 - 나중에 별도 파일로 뺄게요,,! )
+#### 아래는 모두 야후 파이낸스 api 불러왔던 코드 
 
 stock_type = {
     'kospi': 'stockMkt',
@@ -290,15 +344,19 @@ def initial_data_create() :
             Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
 
 
-def data_update() :
+def data_update_long() :
+
     # 하루 지날때마다 업데이트 하기 1
+    today = datetime.date.today()  
+    yesterday = today - datetime.timedelta(1)  
+    str_yesterday = str(yesterday)
+
     stocks = Stock.objects.all()
 
     for stock in stocks :
         stock_code=stock.stock_code
         try:
-            pass
-            df = yf.download(tickers=stock_code, period='1d', interval='5m')
+            df = yf.download(tickers=stock_code, period='1d', interval='1h')
             lists = df.tail(1).values.tolist()
             stock.open=lists[0][0]
             stock.high=lists[0][1]
@@ -312,13 +370,20 @@ def data_update() :
             stock.save()
 
         except:
+            print("실패")
             pass
+            
 
+
+def data_update_short() :
     # 업데이트2 ( 등락율, 등락폭 ) 
-    # incrase랑 decrease는 데이터를 싹 다 비우고 해야겠네 ( 아직 해결 못 함 )
-
+    stocks = Stock.objects.all()
     for stock in stocks :
-        stock.calculate_rate()
-        stock.calculate_width()
+        try:
+            stock.initialize()
+            stock.calculate_rate()
+            stock.calculate_width()
+        except :
+            pass
 
     
