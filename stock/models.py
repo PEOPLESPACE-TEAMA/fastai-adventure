@@ -95,8 +95,8 @@ class Stock(models.Model):
     bookmarked = models.BooleanField(default=False)
 
     chart_image = models.ImageField(default=False, upload_to="")
-    last_pattern = models.CharField(max_length=50,blank=True)
-    increase_or_decrease = models.CharField(max_length=50,blank=True)
+    last_pattern = models.CharField(max_length=50,blank=True)       # 가장 최근에 본 패턴
+    increase_or_decrease = models.CharField(max_length=50,blank=True) # 상승인지 하락인지
     def approve(self):
         self.bookmarked = True
         self.save()
@@ -128,3 +128,11 @@ class Bookmark(models.Model):
 
     def __str__(self):
         return self.stock.company_name
+
+class News(models.Model):
+    newsId=models.IntegerField(verbose_name="newsId",null=True)
+    author = models.CharField(max_length=256,null=True)
+    title = models.CharField(max_length=256,null=True)
+    description = models.CharField(max_length=512,null=True, blank=True)
+    newsImage = models.ImageField(default=False, upload_to="")
+    publishedAt=models.DateTimeField(null=True)
