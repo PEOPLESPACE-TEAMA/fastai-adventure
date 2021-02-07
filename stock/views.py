@@ -221,7 +221,9 @@ def stock_detail(request,stock_code):
     bar_chart = draw_bar_chart(stocks,probability,label_list)
     predictedProbability = round(float(probability[int(predictedIdx)])*100,2)
     print(predictedLabel)
-
+    stocks.last_pattern = predictedLabel
+    stocks.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
+    stocks.save()
     #북마크에 저장
     if request.method == 'POST':
         print(request.user)
@@ -232,6 +234,12 @@ def stock_detail(request,stock_code):
     
     return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
 
+def getIncreaseDecreaseResult(predictedLabel):
+    increase = ['DoubleBottom','InverseHeadAndShoulders','r_FallingWedge','c_FallingWedge','BullishPennant','BullishRectangle']
+    if predictedLabel in increase:
+        return 'increase'
+    else:
+        return 'decrease'
 def draw_bar_chart(self,probability,label_list):
     prob_list =[]
     print(label_list)
