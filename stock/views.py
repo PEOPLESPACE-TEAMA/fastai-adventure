@@ -1,8 +1,12 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm
 from django.views.generic import View
+<<<<<<< HEAD
 from .models import User, Stock, Bookmark,News
+=======
+from .models import User, Stock, Bookmark, Question, Answer
+>>>>>>> f4f4ad7b058d6d2ad8bf352022d61a24bd27782e
 import pandas as pd
 import pandas_datareader as pdr
 import yfinance as yf
@@ -19,6 +23,7 @@ import os
 import numpy as np
 from django.contrib.auth import login as login_a, authenticate
 from .prediction import predict, getLabels
+<<<<<<< HEAD
 from GoogleNews import GoogleNews
 from newspaper import Article
 from newspaper import Config
@@ -26,6 +31,9 @@ import ssl
 import nltk
 import requests
 import json
+=======
+from django.utils import timezone
+>>>>>>> f4f4ad7b058d6d2ad8bf352022d61a24bd27782e
 # from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
 def main(request):
@@ -73,12 +81,10 @@ def market(request):
     if q:
         stocks=Stock.objects.all()
         search = stocks.filter(company_name__icontains=q)
-
         context ={
             'stocks':search,
         }
-
-        return render(request, 'stock/market_list_for_search.html', context )
+        return render(request, 'stock/market_list_for_search.html', context)
 
     bookmarks = Bookmark.objects.filter(user=request.user).order_by('?')
     bm_list = []
@@ -97,9 +103,15 @@ def market(request):
     top = increases[0];    bottom = decreases[0]
     increasechart = draw_chart(top)
     decreasechart = draw_chart(bottom)
-
-    return render(request, 'stock/market.html', {'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases, 
-            'bookmarkchart': bookmarkchart, 'increasechart': increasechart, 'decreasechart': decreasechart})
+    context = {
+        'bookmarks': bookmarks,
+        'increases': increases,
+        'decreases': decreases,
+        'bookmarkchart': bookmarkchart,
+        'increasechart': increasechart,
+        'decreasechart': decreasechart,
+    }
+    return render(request, 'stock/market.html', context)
 
 def market_list_for_search(request):
     q = request.POST.get('q', "") 
@@ -109,7 +121,7 @@ def market_list_for_search(request):
         context ={
             'stocks':search,
         }
-        return render(request, 'stock/market_list_for_search.html', context )
+        return render(request, 'stock/market_list_for_search.html', context)
     else :
         return render(request, 'stock/market_list_for_search.html')
 
@@ -231,7 +243,6 @@ def market_list_cospi(request):
     
     return render(request, 'stock/market_list_cospi.html' ,context)
  
-
 def market_list_cosdaq(request):
     pass
 
@@ -274,7 +285,10 @@ def getIncreaseDecreaseResult(predictedLabel):
         return 'increase'
     else:
         return 'decrease'
+<<<<<<< HEAD
     
+=======
+>>>>>>> f4f4ad7b058d6d2ad8bf352022d61a24bd27782e
 def draw_bar_chart(self,probability,label_list):
     prob_list =[]
     print(label_list)
@@ -286,7 +300,6 @@ def draw_bar_chart(self,probability,label_list):
     path = "./graphimg/"
     fig.savefig(path+self.company_name+"barchart"+'.png', dpi=fig.dpi)
     return bar_chart
-
 
 def draw_chart(self):
     stock_code = self.stock_code
@@ -313,6 +326,49 @@ def draw_chart(self):
     self.save()
     return chart
 
+def question(request):
+    question_list = Question.objects.order_by('-create_date')
+    context = {
+        'question_list': question_list,
+    }
+    return render(request, 'stock/question.html', context)
+
+def question_detail(request, question_id):
+    question = Question.objects.get(id=question_id)
+    context = {
+        'question': question
+    }
+    return render(request, 'stock/question_detail.html', context)
+
+def answer_create(request, question_id):
+    question = Question.objects.get(id=question_id)
+    if request.method == 'POST':
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.create_date = timezone.now()
+            answer.question = question
+            answer.save()
+            return redirect('question_detail', question_id=question.id)
+    else:
+        form = AnswerForm()
+    context = {
+        'form': form,
+        'question': question,
+    }
+    return render(request, 'stock/answer_create.html', context)
+
+def question_create(request):
+    if request.method == 'POST':
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.create_date = timezone.now()
+            question.save()
+            return redirect('question_detail', question_id=question.id)
+    else:
+        form = QuestionForm()
+    return render(request, 'stock/question_create.html', {'form': form})
 
 #### 아래는 모두 야후 파이낸스 api 불러왔던 코드 
 
