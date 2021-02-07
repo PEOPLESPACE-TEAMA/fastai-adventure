@@ -19,6 +19,7 @@ import os
 import numpy as np
 from django.contrib.auth import login as login_a, authenticate
 from .prediction import predict, getLabels
+#from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
 def main(request):
     return render(request, 'stock/main.html')
@@ -41,7 +42,7 @@ def login(request):
         user_form = LoginForm(request,request.POST)
         if user_form.is_valid():
             login_a(request, user_form.get_user(), backend='django.contrib.auth.backends.ModelBackend') 
-            return redirect('home')
+            return redirect('market')
     else:
         user_form = LoginForm()
     return render(request, 'stock/login.html',{'form': user_form})
@@ -50,12 +51,12 @@ def logout(request):
     # 로그아웃 하면 로그인 화면으로 연결
     return render(request, 'stock/login.html')
 
-def home(request):
+def market(request):
     stocks = Stock.objects.all().order_by('-id')
     # user = User.objects.get(username = request.user.username)
 
     # increase, decrease 계산하려면 아래 주석 풀기
-    # 계산이 오래 걸려요. 한 번 계산되면 다시 주석 설정해도 됩니다!
+    # 계산이 오래 걸려요. 테스트 때는 한 번 계산되면 다시 주석 설정해도 됩니다!
     # for stock in stocks:
     #     try:
     #         stock.initialize()
@@ -64,9 +65,16 @@ def home(request):
     #         pass
     q = request.POST.get('q', "") 
     if q:
+        stocks=Stock.objects.all()
         search = stocks.filter(company_name__icontains=q)
-        return render(request, 'stock/search.html', {'stocks' : search, 'q' : q})
-    bookmarks = stocks.filter(bookmarked=True).order_by('?')
+
+        context ={
+            'stocks':search,
+        }
+
+        return render(request, 'stock/market_list_for_search.html', context )
+
+    bookmarks = Bookmark.objects.filter(user=request.user).order_by('?')
     increases = stocks.exclude(increase=None).order_by('-increase')[:5]
     decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
 
@@ -74,21 +82,35 @@ def home(request):
         bookmark = bookmarks[0];  
         bookmarkchart = draw_chart(bookmark)  
     else :
-        bookmark="북마크한 종목이 없습니다"
+        bookmark=" "
         bookmarkchart=" "
     top = increases[0];    bottom = decreases[0]
     increasechart = draw_chart(top)
     decreasechart = draw_chart(bottom)
 
-    return render(request, 'stock/home.html', {'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases, 
+    return render(request, 'stock/market.html', {'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases, 
             'bookmarkchart': bookmarkchart, 'increasechart': increasechart, 'decreasechart': decreasechart})
+
+
+def market_list_for_search(request):
+    q = request.POST.get('q', "") 
+    if q:
+        stocks=Stock.objects.all()
+        search = stocks.filter(company_name__icontains=q)
+        context ={
+            'stocks':search,
+        }
+        return render(request, 'stock/market_list_for_search.html', context )
+    else :
+        return render(request, 'stock/market_list_for_search.html')
+
+
 
 def crop_image(self,stock):
     graph = Image.open(self)
     pattern=graph.crop((850,40,945,400)) # left, up, right, down 95*360
     stock_name = stock.company_name
     path = "./graphimg/"
-    pattern.save(path+stock.company_name+'crop.PNG')
     rgb_im = pattern.convert('RGB')
     pix = np.array(rgb_im)
     stop = False
@@ -114,7 +136,7 @@ def crop_image(self,stock):
     bottom = i
     pattern=graph.crop((850,40+top,945,40+bottom))
     pattern.show()
-    pattern.save(path+stock.company_name+'newcrop.PNG')
+    pattern.save(path+stock.company_name+'crop.PNG')
 
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
@@ -151,17 +173,21 @@ def bookmarkInOut(user,stock):
         bookmark.save()
     
 
-
-def market(request):
-    return render(request, 'stock/market.html')
-
-def market_list(request):
+def market_list_cospi(request):
     # 데이터 생성 및 업데이트 할 시에만 주석 풀기
     # initial_data_create()
     # data_update_long()
     # data_update_short()
-    
-    stocks = Stock.objects.all().order_by('company_name')
+    q = request.POST.get('q', "") 
+    if q:
+        stocks=Stock.objects.all()
+        search = stocks.filter(company_name__icontains=q).filter(stock_type='S')
+        context ={
+            'stocks':search,
+        }
+        return render(request, 'stock/market_list_for_search.html', context )
+
+    stocks = Stock.objects.all().filter(stock_type='S').order_by('company_name')
     
     paginator = Paginator(stocks, 20)
     page = request.GET.get("page",'1')
@@ -170,8 +196,14 @@ def market_list(request):
     today = datetime.date.today()  
     context = {'posts':posts, 'today':today} # 오늘 날짜도 알려주고 싶음
     
-    return render(request, 'stock/market_list.html' ,context)
+    return render(request, 'stock/market_list_cospi.html' ,context)
  
+
+def market_list_cosdaq(request):
+    pass
+
+def market_list_nasdaq(request):
+    pass 
 
 def stock_detail(request,stock_code):
     print(request.user)
@@ -182,7 +214,7 @@ def stock_detail(request,stock_code):
     chart = draw_chart(stocks)
     vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume,'수정주가':stocks.adj_close}
     crop_image(stocks.chart_image,stocks)
-    img_path = "./graphimg/"+stocks.company_name+'newcrop.PNG'
+    img_path = "./graphimg/"+stocks.company_name+'crop.PNG'
     #모델 예측
     predictedLabel,predictedIdx,probability = predict(img_path)
     label_list = getLabels()
