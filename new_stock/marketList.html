@@ -371,7 +371,8 @@
                              <!-- !!!!Notice!!!!-->
                             <!-- 테이블 자리에 주식시장 정보/페이지네이션 가 들어오면 됩니다 -->
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered table-hover"
+                                        id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr class="text-primary bg-gray-100"> 
                                             <th>STOCK</th>
@@ -389,7 +390,8 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        <tr>
+                                        <tr onClick ="location.href='bookmarkDetail.html'">  
+                                            <!-- 클릭시 marketDetail로 이동, 일단 북마크디테일로 설정해둠(수정해야함) -->
                                             <td>Apple</td>
                                             <td>500000</td>
                                             <td class="text-danger">123</td>
