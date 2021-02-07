@@ -2,11 +2,7 @@ from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
 from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm
 from django.views.generic import View
-<<<<<<< HEAD
-from .models import User, Stock, Bookmark,News
-=======
-from .models import User, Stock, Bookmark, Question, Answer
->>>>>>> f4f4ad7b058d6d2ad8bf352022d61a24bd27782e
+from .models import User, Stock, Bookmark, Question, Answer,News
 import pandas as pd
 import pandas_datareader as pdr
 import yfinance as yf
@@ -23,7 +19,6 @@ import os
 import numpy as np
 from django.contrib.auth import login as login_a, authenticate
 from .prediction import predict, getLabels
-<<<<<<< HEAD
 from GoogleNews import GoogleNews
 from newspaper import Article
 from newspaper import Config
@@ -31,9 +26,7 @@ import ssl
 import nltk
 import requests
 import json
-=======
 from django.utils import timezone
->>>>>>> f4f4ad7b058d6d2ad8bf352022d61a24bd27782e
 # from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
 def main(request):
@@ -50,7 +43,6 @@ def signup(request):
             return redirect('login')
     else:
         user_form = RegisterForm()
-        updateNews()
     return render(request, 'stock/signup.html',{'form': user_form})
 
 def login(request):
@@ -285,10 +277,7 @@ def getIncreaseDecreaseResult(predictedLabel):
         return 'increase'
     else:
         return 'decrease'
-<<<<<<< HEAD
     
-=======
->>>>>>> f4f4ad7b058d6d2ad8bf352022d61a24bd27782e
 def draw_bar_chart(self,probability,label_list):
     prob_list =[]
     print(label_list)
