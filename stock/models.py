@@ -157,7 +157,7 @@ class Answer(models.Model):
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     content = models.TextField()
-    create_data = models.DateTimeField()
+    create_date = models.DateTimeField()
 
     def __str__(self):
-        return self.user, self.content, self.create_data
+        return self.user, self.content, self.create_date

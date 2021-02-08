@@ -1,9 +1,9 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
-from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm
+from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm ,Reviewform
 from django.views.generic import View
 
-from .models import User, Stock, Bookmark, Question, Answer,News
+from .models import User, Stock, Bookmark, Question, Answer,News ,Review
 import pandas as pd
 import pandas_datareader as pdr
 import yfinance as yf
@@ -355,6 +355,13 @@ def question_create(request):
         form = QuestionForm()
     return render(request, 'stock/question_create.html', {'form': form})
 
+
+def review(request):
+    #사용자 후기 게시판 
+
+    return render(request, 'stock/review.html')
+
+
 #### 아래는 모두 야후 파이낸스 api 불러왔던 코드 
 
 stock_type = {
@@ -463,8 +470,5 @@ def data_update_short() :
         except :
             pass
 
-def review(request):
-    #사용자 후기 게시판 
 
-    return render(request, 'stock/review.html')
 
