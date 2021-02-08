@@ -9,7 +9,7 @@ class StockAdmin(admin.ModelAdmin) :
     list_display = (
         'company_name','stock_type','open','close','before_close','increase','fluctuation_width',
     )
-    search_fields = ( 'stock_code' , )
+    search_fields = ( 'stock_code' , 'company_name', )
 
 admin.site.register(Stock,StockAdmin)
 admin.site.register(Bookmark)
