@@ -155,6 +155,7 @@ class Answer(models.Model):
         return self.question.title
 
 class Review(models.Model):
+    title = models.CharField(max_length=200,null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     content = models.TextField()
     create_date = models.DateTimeField()

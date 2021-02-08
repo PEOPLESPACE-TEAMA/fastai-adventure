@@ -358,6 +358,7 @@ def question_create(request):
 
 def review(request):
     #사용자 후기 게시판 
+    reviews = Review.objects.all().order_by('-create_date')
 
     return render(request, 'stock/review.html')
 
