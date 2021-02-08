@@ -19,4 +19,13 @@ urlpatterns = [
     path('question/<int:question_id>/', views.question_detail, name='question_detail'),
     path('question/create/', views.question_create, name='question_create'),
     path('answer/create/<int:question_id>/', views.answer_create, name='answer_create'),
+
+    # 새로운 템플릿 동작 확인용
+    path('register/',views.register, name='register'),
+    path('home/',views.home, name='home'),
+    path('forgot/',views.forgot, name='forgot-password'),
+    path('guideline/',views.guideline, name='guideline'),
+    path('aboutus/',views.aboutus, name='aboutus'),
+    path('reviewcreate/',views.reviewcreate, name='reviewcreate'),
+    path('reviewlist/',views.reviewlist, name='reviewlist'), 
 ]

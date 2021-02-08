@@ -1,0 +1,152 @@
+{% extends "stock/base.html" %}
+
+{% block contents %}
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+
+                    <!-- 주식 종목 소개 -->
+                    {% for stock in posts %}
+                    <ul class="list-inline"> 
+                        <li class="section-heading text-uppercase h1 fw-bolder list-inline-item">{{ stock.company_name }}</li>  <!--종목이름-->
+                        <li class="section-heading text-uppercase h2 fw-normal list-inline-item" >13250</li>   <!--현재가-->
+                        <li class="section-heading text-uppercase fs-3 fw-normal list-inline-item text-danger">3.25↑</li> <!--등락률-->
+                        <li class="fa fa-bell list-inline-item" aria-hidden="true"></li>    <!--색 채워진 알람-->
+                        <!-- <i class="fa fa-bell-o" aria-hidden="true"></i> 빈 알람 -->
+                        <li class="fa fa-star list-inline-item" aria-hidden="true"></li>    <!-- 색 채워진 별-->
+                        <!-- <li class="fa fa-star-o list-inline-item" aria-hidden="true"></li> 빈 별 -->
+                    </ul>
+
+                    <!-- 내용 -->
+                    <div class="row">
+
+                        <div class="col-xl-8 col-lg-7">
+
+                            <!-- 주식 그래프 -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">chart</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <h6 class="m-0 font-weight-bold text-primary">그래프</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- 주식 표 -->
+                        <div class="col-xl-4 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">About</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-area">
+
+                                            <table class="table"> 
+                                                <tr>
+                                                    <th>
+                                                        시가
+                                                    </th>
+                                                    <td>
+                                                        
+                                                    </td>
+                                                    <th>
+                                                        거래량
+                                                    </th>
+                                                    <td>
+                                                        4800
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        고가
+                                                    </th>
+                                                    <td>
+                                                        5120
+                                                    </td>
+                                                    <th>
+                                                        거래대금
+                                                    </th>
+                                                    <td>
+                                                        5120
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        저가
+                                                    </th>
+                                                    <td>
+                                                        5120
+                                                    </td>
+                                                    <th>
+                                                        52주 최저
+                                                    </th>
+                                                    <td>
+                                                        5120
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        전일지수
+                                                    </th>
+                                                    <td>
+                                                        5120
+                                                    </td>
+                                                    <th>
+                                                        52주 최고
+                                                    </th>
+                                                    <td>
+                                                        5120
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+            </div>
+
+            <div class="row">
+
+                        <div class="col-xl-4 col-lg-7">
+
+                            <!-- 주식 그래프 -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">chart</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <h6 class="m-0 font-weight-bold text-primary">패턴 설명</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- 주식 표 -->
+                        <div class="col-xl-8 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">About</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <h6 class="m-0 font-weight-bold text-primary">패턴차트</h6>
+                                                
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+            </div>
+
+
+            <!-- End of Main Content -->
+
+{% endblock %}
