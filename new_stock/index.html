@@ -34,7 +34,7 @@
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <!-- 윙크 이모티콘 삭제 -->
                 <!-- 작은 화면에서 글자 안 보임 -->
-                <div class="sidebar-brand-text mx-3">FASTOCK</div>
+                <div class="sidebar-brand-text mx-3 logo">FASTOCK</div>
             </a>
 
             <!-- Divider -->
@@ -80,7 +80,7 @@
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="AboutUs.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>About us</span></a>
             </li>
@@ -94,16 +94,33 @@
 
             <!-- Nav Item - BOOKMARK -->
             <li class="nav-item">
-                <a class="nav-link" href="cards.html">
+                <a class="nav-link" href="bookmarkList.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Bookmark</span></a>
             </li>
 
             <!-- Nav Item - MARKET -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="marketList.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Market</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2"
+                    aria-expanded="true" aria-controls="collapse2Pages">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Posts</span>
+                </a>
+                <div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Posts Screens:</h6>
+                        <a class="collapse-item" href="review_list.html">Review</a>
+                        <a class="collapse-item" href="guideline.html">Guideline</a>
+                        <!-- <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
+                        <div class="collapse-divider"></div>
+                    </div>
+                </div>
             </li>
 
             <!-- Divider -->
@@ -473,7 +490,7 @@
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Bookmark</h6>
                                     <div class="input-group-append">
-                                        <button class="btn btn-primary btn-l" type="button" onclick="location='charts.html'">MORE</button>
+                                        <a class="btn btn-primary btn-l" type="button" href="bookmarkList.html">MORE</a>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
