@@ -138,8 +138,9 @@ class Bookmark(models.Model):
 class News(models.Model):
     newsId=models.IntegerField(verbose_name="newsId",null=True)
     author = models.CharField(max_length=256,null=True)
-    title = models.CharField(max_length=256,null=True)
-    description = models.CharField(max_length=512,null=True, blank=True)
+    title = models.CharField(max_length=1024,null=True)
+    description = models.CharField(max_length=2048,null=True, blank=True)
+    redirectUrl = models.CharField(max_length=128,null=True)
     newsImage = models.ImageField(default=False, upload_to="")
     publishedAt=models.DateTimeField(null=True)
 
