@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
-from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm
+from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm, AlarmForm
 from django.views.generic import View
 
 from .models import User, Stock, Bookmark, Question, Answer,News
@@ -153,13 +153,46 @@ def crop_image(self,stock):
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
 
+
+def alarm(request):
+
+    if request.method == "POST":
+        form = AlarmForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user.mail_alarm_time = form.mail_alarm_time
+            user.save()
+            return redirect('bookmark_list')
+    else:
+        form = AlarmForm()
+        context = {
+            'form':form,
+        }
+    return render(request, 'stock/alarm.html', context)
+
+def post_new(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.published_date = timezone.now()
+            post.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = PostForm()
+    return render(request, 'blog/post_edit.html', {'form': form})
+
+
 def bookmark_list(request):
     if request.user.is_authenticated:
-        print('로그인 되어 있네')
+        print('로그인 성공')
+        print(request.user)
+        print(request.user.username)
     else:
         print('dkdlsp')
-    #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
 
+    #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
     # print(request.user)
     # user = User.objects.all().filter(username = request.user.username) #유저네임 바꾸기 이 로그인 에러 있어서 일단 이렇게 했는데 레어 없으면 username = request.user.username 이나 그냥 현재 로그인 유저를 특정 할수 있게 하면 됨 
     # print(user)
@@ -225,16 +258,17 @@ def market_list_cospi(request):
         }
         return render(request, 'stock/market_list_for_search.html', context )
 
+    print(request.user)
+    # user=User.objects.all().filter(user=request.user)
+
     stocks = Stock.objects.all().filter(stock_type='S').order_by('company_name')
-    
     paginator = Paginator(stocks, 20)
     page = request.GET.get("page",'1')
     posts = paginator.get_page(page)
 
-    today = datetime.date.today()  
-    context = {'posts':posts, 'today':today} # 오늘 날짜도 알려주고 싶음
+    context = {'posts':posts,  }
     
-    return render(request, 'stock/market_list_cospi.html' ,context)
+    return render(request, 'stock/market_list_cospi.html' ,    context)
  
 def market_list_cosdaq(request):
     pass

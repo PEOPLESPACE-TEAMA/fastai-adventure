@@ -35,6 +35,22 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractUser):
+    HOUR = (
+        (9, '9'),
+        (10, '10'),
+        (11, '11'),
+        (12, '12'),
+        (13, '13'),
+        (14, '14'),
+    )
+    MINUTE = (
+        (0, '0'),
+        (10, '10'),
+        (20, '20'),
+        (30, '30'),
+        (40, '40'),
+        (50, '50'),
+    )
     email = models.EmailField(verbose_name='email',max_length=255,unique=True)
     username = models.CharField(max_length=30)
     active = models.BooleanField(default=True)
@@ -43,11 +59,13 @@ class User(AbstractUser):
     confirmedEmail = models.BooleanField(default=False)
     dateRegistered = models.DateTimeField(
         auto_now_add=True)
-    
     objects = UserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
+    mail_alarm_time_hour = models.IntegerField(null=True, choices=HOUR, verbose_name="시")
+    mail_alarm_time_minute = models.IntegerField(null=True, choices=MINUTE, verbose_name="분")
+    
     def __str__(self):
         return "<%d %s>" %(self.pk,self.email)
     
@@ -94,13 +112,10 @@ class Stock(models.Model):
     bookmarked = models.BooleanField(default=False)
 
     chart_image = models.ImageField(default=False, upload_to="")
-<<<<<<< HEAD
+
     last_pattern = models.CharField(max_length=50,blank=True)       # 가장 최근에 본 패턴
     increase_or_decrease = models.CharField(max_length=50,blank=True) # 상승인지 하락인지
-=======
-    last_pattern = models.CharField(max_length=50,blank=True)
-    increase_or_decrease = models.CharField(max_length=50,blank=True)
->>>>>>> f4f4ad7b058d6d2ad8bf352022d61a24bd27782e
+
     def approve(self):
         self.bookmarked = True
         self.save()
