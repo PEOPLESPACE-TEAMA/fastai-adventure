@@ -463,4 +463,8 @@ def data_update_short() :
         except :
             pass
 
-    
+def review(request):
+    #사용자 후기 게시판 
+
+    return render(request, 'stock/review.html')
+
