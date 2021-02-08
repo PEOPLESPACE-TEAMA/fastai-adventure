@@ -13,5 +13,9 @@
     </ul>
 </div>
 
-<a href="{% url 'answer_create' question_id=question.id %}" class="btn btn-primary">답변 등록하기</a>
+<a href="{% url 'question' %}" class="btn btn-primary">돌아가기</a>
+
+{% if user.admin is True %}
+    <a href="{% url 'answer_create' question_id=question.id %}" class="btn btn-primary">답변 등록하기</a>
+{% endif %}
 
