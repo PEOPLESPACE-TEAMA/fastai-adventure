@@ -4,7 +4,7 @@ from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm, AlarmForm,
 from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm 
 from django.views.generic import View
 
-from .models import User, Stock, Bookmark, Question, Answer,News ,Review
+from .models import User, Stock, Bookmark, Question, Answer, News, Review
 import pandas as pd
 import pandas_datareader as pdr
 import yfinance as yf
@@ -24,10 +24,35 @@ from .prediction import predict, getLabels
 import requests
 import json
 from django.utils import timezone
+from stock.decorators import *
 # from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
 def main(request):
     return render(request, 'stock/main.html')
+
+# 새로운 템플릿 확인용 주소 시작
+def register(request):
+    return render(request, 'stock/register.html')
+
+def home(request):
+    return render(request, 'stock/home.html')
+
+def forgot(request):
+    return render(request, 'stock/forgot-password.html')
+
+def aboutus(request):
+    return render(request, 'stock/AboutUs.html')
+
+def guideline(request):
+    return render(request, 'stock/guideline.html')
+
+def reviewcreate(request):
+    return render(request, 'stock/review_create.html')
+
+def reviewlist(request):
+    return render(request, 'stock/review_list.html')
+# 새로운 템플릿 확인용 주소 끝   
+
 
 def signup(request):
     if request.method == 'POST':
@@ -89,7 +114,8 @@ def market(request):
     else :
         bookmark=" "
         bookmarkchart=" "
-    top = increases[0];    bottom = decreases[0]
+    top = increases[0]
+    bottom = decreases[0]
     increasechart = draw_chart(top)
     decreasechart = draw_chart(bottom)
     context = {
@@ -358,10 +384,12 @@ def question(request):
 def question_detail(request, question_id):
     question = Question.objects.get(id=question_id)
     context = {
-        'question': question
+        'question': question,
+        'user': request.user,
     }
     return render(request, 'stock/question_detail.html', context)
 
+@admin_required
 def answer_create(request, question_id):
     question = Question.objects.get(id=question_id)
     if request.method == 'POST':
@@ -392,12 +420,29 @@ def question_create(request):
         form = QuestionForm()
     return render(request, 'stock/question_create.html', {'form': form})
 
-
 def review(request):
     #사용자 후기 게시판 
-    reviews = Review.objects.all().order_by('-create_date')
+    review_list = Review.objects.all().order_by('-create_date')
 
-    return render(request, 'stock/review.html')
+    if request.method == 'POST':
+        form = Reviewform(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.create_date = timezone.now()
+            review.save()
+            form = Reviewform()
+            context = {
+                review_list :'review_list',
+                form : 'form',
+            }
+    else:
+        form = Reviewform()
+        context = {
+            review_list :'review_list',
+            form : 'form',
+        }
+    print(len(review_list))
+    return render(request, 'stock/review.html',context)
 
 
 #### 아래는 모두 야후 파이낸스 api 불러왔던 코드 
