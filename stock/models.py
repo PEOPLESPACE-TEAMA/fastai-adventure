@@ -35,6 +35,22 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractUser):
+    HOUR = (
+        (9, '9'),
+        (10, '10'),
+        (11, '11'),
+        (12, '12'),
+        (13, '13'),
+        (14, '14'),
+    )
+    MINUTE = (
+        (0, '0'),
+        (10, '10'),
+        (20, '20'),
+        (30, '30'),
+        (40, '40'),
+        (50, '50'),
+    )
     email = models.EmailField(verbose_name='email',max_length=255,unique=True)
     username = models.CharField(max_length=30)
     active = models.BooleanField(default=True)
@@ -43,11 +59,13 @@ class User(AbstractUser):
     confirmedEmail = models.BooleanField(default=False)
     dateRegistered = models.DateTimeField(
         auto_now_add=True)
-    
     objects = UserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
+    mail_alarm_time_hour = models.IntegerField(null=True, choices=HOUR, verbose_name="시")
+    mail_alarm_time_minute = models.IntegerField(null=True, choices=MINUTE, verbose_name="분")
+    
     def __str__(self):
         return "<%d %s>" %(self.pk,self.email)
     
@@ -94,8 +112,12 @@ class Stock(models.Model):
     bookmarked = models.BooleanField(default=False)
 
     chart_image = models.ImageField(default=False, upload_to="")
-    last_pattern = models.CharField(max_length=50,blank=True)
-    increase_or_decrease = models.CharField(max_length=50,blank=True)
+
+
+    last_pattern = models.CharField(max_length=50,blank=True)       # 가장 최근에 본 패턴
+    increase_or_decrease = models.CharField(max_length=50,blank=True) # 상승인지 하락인지
+
+
     def approve(self):
         self.bookmarked = True
         self.save()
@@ -128,6 +150,15 @@ class Bookmark(models.Model):
     def __str__(self):
         return self.stock.company_name
 
+
+class News(models.Model):
+    newsId=models.IntegerField(verbose_name="newsId",null=True)
+    author = models.CharField(max_length=256,null=True)
+    title = models.CharField(max_length=256,null=True)
+    description = models.CharField(max_length=512,null=True, blank=True)
+    newsImage = models.ImageField(default=False, upload_to="")
+    publishedAt=models.DateTimeField(null=True)
+
 class Question(models.Model):
     title = models.CharField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -144,3 +175,12 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.question.title
+
+class Review(models.Model):
+    title = models.CharField(max_length=200,null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    content = models.TextField()
+    create_date = models.DateTimeField()
+
+    def __str__(self):
+        return self.user, self.content, self.create_date

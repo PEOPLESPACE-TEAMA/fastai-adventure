@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
-from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm
+from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm, AlarmForm,Reviewform
+from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm 
 from django.views.generic import View
 
 from .models import User, Stock, Bookmark, Question, Answer, News, Review
@@ -20,6 +21,8 @@ import os
 import numpy as np
 from django.contrib.auth import login as login_a, authenticate
 from .prediction import predict, getLabels
+import requests
+import json
 from django.utils import timezone
 from stock.decorators import *
 # from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
@@ -148,13 +151,48 @@ def crop_image(self,stock):
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
 
+
+def alarm(request):
+    
+    if request.method == "POST":
+        user = request.user
+        form = AlarmForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            # user.mail_alarm_time_hour = form.mail_alarm_time_hour
+            # user.mail_alarm_time_minute = form.mail_alarm_time_minute
+            # user.save()
+            return redirect('bookmark_list')
+    else:
+        form = AlarmForm()
+        context = {
+            'form':form,
+        }
+    return render(request, 'stock/alarm.html', context)
+
+def post_new(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.published_date = timezone.now()
+            post.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = PostForm()
+    return render(request, 'blog/post_edit.html', {'form': form})
+
+
 def bookmark_list(request):
     if request.user.is_authenticated:
-        print('로그인 되어 있네')
+        print('로그인 성공')
+        print(request.user)
+        print(request.user.username)
     else:
         print('dkdlsp')
-    #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
 
+    #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
     # print(request.user)
     # user = User.objects.all().filter(username = request.user.username) #유저네임 바꾸기 이 로그인 에러 있어서 일단 이렇게 했는데 레어 없으면 username = request.user.username 이나 그냥 현재 로그인 유저를 특정 할수 있게 하면 됨 
     # print(user)
@@ -178,7 +216,33 @@ def bookmarkInOut(user,stock):
         bookmark.user = user
         bookmark.stock = stock
         bookmark.save()
-    
+
+
+# 하기전에 pip3 install newsapi 해주세용!
+def updateNews():
+    url = ('http://newsapi.org/v2/everything?'
+        'q=stock&'
+       'sources=bbc-news&'
+       'sortBy=publishedAt&'
+       'apiKey=19397c8c5dfa44858d9696e3b498b1ee')
+    response = requests.get(url)
+    jsonResult=response.json()
+    articles = jsonResult['articles'][0:5]
+    for i in range(0,5):
+        try:
+            news = News.objects.get(newsId=i)
+        except News.DoesNotExist:
+            news = News()
+        news.newsId=i
+        news.author = articles[i]['author']
+        news.title = articles[i]['title']
+        news.description = articles[i]['description']
+        news.newsImage = articles[i]['urlToImage']
+        datePublished=datetime.datetime.strptime(articles[i]['publishedAt'],"%Y-%m-%dT%H:%M:%SZ")
+        news.publishedAt=datePublished
+        news.save()
+    print(articles)
+
 
 def market_list_cospi(request):
     # 데이터 생성 및 업데이트 할 시에만 주석 풀기
@@ -194,16 +258,17 @@ def market_list_cospi(request):
         }
         return render(request, 'stock/market_list_for_search.html', context )
 
+    print(request.user)
+    # user=User.objects.all().filter(user=request.user)
+
     stocks = Stock.objects.all().filter(stock_type='S').order_by('company_name')
-    
     paginator = Paginator(stocks, 20)
     page = request.GET.get("page",'1')
     posts = paginator.get_page(page)
 
-    today = datetime.date.today()  
-    context = {'posts':posts, 'today':today} # 오늘 날짜도 알려주고 싶음
+    context = {'posts':posts,  }
     
-    return render(request, 'stock/market_list_cospi.html' ,context)
+    return render(request, 'stock/market_list_cospi.html' ,    context)
  
 def market_list_cosdaq(request):
     pass
@@ -247,6 +312,7 @@ def getIncreaseDecreaseResult(predictedLabel):
         return 'increase'
     else:
         return 'decrease'
+
 def draw_bar_chart(self,probability,label_list):
     prob_list =[]
     print(label_list)
@@ -266,7 +332,8 @@ def draw_chart(self):
     print(size)
     data = df.values.tolist()
     time = df.index.tolist()
-    x=[];    y=[]
+    x=[]
+    y=[]
     for i in time:
         time_only = i.strftime("%H:%M:%S")
         print("time:", time_only)
@@ -328,6 +395,14 @@ def question_create(request):
     else:
         form = QuestionForm()
     return render(request, 'stock/question_create.html', {'form': form})
+
+
+def review(request):
+    #사용자 후기 게시판 
+    reviews = Review.objects.all().order_by('-create_date')
+
+    return render(request, 'stock/review.html')
+
 
 #### 아래는 모두 야후 파이낸스 api 불러왔던 코드 
 
@@ -437,4 +512,5 @@ def data_update_short() :
         except :
             pass
 
-    
+
+
