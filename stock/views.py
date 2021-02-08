@@ -30,6 +30,30 @@ from stock.decorators import *
 def main(request):
     return render(request, 'stock/main.html')
 
+# 새로운 템플릿 확인용 주소 시작
+def register(request):
+    return render(request, 'stock/register.html')
+
+def home(request):
+    return render(request, 'stock/home.html')
+
+def forgot(request):
+    return render(request, 'stock/forgot-password.html')
+
+def aboutus(request):
+    return render(request, 'stock/AboutUs.html')
+
+def guideline(request):
+    return render(request, 'stock/guideline.html')
+
+def reviewcreate(request):
+    return render(request, 'stock/review_create.html')
+
+def reviewlist(request):
+    return render(request, 'stock/review_list.html')
+# 새로운 템플릿 확인용 주소 끝   
+
+
 def signup(request):
     if request.method == 'POST':
         user_form = RegisterForm(request.POST)
