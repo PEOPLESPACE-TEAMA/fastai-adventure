@@ -11,17 +11,14 @@
 
     <title>FASTOCK - Main</title>
 
-    <!-- Custom fonts for this template -->
+    <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template -->
+    <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this page -->
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
@@ -31,8 +28,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-          <!-- Sidebar -->
-          <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -84,7 +80,7 @@
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="AboutUs.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>About us</span></a>
             </li>
@@ -105,7 +101,7 @@
 
             <!-- Nav Item - MARKET -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="marketList.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Market</span></a>
             </li>
@@ -119,7 +115,8 @@
                 <div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Posts Screens:</h6>
-                        <a class="collapse-item" href="review_list.html">Review</a>
+                        <a class="collapse-item" href="qnaList.html">QnA</a>
+                        <a class="collapse-item" href="reviewList.html">Review</a>
                         <a class="collapse-item" href="guideline.html">Guideline</a>
                         <!-- <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
                         <div class="collapse-divider"></div>
@@ -128,7 +125,8 @@
             </li>
 
             <!-- Divider -->
-           <hr class="sidebar-divider d-none d-md-block">
+           <br class="sidebar-divider d-none d-md-block">
+           <br class="sidebar-divider d-none d-md-block">
 
            <!-- Sidebar Toggler (Sidebar) -->
            <div class="text-center d-none d-md-inline">
@@ -142,7 +140,6 @@
 
         </ul>
         <!-- End of Sidebar -->
-        <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -154,25 +151,34 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
-                    <form class="form-inline">
-                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                            <i class="fa fa-bars"></i>
-                        </button>
-                    </form>
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
 
                     <!-- Topbar Search -->
                     <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
                             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
+                                aria-label="Search" aria-describedby="basic-addon2" id="search-input">
                             <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
+                                <button class="btn btn-primary btn-l" type="button" onclick="searchStock();">OK</button>
                             </div>
                         </div>
                     </form>
+
+                    <!-- SEARCH ALERT : 두 글자 이상 입력해주세요-->
+                    <script>
+                        function searchStock(){
+                            let searchValue = document.getElementById('search-input').value.trim();
+                            if (searchValue.length > 1){
+                                location.href="/stock/search/" + searchValue + "/";
+                            }
+                            else {
+                                alert('두 글자 이상 입력해주세요.');
+                            }
+                        };
+                    </script>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -360,80 +366,48 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Bookmark List</h1>
-                    <h4 class="mb-4">Check Your Bookmark Items!<br/> KOSPI </h4>
-
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary"></h6>
-                        </div>
-                        <div class="card-body">
-                             <!-- !!!!!Notice!!!!!-->
-                            <!-- 테이블 자리에 북마크 리스트/페이지네이션 정보가 들어오면 됩니다 -->
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover" style="cursor:pointer" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr class="text-primary bg-gray-100"> 
-                                            <th>STOCK</th>
-                                            <th>PRESENT PRICE</th>
-                                            <th>FLUCTUATION</th>
-                                            <th>FLUCTUATION RATE</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr class="text-primary bg-gray-100">
-                                            <th>STOCK</th>
-                                            <th>PRESENT PRICE</th>
-                                            <th>FLUCTUATION</th>
-                                            <th>FLUCTUATION RATE</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <tr onClick ="location.href='bookmarkDetail.html'">  
-                                            <!-- 클릭시 bbokmarktDetail로 이동 -->
-                                            <td>Apple</td>
-                                            <td>500000</td>
-                                            <td class="text-danger">123</td>
-                                            <td class="text-danger">4.5↑</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Lael Greer</td>
-                                            <td>Systems Administrator</td>
-                                            <td>London</td>
-                                            <td>21</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jonas Alexander</td>
-                                            <td>Developer</td>
-                                            <td>San Francisco</td>
-                                            <td>30</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Shad Decker</td>
-                                            <td>Regional Director</td>
-                                            <td>Edinburgh</td>
-                                            <td>51</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Michael Bruce</td>
-                                            <td>Javascript Developer</td>
-                                            <td>Singapore</td>
-                                            <td>29</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Donna Snider</td>
-                                            <td>Customer Support</td>
-                                            <td>New York</td>
-                                            <td>27</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">QnA</h1>
                     </div>
+                <div class="container">
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- //이름 입력 폼 -->
+                        <div class="col-md-4"> 
+                        <div class="form-group"> 
+                        <label for="name" class="text-primary">NAME</label> 
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Enter name"> 
+                        </div> 
+                        </div> 
 
+
+                        <!-- //제목 입력 폼 -->
+                        <div class="col-md-8"> 
+                        <div class="form-group"> 
+                        <label for="pass" class="text-primary">Title</label> 
+                        <input type="tel" class="form-control" name="pass" id="pass" placeholder="Enter title"> 
+                        </div> 
+                        </div>  
+
+                         <!-- 이메일 입력 폼  -->
+                        <!-- <div class="col-md-4 form-group"> 
+                        <label for="email" class="text-primary">Email address</label> 
+                        <input type="email" class="form-control" name ="email" id="email" placeholder="Enter email"> 
+                        </div>   -->
+                    
+                        <!-- //글내용 입력 폼  -->
+                        <div class="col-md-12 form-group">  
+                        <label for="content" class="text-primary">Comment:</label> 
+                        <textarea class="form-control" rows="10" name="content" id="content"></textarea>
+                        </div> 
+                        <!-- //버튼 저장하기 -->
+                        <div class="container " style='width:100px'> 
+                        <input class="btn btn-primary" type="submit" value=" save "> 
+                        </div>  
+            
+                    </div>
                 </div>
+            </div>
                 <!-- /.container-fluid -->
 
             </div>
@@ -443,7 +417,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; FASTOCK 2021</span>
                     </div>
                 </div>
             </footer>
@@ -491,11 +465,11 @@
     <script src="js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
+    <script src="js/demo/chart-area-demo.js"></script>
+    <script src="js/demo/chart-pie-demo.js"></script>
 
 </body>
 
