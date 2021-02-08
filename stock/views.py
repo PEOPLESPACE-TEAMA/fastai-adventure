@@ -2,7 +2,8 @@ from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
 from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm
 from django.views.generic import View
-from .models import User, Stock, Bookmark, Question, Answer
+
+from .models import User, Stock, Bookmark, Question, Answer, News, Review
 import pandas as pd
 import pandas_datareader as pdr
 import yfinance as yf
@@ -20,6 +21,7 @@ import numpy as np
 from django.contrib.auth import login as login_a, authenticate
 from .prediction import predict, getLabels
 from django.utils import timezone
+from stock.decorators import *
 # from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
 def main(request):
@@ -85,7 +87,8 @@ def market(request):
     else :
         bookmark=" "
         bookmarkchart=" "
-    top = increases[0];    bottom = decreases[0]
+    top = increases[0]
+    bottom = decreases[0]
     increasechart = draw_chart(top)
     decreasechart = draw_chart(bottom)
     context = {
@@ -290,10 +293,12 @@ def question(request):
 def question_detail(request, question_id):
     question = Question.objects.get(id=question_id)
     context = {
-        'question': question
+        'question': question,
+        'user': request.user,
     }
     return render(request, 'stock/question_detail.html', context)
 
+@admin_required
 def answer_create(request, question_id):
     question = Question.objects.get(id=question_id)
     if request.method == 'POST':
