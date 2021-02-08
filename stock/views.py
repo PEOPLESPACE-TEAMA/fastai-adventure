@@ -355,12 +355,29 @@ def question_create(request):
         form = QuestionForm()
     return render(request, 'stock/question_create.html', {'form': form})
 
-
 def review(request):
     #사용자 후기 게시판 
-    reviews = Review.objects.all().order_by('-create_date')
+    review_list = Review.objects.all().order_by('-create_date')
 
-    return render(request, 'stock/review.html')
+    if request.method == 'POST':
+        form = Reviewform(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.create_date = timezone.now()
+            review.save()
+            form = Reviewform()
+            context = {
+                review_list :'review_list',
+                form : 'form',
+            }
+    else:
+        form = Reviewform()
+        context = {
+            review_list :'review_list',
+            form : 'form',
+        }
+    print(len(review_list))
+    return render(request, 'stock/review.html',context)
 
 
 #### 아래는 모두 야후 파이낸스 api 불러왔던 코드 
