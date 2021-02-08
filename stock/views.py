@@ -213,6 +213,8 @@ def bookmark_list(request):
     bookmarks = Bookmark.objects.all().filter(user=request.user)
     print(bookmarks)
     print(type(bookmarks))
+    for bookmark in bookmarks :
+        print(bookmark.stock.stock_code)
 
 
     return render(request, 'stock/bookmark_list.html',{'bookmarks':bookmarks, } )

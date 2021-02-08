@@ -1,9 +1,9 @@
-<p>왜 안뜨는거야!!!!! 진짜 어이없네!!</p>
+
 
 {% if request.user.mail_alarm_time_hour %}
-    <h1><a href="{% url 'alarm' %}" class="top-menu">메일 알람 수정하러 가기</a></h1>
+    <p><a href="{% url 'alarm' %}" class="top-menu">메일 알람 수정하기</a></p>
 {% else %}
-    <h1><a href="{% url 'alarm' %}" class="top-menu">메일 알람 생성하러 가기</a></h1>
+    <p><a href="{% url 'alarm' %}" class="top-menu">메일 알람 생성하기</a></p>
 {% endif %}
 
 <!-- {% url 'market_list_cospi' %} -->
