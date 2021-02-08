@@ -18,7 +18,6 @@
 
     <h2 class=cosqi_tile >코스피 종목 목록</h2>
 
-
     <form class="form-inline my-2 my-lg-0" action="{% url 'market_list_for_search' %}" method="post">
         {% csrf_token %}
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" value="{{q}}">
