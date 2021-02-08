@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser,BaseUserManager
 
-# Create your models here.
 
 class UserManager(BaseUserManager):
     def create_user(self, email, username, is_staff=False, is_admin=False, is_active=True, confirmedEmail=False, password=None):
@@ -95,7 +94,13 @@ class Stock(models.Model):
     bookmarked = models.BooleanField(default=False)
 
     chart_image = models.ImageField(default=False, upload_to="")
-
+<<<<<<< HEAD
+    last_pattern = models.CharField(max_length=50,blank=True)       # 가장 최근에 본 패턴
+    increase_or_decrease = models.CharField(max_length=50,blank=True) # 상승인지 하락인지
+=======
+    last_pattern = models.CharField(max_length=50,blank=True)
+    increase_or_decrease = models.CharField(max_length=50,blank=True)
+>>>>>>> f4f4ad7b058d6d2ad8bf352022d61a24bd27782e
     def approve(self):
         self.bookmarked = True
         self.save()
@@ -122,5 +127,34 @@ class Stock(models.Model):
         return self.company_name
 
 class Bookmark(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE, related_name="이름이름", null=True, blank=True)
-    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name="이름", null=True, blank=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE, null=True, blank=True)
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE,  null=True, blank=True)
+
+    def __str__(self):
+        return self.stock.company_name
+
+
+class News(models.Model):
+    newsId=models.IntegerField(verbose_name="newsId",null=True)
+    author = models.CharField(max_length=256,null=True)
+    title = models.CharField(max_length=256,null=True)
+    description = models.CharField(max_length=512,null=True, blank=True)
+    newsImage = models.ImageField(default=False, upload_to="")
+    publishedAt=models.DateTimeField(null=True)
+
+class Question(models.Model):
+    title = models.CharField(max_length=200)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    content = models.TextField()
+    create_date = models.DateTimeField()
+
+    def __str__(self):
+        return self.title
+
+class Answer(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    content = models.TextField()
+    create_date = models.DateTimeField()
+
+    def __str__(self):
+        return self.question.title

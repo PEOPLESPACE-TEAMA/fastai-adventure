@@ -1,11 +1,10 @@
 from django import forms
-from .models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
+from .models import User, Question, Answer
 from django.contrib.auth.hashers import check_password, make_password
-
-class RegisterForm(forms.ModelForm):
+class RegisterForm(UserCreationForm):
     # 회원가입 폼
-    password = forms.CharField(label='password',widget=forms.PasswordInput)
-    confirm_password = forms.CharField(label='confirm password',widget=forms.PasswordInput)
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
     class Meta: 
         model = User 
@@ -19,23 +18,22 @@ class RegisterForm(forms.ModelForm):
         return data['confirm_password']
 
 
-class LoginForm(forms.Form):
+class LoginForm(AuthenticationForm):
     # 로그인 폼
-    email = forms.CharField(label='email',max_length=255)     
+    # email = forms.CharField(label='email',max_length=255)     
     password = forms.CharField(label='password',widget=forms.PasswordInput)
 
 
-    def clean(self):
-        data = self.cleaned_data
-        email = data.get('email')
-        password = data.get('password')
-        if password and email:
-            try:
-                user = User.objects.get(email=email)
-            except User.DoesNotExist:
-                self.add_error('email', '아이디가 존재하지 않습니다')
-                return
-            if not check_password(password, user.password):
-                self.add_error('password', '비밀번호가 틀렸습니다.')
-            else:
-                self.email = user.email
+class QuestionForm(forms.ModelForm):
+    # 질문 작성 폼
+    class Meta:
+        model = Question
+        fields = ['title', 'content']
+
+
+class AnswerForm(forms.ModelForm):
+    # 답변 작성 폼
+    class Meta:
+        model = Answer
+        fields = ['content']
+

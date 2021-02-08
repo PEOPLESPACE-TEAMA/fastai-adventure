@@ -1,6 +1,13 @@
 {% extends "stock/base.html" %}
 {% load staticfiles %}
 
+<!-- <p> 내가 북마킹한 종목들 </p>
+{% for bookmark in bookmarks %}
+  <div><a class = wow href="{% url 'stock_detail' stock_code=bookmark.stock.stock_code %}">{{ bookmark }}</a></div>
+{% endfor %}
+
+테스팅 하기 위한 코드입니다. -->
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
