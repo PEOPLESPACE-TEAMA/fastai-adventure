@@ -20,11 +20,6 @@ import os
 import numpy as np
 from django.contrib.auth import login as login_a, authenticate
 from .prediction import predict, getLabels
-from GoogleNews import GoogleNews
-from newspaper import Article
-from newspaper import Config
-import ssl
-import nltk
 import requests
 import json
 from django.utils import timezone
