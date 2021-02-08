@@ -155,18 +155,32 @@ def bookmark(request):
 def alarm(request):
     
     if request.method == "POST":
+        hour=request.POST['hour']
+        minute=request.POST['minute']
+
         user = request.user
-        form = AlarmForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            # user.mail_alarm_time_hour = form.mail_alarm_time_hour
-            # user.mail_alarm_time_minute = form.mail_alarm_time_minute
-            # user.save()
-            return redirect('bookmark_list')
+        user.mail_alarm_time_hour = hour
+        user.mail_alarm_time_minute = minute
+        user.save()
+        print(user)
+        print(user.email)
+        print(user.username)
+        # form = AlarmForm(request.POST, instance=request.user)
+        # if form.is_valid():
+        #     a=form.save(commit=False)
+        #     a.user=request.user
+        #     a.save()
+        #     print(user)
+        #     print(user.email)
+        #     print(user.username)
+        #     # user.mail_alarm_time_hour = form.mail_alarm_time_hour
+        #     # user.mail_alarm_time_minute = form.mail_alarm_time_minute
+        #     # user.save()
+        return redirect('bookmark_list')
     else:
-        form = AlarmForm()
+        # form = AlarmForm()
         context = {
-            'form':form,
+            # 'form':form,
         }
     return render(request, 'stock/alarm.html', context)
 
