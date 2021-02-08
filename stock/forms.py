@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
-from .models import User, Question, Answer
+from .models import User, Question, Answer, Review
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.admin.widgets import AdminTimeWidget
 
@@ -39,9 +39,17 @@ class AnswerForm(forms.ModelForm):
         model = Answer
         fields = ['content']
 
+
 class AlarmForm(forms.ModelForm):
     # 메일 알람 시간 설정 폼
     class Meta:
         model = User
         fields = ['mail_alarm_time_hour','mail_alarm_time_minute']
+
+
+class Reviewform(forms.ModelForm):
+    #후기 폼
+    class Meta:
+        model = Review
+        fields = ['title', 'content']
 

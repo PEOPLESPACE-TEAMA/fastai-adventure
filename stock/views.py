@@ -1,9 +1,10 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
-from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm, AlarmForm
+from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm, AlarmForm,Reviewform
+from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm 
 from django.views.generic import View
 
-from .models import User, Stock, Bookmark, Question, Answer,News
+from .models import User, Stock, Bookmark, Question, Answer,News ,Review
 import pandas as pd
 import pandas_datareader as pdr
 import yfinance as yf
@@ -20,11 +21,6 @@ import os
 import numpy as np
 from django.contrib.auth import login as login_a, authenticate
 from .prediction import predict, getLabels
-from GoogleNews import GoogleNews
-from newspaper import Article
-from newspaper import Config
-import ssl
-import nltk
 import requests
 import json
 from django.utils import timezone
@@ -396,6 +392,14 @@ def question_create(request):
         form = QuestionForm()
     return render(request, 'stock/question_create.html', {'form': form})
 
+
+def review(request):
+    #사용자 후기 게시판 
+    reviews = Review.objects.all().order_by('-create_date')
+
+    return render(request, 'stock/review.html')
+
+
 #### 아래는 모두 야후 파이낸스 api 불러왔던 코드 
 
 stock_type = {
@@ -504,4 +508,5 @@ def data_update_short() :
         except :
             pass
 
-    
+
+

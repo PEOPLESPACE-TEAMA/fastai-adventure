@@ -113,8 +113,10 @@ class Stock(models.Model):
 
     chart_image = models.ImageField(default=False, upload_to="")
 
+
     last_pattern = models.CharField(max_length=50,blank=True)       # 가장 최근에 본 패턴
     increase_or_decrease = models.CharField(max_length=50,blank=True) # 상승인지 하락인지
+
 
     def approve(self):
         self.bookmarked = True
@@ -173,3 +175,12 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.question.title
+
+class Review(models.Model):
+    title = models.CharField(max_length=200,null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    content = models.TextField()
+    create_date = models.DateTimeField()
+
+    def __str__(self):
+        return self.user, self.content, self.create_date

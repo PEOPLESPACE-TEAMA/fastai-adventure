@@ -37,6 +37,14 @@
  footer.sticky-footer .copyright{line-height:1;font-size:.8rem}
  body.sidebar-toggled footer.sticky-footer{width:100%}
 
+/* fastock homepage logo */
+.logo {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 3.25rem;
+  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
  /*login, resister, forgotten page용 */
  header.masthead {
     padding-top: 6rem;
