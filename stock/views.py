@@ -1,9 +1,10 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
-from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm
+from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm, AlarmForm,Reviewform
+from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm 
 from django.views.generic import View
 
-from .models import User, Stock, Bookmark, Question, Answer,News
+from .models import User, Stock, Bookmark, Question, Answer, News, Review
 import pandas as pd
 import pandas_datareader as pdr
 import yfinance as yf
@@ -23,6 +24,7 @@ from .prediction import predict, getLabels
 import requests
 import json
 from django.utils import timezone
+from stock.decorators import *
 # from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
 def main(request):
@@ -112,7 +114,8 @@ def market(request):
     else :
         bookmark=" "
         bookmarkchart=" "
-    top = increases[0];    bottom = decreases[0]
+    top = increases[0]
+    bottom = decreases[0]
     increasechart = draw_chart(top)
     decreasechart = draw_chart(bottom)
     context = {
@@ -172,13 +175,48 @@ def crop_image(self,stock):
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
 
+
+def alarm(request):
+    
+    if request.method == "POST":
+        user = request.user
+        form = AlarmForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            # user.mail_alarm_time_hour = form.mail_alarm_time_hour
+            # user.mail_alarm_time_minute = form.mail_alarm_time_minute
+            # user.save()
+            return redirect('bookmark_list')
+    else:
+        form = AlarmForm()
+        context = {
+            'form':form,
+        }
+    return render(request, 'stock/alarm.html', context)
+
+def post_new(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.published_date = timezone.now()
+            post.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = PostForm()
+    return render(request, 'blog/post_edit.html', {'form': form})
+
+
 def bookmark_list(request):
     if request.user.is_authenticated:
-        print('로그인 되어 있네')
+        print('로그인 성공')
+        print(request.user)
+        print(request.user.username)
     else:
         print('dkdlsp')
-    #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
 
+    #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
     # print(request.user)
     # user = User.objects.all().filter(username = request.user.username) #유저네임 바꾸기 이 로그인 에러 있어서 일단 이렇게 했는데 레어 없으면 username = request.user.username 이나 그냥 현재 로그인 유저를 특정 할수 있게 하면 됨 
     # print(user)
@@ -244,16 +282,17 @@ def market_list_cospi(request):
         }
         return render(request, 'stock/market_list_for_search.html', context )
 
+    print(request.user)
+    # user=User.objects.all().filter(user=request.user)
+
     stocks = Stock.objects.all().filter(stock_type='S').order_by('company_name')
-    
     paginator = Paginator(stocks, 20)
     page = request.GET.get("page",'1')
     posts = paginator.get_page(page)
 
-    today = datetime.date.today()  
-    context = {'posts':posts, 'today':today} # 오늘 날짜도 알려주고 싶음
+    context = {'posts':posts,  }
     
-    return render(request, 'stock/market_list_cospi.html' ,context)
+    return render(request, 'stock/market_list_cospi.html' ,    context)
  
 def market_list_cosdaq(request):
     pass
@@ -345,10 +384,12 @@ def question(request):
 def question_detail(request, question_id):
     question = Question.objects.get(id=question_id)
     context = {
-        'question': question
+        'question': question,
+        'user': request.user,
     }
     return render(request, 'stock/question_detail.html', context)
 
+@admin_required
 def answer_create(request, question_id):
     question = Question.objects.get(id=question_id)
     if request.method == 'POST':
@@ -378,6 +419,31 @@ def question_create(request):
     else:
         form = QuestionForm()
     return render(request, 'stock/question_create.html', {'form': form})
+
+def review(request):
+    #사용자 후기 게시판 
+    review_list = Review.objects.all().order_by('-create_date')
+
+    if request.method == 'POST':
+        form = Reviewform(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.create_date = timezone.now()
+            review.save()
+            form = Reviewform()
+            context = {
+                review_list :'review_list',
+                form : 'form',
+            }
+    else:
+        form = Reviewform()
+        context = {
+            review_list :'review_list',
+            form : 'form',
+        }
+    print(len(review_list))
+    return render(request, 'stock/review.html',context)
+
 
 #### 아래는 모두 야후 파이낸스 api 불러왔던 코드 
 
@@ -487,4 +553,5 @@ def data_update_short() :
         except :
             pass
 
-    
+
+
