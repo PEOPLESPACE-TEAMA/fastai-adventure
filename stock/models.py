@@ -94,13 +94,8 @@ class Stock(models.Model):
     bookmarked = models.BooleanField(default=False)
 
     chart_image = models.ImageField(default=False, upload_to="")
-<<<<<<< HEAD
-    last_pattern = models.CharField(max_length=50,blank=True)       # 가장 최근에 본 패턴
-    increase_or_decrease = models.CharField(max_length=50,blank=True) # 상승인지 하락인지
-=======
     last_pattern = models.CharField(max_length=50,blank=True)
     increase_or_decrease = models.CharField(max_length=50,blank=True)
->>>>>>> f4f4ad7b058d6d2ad8bf352022d61a24bd27782e
     def approve(self):
         self.bookmarked = True
         self.save()
