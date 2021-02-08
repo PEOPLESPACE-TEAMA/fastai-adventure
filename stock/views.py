@@ -155,13 +155,15 @@ def bookmark(request):
 
 
 def alarm(request):
-
+    
     if request.method == "POST":
-        form = AlarmForm(request.POST)
+        user = request.user
+        form = AlarmForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            user.mail_alarm_time = form.mail_alarm_time
-            user.save()
+            # user.mail_alarm_time_hour = form.mail_alarm_time_hour
+            # user.mail_alarm_time_minute = form.mail_alarm_time_minute
+            # user.save()
             return redirect('bookmark_list')
     else:
         form = AlarmForm()
