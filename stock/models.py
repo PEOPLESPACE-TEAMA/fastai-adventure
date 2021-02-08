@@ -153,3 +153,11 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.question.title
+
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    content = models.TextField()
+    create_data = models.DateTimeField()
+
+    def __str__(self):
+        return self.user, self.content, self.create_data

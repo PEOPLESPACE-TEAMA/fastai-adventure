@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
-from .models import User, Question, Answer
+from .models import User, Question, Answer, Review
 from django.contrib.auth.hashers import check_password, make_password
 class RegisterForm(UserCreationForm):
     # 회원가입 폼
@@ -37,3 +37,8 @@ class AnswerForm(forms.ModelForm):
         model = Answer
         fields = ['content']
 
+class Reviewform(forms.ModelForm):
+    #후기 폼
+    class Meta:
+        model = Review
+        fields = ['content']
