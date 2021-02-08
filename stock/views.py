@@ -277,6 +277,7 @@ def updateNews():
         news.author = articles[i]['author']
         news.title = articles[i]['title']
         news.description = articles[i]['description']
+        news.redirectUrl = articles[i]['url']
         news.newsImage = articles[i]['urlToImage']
         datePublished=datetime.datetime.strptime(articles[i]['publishedAt'],"%Y-%m-%dT%H:%M:%SZ")
         news.publishedAt=datePublished
