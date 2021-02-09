@@ -51,6 +51,13 @@ def reviewcreate(request):
 
 def reviewlist(request):
     return render(request, 'stock/review_list.html')
+
+def qnacreate(request):
+    return render(request, 'stock/qnaCreate.html')
+
+def qnalist(request):
+    return render(request, 'stock/qnaList.html')
+
 # 새로운 템플릿 확인용 주소 끝   
 
 
