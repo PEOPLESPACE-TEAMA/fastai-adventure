@@ -23,7 +23,6 @@ urlpatterns = [
     path('review/', views.review, name = 'review'),
 
     # 새로운 템플릿 동작 확인용
-    path('register/',views.register, name='register'),
     path('home/',views.home, name='home'),
     path('forgot/',views.forgot, name='forgot-password'),
     path('guideline/',views.guideline, name='guideline'),
