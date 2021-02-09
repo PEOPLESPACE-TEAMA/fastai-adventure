@@ -15,26 +15,47 @@
 
                     <!-- Content Row -->
                     <div class="row">
-
-                        <!-- Content Column -->
-                        <div class="col-lg-12 mb-8">
-
-                            <!-- Project Card Example -->
+                        <div class="col-lg-4">
+                            <!-- Basic Card Example -->
                             <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">News</h6>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary btn-l" type="button" onclick="location='news.html'">MORE</button>
-                                    </div>
+                                <div class="card-header py-3">
+                                    <a href="https://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=104">세계뉴스</a>
                                 </div>
                                 <div class="card-body">
+                                    The styling for this basic card example is created by using default Bootstrap
+                                    utility classes. By using utility classes, the style of the card component can be
+                                    easily modified with no need for any custom CSS!
                                 </div>
                             </div>
-                            <!-- Color System 없앰 -->
                         </div>
-                        <!-- Illustrations 자리 위쪽으로 옮김 -->
+
+                        <div class="col-lg-4">
+                            <!-- Basic Card Example -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <a href="https://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=101">경제뉴스</a>
+                                </div>
+                                <div class="card-body">
+                                    The styling for this basic card example is created by using default Bootstrap
+                                    utility classes. By using utility classes, the style of the card component can be
+                                    easily modified with no need for any custom CSS!
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <!-- Basic Card Example -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <a href="https://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=100">정치뉴스</a>
+                                </div>
+                                <div class="card-body">
+                                    The styling for this basic card example is created by using default Bootstrap
+                                    utility classes. By using utility classes, the style of the card component can be
+                                    easily modified with no need for any custom CSS!
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -142,27 +163,42 @@
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Bookmark</h6>
                                     <div class="input-group-append">
-                                        <a class="btn btn-primary btn-l" type="button" href="bookmarkList">MORE</a>
+                                        <a class="btn btn-primary btn-l" type="button" href="{% url 'bookmark_list' %}">MORE</a>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas id="myAreaChart"></canvas>
-                                    </div>
-                                    <div class="row">
-                                        <div class="card-body">
-                                            <center>
-                                                <h4>1. 삼성전자<br>2. 삼성 sds<br>3. 삼성바이오로직스<br>4. 삼성증권<br>5. 삼성중공업</h4>
-                                            </center>
+                                <!-- 유저가 로그인 되어 있을 때랑 아닐 때랑 분리 -->
+                                {% if user.is_authenticated %}
+                                    <div class="card-body">
+                                        <div class="chart-area">
+                                            <canvas id="myAreaChart"></canvas>
                                         </div>
-                                        <div class="card-body">
-                                            <center>
-                                                <h4>1. 삼성전자<br>2. 삼성 sds<br>3. 삼성바이오로직스<br>4. 삼성증권<br>5. 삼성중공업</h4>
-                                            </center>
+                                        <div class="row">
+                                            <div class="card-body">
+                                                <center>
+                                                    <h4>1. 삼성전자<br>2. 삼성 sds<br>3. 삼성바이오로직스<br>4. 삼성증권<br>5. 삼성중공업</h4>
+                                                </center>
+                                            </div>
+                                            <div class="card-body">
+                                                <center>
+                                                    <h4>1. 삼성전자<br>2. 삼성 sds<br>3. 삼성바이오로직스<br>4. 삼성증권<br>5. 삼성중공업</h4>
+                                                </center>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                {% else %}
+
+                                    <div class="card-body">
+                                        <div class="chart-area">
+                                            <canvas id="myAreaChart"></canvas>
+                                            <a class="btn btn-primary btn-l" type="button" style="left:auto;margin-right:auto;display:block;margin-top:22%;margin-bottom:0%" href="{% url 'bookmark_list' %}">Login Required </a>
+                                        </div>
+                                    </div>
+                                    
+                                {% endif %}
+                                
+                                
+
                             </div>
                         </div>
                         <!-- Pie Chart 없앰 -->

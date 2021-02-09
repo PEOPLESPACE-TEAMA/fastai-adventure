@@ -35,22 +35,6 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractUser):
-    HOUR = (
-        (9, '9'),
-        (10, '10'),
-        (11, '11'),
-        (12, '12'),
-        (13, '13'),
-        (14, '14'),
-    )
-    MINUTE = (
-        (0, '0'),
-        (10, '10'),
-        (20, '20'),
-        (30, '30'),
-        (40, '40'),
-        (50, '50'),
-    )
     email = models.EmailField(verbose_name='email',max_length=255,unique=True)
     username = models.CharField(max_length=30)
     active = models.BooleanField(default=True)
@@ -63,8 +47,8 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
-    mail_alarm_time_hour = models.IntegerField(null=True, choices=HOUR, verbose_name="시")
-    mail_alarm_time_minute = models.IntegerField(null=True, choices=MINUTE, verbose_name="분")
+    mail_alarm_time_hour = models.IntegerField(null=True)
+    mail_alarm_time_minute = models.IntegerField(null=True)
     
     def __str__(self):
         return "<%d %s>" %(self.pk,self.email)
@@ -154,8 +138,9 @@ class Bookmark(models.Model):
 class News(models.Model):
     newsId=models.IntegerField(verbose_name="newsId",null=True)
     author = models.CharField(max_length=256,null=True)
-    title = models.CharField(max_length=256,null=True)
-    description = models.CharField(max_length=512,null=True, blank=True)
+    title = models.CharField(max_length=1024,null=True)
+    description = models.CharField(max_length=2048,null=True, blank=True)
+    redirectUrl = models.CharField(max_length=128,null=True)
     newsImage = models.ImageField(default=False, upload_to="")
     publishedAt=models.DateTimeField(null=True)
 

@@ -179,18 +179,32 @@ def bookmark(request):
 def alarm(request):
     
     if request.method == "POST":
+        hour=request.POST['hour']
+        minute=request.POST['minute']
+
         user = request.user
-        form = AlarmForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            # user.mail_alarm_time_hour = form.mail_alarm_time_hour
-            # user.mail_alarm_time_minute = form.mail_alarm_time_minute
-            # user.save()
-            return redirect('bookmark_list')
+        user.mail_alarm_time_hour = hour
+        user.mail_alarm_time_minute = minute
+        user.save()
+        print(user)
+        print(user.email)
+        print(user.username)
+        # form = AlarmForm(request.POST, instance=request.user)
+        # if form.is_valid():
+        #     a=form.save(commit=False)
+        #     a.user=request.user
+        #     a.save()
+        #     print(user)
+        #     print(user.email)
+        #     print(user.username)
+        #     # user.mail_alarm_time_hour = form.mail_alarm_time_hour
+        #     # user.mail_alarm_time_minute = form.mail_alarm_time_minute
+        #     # user.save()
+        return redirect('bookmark_list')
     else:
-        form = AlarmForm()
+        # form = AlarmForm()
         context = {
-            'form':form,
+            # 'form':form,
         }
     return render(request, 'stock/alarm.html', context)
 
@@ -207,14 +221,14 @@ def post_new(request):
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
 
-
 def bookmark_list(request):
     if request.user.is_authenticated:
         print('로그인 성공')
         print(request.user)
         print(request.user.username)
     else:
-        print('dkdlsp')
+        #로그인 되어 있지 않으면 로그인 페이지로 이동 
+        return redirect('login')
 
     #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
     # print(request.user)
@@ -223,11 +237,12 @@ def bookmark_list(request):
     bookmarks = Bookmark.objects.all().filter(user=request.user)
     print(bookmarks)
     print(type(bookmarks))
-
+    for bookmark in bookmarks :
+        print(bookmark.stock.stock_code)
 
     return render(request, 'stock/bookmark_list.html',{'bookmarks':bookmarks, } )
 
-#이거는 그냥 테스트 해볼려고 만든거 
+
 def bookmarkInOut(user,stock):
     # user = User.objects.get(username=name)
     #print(user,stock)
@@ -261,6 +276,7 @@ def updateNews():
         news.author = articles[i]['author']
         news.title = articles[i]['title']
         news.description = articles[i]['description']
+        news.redirectUrl = articles[i]['url']
         news.newsImage = articles[i]['urlToImage']
         datePublished=datetime.datetime.strptime(articles[i]['publishedAt'],"%Y-%m-%dT%H:%M:%SZ")
         news.publishedAt=datePublished
@@ -430,19 +446,16 @@ def review(request):
             review = form.save(commit=False)
             review.create_date = timezone.now()
             review.save()
-            form = Reviewform()
-            context = {
-                review_list :'review_list',
-                form : 'form',
-            }
-    else:
-        form = Reviewform()
-        context = {
-            review_list :'review_list',
-            form : 'form',
-        }
-    print(len(review_list))
+            return redirect('review')
+
+    form = Reviewform()
+    context = {
+        'review_list' : review_list,
+        'form' : form,
+    }
+
     return render(request, 'stock/review.html',context)
+
 
 
 #### 아래는 모두 야후 파이낸스 api 불러왔던 코드 

@@ -99,7 +99,7 @@
 
             <!-- Nav Item - BOOKMARK -->
             <li class="nav-item">
-                <a class="nav-link" href="bookmarkList.html">
+                <a class="nav-link" href="{% url 'bookmark_list' %}">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Bookmark</span></a>
             </li>
@@ -120,7 +120,7 @@
                 <div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Posts Screens:</h6>
-                        <a class="collapse-item" href="review_list.html">Review</a>
+                        <a class="collapse-item" href="{% url 'review' %}">Review</a>
                         <a class="collapse-item" href="guideline.html">Guideline</a>
                         <!-- <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
                         <div class="collapse-divider"></div>
