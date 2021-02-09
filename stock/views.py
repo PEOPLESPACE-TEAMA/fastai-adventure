@@ -447,19 +447,22 @@ def review(request):
             review = form.save(commit=False)
             review.create_date = timezone.now()
             review.save()
-            form = Reviewform()
-            context = {
-                review_list :'review_list',
-                form : 'form',
-            }
+            print('555555555555555555')
+            print(len(review_list))
+            return redirect('review')
     else:
-        form = Reviewform()
-        context = {
-            review_list :'review_list',
-            form : 'form',
-        }
+        
+        print('444444444')
     print(len(review_list))
+
+    form = Reviewform()
+    context = {
+        'review_list' : review_list,
+        'form' : form,
+    }
+
     return render(request, 'stock/review.html',context)
+
 
 
 #### 아래는 모두 야후 파이낸스 api 불러왔던 코드 
