@@ -458,7 +458,28 @@ def review(request):
         'form' : form,
     }
 
-    return render(request, 'stock/review.html',context)
+    return render(request, 'stock/review_list.html',context)
+
+def review_create(request):
+    
+    if not request.user.is_authenticated:
+        return redirect(signup)
+
+    if request.method == 'POST':
+        form = Reviewform(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.create_date = timezone.now()
+            review.save()
+            return redirect('review')
+    
+    form = Reviewform()
+    context = {
+        'form' : form,
+    }
+
+    return render(request, 'stock/review_create.html',context)
+
 
 
 

@@ -27,9 +27,7 @@ urlpatterns = [
     path('forgot/',views.forgot, name='forgot-password'),
     path('guideline/',views.guideline, name='guideline'),
     path('aboutus/',views.aboutus, name='aboutus'),
-    path('reviewcreate/',views.reviewcreate, name='reviewcreate'),
-    path('reviewlist/',views.reviewlist, name='reviewlist'), 
+    path('review_create/',views.review_create, name='review_create'),
     path('qnalist/',views.qnalist, name='qnalist'), 
     path('qnacreate/',views.qnacreate, name='qnacreate'), 
-
 ]
