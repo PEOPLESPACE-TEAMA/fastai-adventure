@@ -221,14 +221,14 @@ def post_new(request):
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
 
-
 def bookmark_list(request):
     if request.user.is_authenticated:
         print('로그인 성공')
         print(request.user)
         print(request.user.username)
     else:
-        print('dkdlsp')
+        #로그인 되어 있지 않으면 로그인 페이지로 이동 
+        return redirect('login')
 
     #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
     # print(request.user)
@@ -240,10 +240,9 @@ def bookmark_list(request):
     for bookmark in bookmarks :
         print(bookmark.stock.stock_code)
 
-
     return render(request, 'stock/bookmark_list.html',{'bookmarks':bookmarks, } )
 
-#이거는 그냥 테스트 해볼려고 만든거 
+
 def bookmarkInOut(user,stock):
     # user = User.objects.get(username=name)
     #print(user,stock)
@@ -447,13 +446,7 @@ def review(request):
             review = form.save(commit=False)
             review.create_date = timezone.now()
             review.save()
-            print('555555555555555555')
-            print(len(review_list))
             return redirect('review')
-    else:
-        
-        print('444444444')
-    print(len(review_list))
 
     form = Reviewform()
     context = {

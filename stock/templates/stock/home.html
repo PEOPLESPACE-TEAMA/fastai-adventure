@@ -163,27 +163,42 @@
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Bookmark</h6>
                                     <div class="input-group-append">
-                                        <a class="btn btn-primary btn-l" type="button" href="bookmarkList">MORE</a>
+                                        <a class="btn btn-primary btn-l" type="button" href="{% url 'bookmark_list' %}">MORE</a>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas id="myAreaChart"></canvas>
-                                    </div>
-                                    <div class="row">
-                                        <div class="card-body">
-                                            <center>
-                                                <h4>1. 삼성전자<br>2. 삼성 sds<br>3. 삼성바이오로직스<br>4. 삼성증권<br>5. 삼성중공업</h4>
-                                            </center>
+                                <!-- 유저가 로그인 되어 있을 때랑 아닐 때랑 분리 -->
+                                {% if user.is_authenticated %}
+                                    <div class="card-body">
+                                        <div class="chart-area">
+                                            <canvas id="myAreaChart"></canvas>
                                         </div>
-                                        <div class="card-body">
-                                            <center>
-                                                <h4>1. 삼성전자<br>2. 삼성 sds<br>3. 삼성바이오로직스<br>4. 삼성증권<br>5. 삼성중공업</h4>
-                                            </center>
+                                        <div class="row">
+                                            <div class="card-body">
+                                                <center>
+                                                    <h4>1. 삼성전자<br>2. 삼성 sds<br>3. 삼성바이오로직스<br>4. 삼성증권<br>5. 삼성중공업</h4>
+                                                </center>
+                                            </div>
+                                            <div class="card-body">
+                                                <center>
+                                                    <h4>1. 삼성전자<br>2. 삼성 sds<br>3. 삼성바이오로직스<br>4. 삼성증권<br>5. 삼성중공업</h4>
+                                                </center>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                {% else %}
+
+                                    <div class="card-body">
+                                        <div class="chart-area">
+                                            <canvas id="myAreaChart"></canvas>
+                                            <a class="btn btn-primary btn-l" type="button" style="left:auto;margin-right:auto;display:block;margin-top:22%;margin-bottom:0%" href="{% url 'bookmark_list' %}">Login Required </a>
+                                        </div>
+                                    </div>
+                                    
+                                {% endif %}
+                                
+                                
+
                             </div>
                         </div>
                         <!-- Pie Chart 없앰 -->
