@@ -218,25 +218,37 @@
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                                     <!-- 유저가 로그인 되어 있을 때랑 아닐 때랑 분리 -->
                                     {% if user.is_authenticated %}
-                                    사용자 이름
+                                    {{user.username}}
                                     {% else %}
                                     비회원
-                                    {% endif %}
+                                    {% endif %} 
                                 </span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href='{% url "login" %}' >
+                                
+                                <!-- 비회원 인경우 로그아웃 버튼만 회원인 경우 로그인 버튼만 보임 -->
+                                {% if user.is_authenticated %}
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Logout
+                                    </a>
+                                {% else %}
+                                    <a class="dropdown-item" href='{% url "login" %}' >
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Login
+                                    </a>                            
+                                {% endif %} 
+
+                                <!-- <a class="dropdown-item" href='{% url "login" %}' >
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Login
                                 </a>
                 
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
+                                <div class="dropdown-divider"></div> -->
+
+                                
                             </div>
                         </li>
 
