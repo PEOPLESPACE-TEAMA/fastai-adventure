@@ -458,7 +458,7 @@ def review(request):
         'form' : form,
     }
 
-    return render(request, 'stock/review_list.html',context)
+    return render(request, 'stock/review.html',context)
 
 def review_create(request):
     
