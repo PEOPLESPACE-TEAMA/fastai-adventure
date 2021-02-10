@@ -94,7 +94,7 @@
 
             <!-- Nav Item - MARKET -->
             <li class="nav-item">
-                <a class="nav-link" href='{% url "market" %}'>
+                <a class="nav-link" href='{% url "market_list_cospi" %}'>
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Market</span></a>
             </li>
@@ -114,8 +114,7 @@
                 <div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Posts Screens:</h6>
-                        <!--qna연결안함-->
-                        <a class="collapse-item" href="qnaList">QnA</a>
+                        <a class="collapse-item" href='{% url "qnalist" %}'>QnA</a>
                         <a class="collapse-item" href="{% url 'review' %}">Review</a>
                         <a class="collapse-item" href='{% url "guideline" %}'>Guideline</a>
                         <div class="collapse-divider"></div>

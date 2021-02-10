@@ -1,4 +1,97 @@
+{% extends "stock/base.html "%}
 
+{% block contents %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Bookmark List</h1>
+  <h4 class="mb-4">Check Your Bookmark Items!<br/> KOSPI </h4>
+  <p>{{user.username}}님이 북마크한 종목들입니다!</p>
+
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+      <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary"></h6>
+      </div>
+      <div class="card-body">
+           <!-- !!!!!Notice!!!!!-->
+          <!-- 테이블 자리에 북마크 리스트/페이지네이션 정보가 들어오면 됩니다 -->
+
+          {% for bookmark in bookmarks %}
+        <div><a class = wow href="{% url 'stock_detail' stock_code=bookmark.stock.stock_code %}">{{ bookmark }}</a></div>
+          {% endfor %} 
+
+
+
+
+          <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                      <tr class="text-primary bg-gray-100"> 
+                          <th>STOCK</th>
+                          <th>PRESENT PRICE</th>
+                          <th>FLUCTUATION</th>
+                          <th>FLUCTUATION RATE</th>
+                      </tr>
+                  </thead>
+                  <tfoot>
+                      <tr class="text-primary bg-gray-100">
+                          <th>STOCK</th>
+                          <th>PRESENT PRICE</th>
+                          <th>FLUCTUATION</th>
+                          <th>FLUCTUATION RATE</th>
+                      </tr>
+                  </tfoot>
+                  <tbody>
+                      <tr>
+                          <td>Apple</td>
+                          <td>500000</td>
+                          <td class="text-danger">123</td>
+                          <td class="text-danger">4.5↑</td>
+                      </tr>
+                      <tr>
+                          <td>Lael Greer</td>
+                          <td>Systems Administrator</td>
+                          <td>London</td>
+                          <td>21</td>
+                      </tr>
+                      <tr>
+                          <td>Jonas Alexander</td>
+                          <td>Developer</td>
+                          <td>San Francisco</td>
+                          <td>30</td>
+                      </tr>
+                      <tr>
+                          <td>Shad Decker</td>
+                          <td>Regional Director</td>
+                          <td>Edinburgh</td>
+                          <td>51</td>
+                      </tr>
+                      <tr>
+                          <td>Michael Bruce</td>
+                          <td>Javascript Developer</td>
+                          <td>Singapore</td>
+                          <td>29</td>
+                      </tr>
+                      <tr>
+                          <td>Donna Snider</td>
+                          <td>Customer Support</td>
+                          <td>New York</td>
+                          <td>27</td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
 
 {% if request.user.mail_alarm_time_hour %}
     <p><a href="{% url 'alarm' %}" class="top-menu">메일 알람 수정하기</a></p>
@@ -9,11 +102,8 @@
 <!-- {% url 'market_list_cospi' %} -->
 
 
-<p>{{user.username}}님이 북마크한 종목들입니다!</p>
-
-{% for bookmark in bookmarks %}
-  <div><a class = wow href="{% url 'stock_detail' stock_code=bookmark.stock.stock_code %}">{{ bookmark }}</a></div>
-{% endfor %} 
 
 
-<!-- 테스팅 하기 위한 코드입니다.
+
+{% endblock %}
+<!-- 테스팅 하기 위한 코드입니다.-->

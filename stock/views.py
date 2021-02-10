@@ -76,7 +76,7 @@ def login(request):
         user_form = LoginForm(request,request.POST)
         if user_form.is_valid():
             login_a(request, user_form.get_user(), backend='django.contrib.auth.backends.ModelBackend') 
-            return redirect('market')
+            return redirect('home')
     else:
         user_form = LoginForm()
     return render(request, 'stock/login.html',{'form': user_form})
