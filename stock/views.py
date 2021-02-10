@@ -403,9 +403,20 @@ def question(request):
 
 def question_detail(request, question_id):
     question = Question.objects.get(id=question_id)
+    if request.method == 'POST':
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.create_date = timezone.now()
+            answer.question = question
+            answer.save()
+            # return redirect('question_detail', question_id=question.id)
+    else:
+        form = AnswerForm()
     context = {
         'question': question,
         'user': request.user,
+        'form': form,
     }
     return render(request, 'stock/question_detail.html', context)
 
@@ -433,6 +444,7 @@ def question_create(request):
         form = QuestionForm(request.POST)
         if form.is_valid():
             question = form.save(commit=False)
+            question.user = request.user
             question.create_date = timezone.now()
             question.save()
             return redirect('question_detail', question_id=question.id)
