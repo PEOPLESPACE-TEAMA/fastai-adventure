@@ -3,8 +3,8 @@
 {% load staticfiles%}
 
 {% block contents %}
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -16,9 +16,11 @@
                     
                         <!-- 1 -->
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">{{ question }}</h6>
-                                </div>
+                                                    <div class="card-header py-3">
+                        <h3 class="m-0 font-weight-bold text-primary">{{ question }}</h3>
+                        <p class="m-0 font-weight-bold text-primary">{{ question.user.username }}</p>
+                        <p class="m-0 font-weight-bold text-primary">{{ question.create_date }}</p>
+                    </div>
                                 <div class="card-body">
                                     <div class="chart-area">
                                         <h6 class="m-0 text-primary">{{ question.content }}</h6>
@@ -63,30 +65,29 @@
                                 {% endif %}
                             </form>
                         </div>
+  
     
 
                         
+            <!-- 2 -->
+            <!-- <div class="col-xl-10 col-lg-10">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">N</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <h6 class="m-0 font-weight-bold text-primary">2</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>                         -->
+        </div>
+    </div>
+    <!-- /.container-fluid -->
 
 
-                        <!-- 2 -->
-                        <!-- <div class="col-xl-10 col-lg-10">
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">NAME</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <h6 class="m-0 font-weight-bold text-primary">2</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>                         -->
-                    
-            </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
+    <!-- End of Main Content -->
 {% endblock %}
 
 <!--백에서 짠 코드-->
