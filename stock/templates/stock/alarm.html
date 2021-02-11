@@ -8,7 +8,7 @@
 
 <form action="" method="POST">
     {% csrf_token %}
-    <p>한시간,10분단위로 메일알람 시간대 설정 가능합니다</p>
+    <p>한시간,5분단위로 메일알람 시간대 설정 가능합니다</p>
     <input type="number" min="9" max="14" step="1" value="시" name="hour"/><span>시</span>
     <input type="number" min="0" max="100"  step ="5" value="분" name="minute" /><span>분</span>
     <input type="submit" value="저장하기" name="submit" onclick="return confirm('알람 설정을 마치시겠습니까?');">
