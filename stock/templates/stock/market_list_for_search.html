@@ -1,9 +1,16 @@
+{% extends "stock/base.html" %}
+
+{% load staticfiles%}
+
+{% block contents %}
+
 <body>
-    <form class="form-inline my-2 my-lg-0" action="{% url 'market_list_for_search' %}" method="post">
+    <!-- 상단 검색 으로 옮김
+        <form class="form-inline my-2 my-lg-0" action="{% url 'market_list_for_search' %}" method="post">
         {% csrf_token %}
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" value="{{q}}">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+    </form> -->
 
     {% block content %}
         {% if not stocks %}
@@ -25,3 +32,5 @@
     {% endblock %}
 
 </body>
+
+{% endblock %}

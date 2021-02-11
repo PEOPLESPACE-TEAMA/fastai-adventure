@@ -29,13 +29,7 @@ import FinanceDataReader as fdr
 # from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
 def main(request):
-    # nasdaq_initial_data_create()
-    data_update_long()
-    # cosdaq_initial_data_create()
-    # data_update_long()
-    # cosdaq_initial_data_create()
-    # data_update_long()
-    # cospi_initial_data_create()
+    
     return render(request, 'stock/main.html')
 
 # 새로운 템플릿 확인용 주소 시작
@@ -94,7 +88,6 @@ def logout(request):
     return render(request, 'stock/login.html')
 
 def market(request):
-    data_update_long()
     stocks = Stock.objects.all().order_by('-id')
     # increase, decrease 계산하려면 아래 주석 풀기
     # 계산이 오래 걸려요. 테스트 때는 한 번 계산되면 다시 주석 설정해도 됩니다!
@@ -331,33 +324,44 @@ def market_list_nasdaq(request):
 
 def stock_detail(request,stock_code):
     print(request.user)
-    stocks = Stock.objects.get(stock_code = stock_code)
+    stock = Stock.objects.get(stock_code = stock_code)
     stock_list = Stock.objects.all().order_by('-id')
     increases = stock_list.exclude(increase=None).order_by('-increase')[:5]
     decreases = stock_list.exclude(decrease=None).order_by('decrease')[:5]
-    chart = draw_chart(stocks)
-    vals = {'시가':stocks.open,'고가':stocks.high,'저가':stocks.low,'거래량':stocks.volume,'수정주가':stocks.adj_close}
-    crop_image(stocks.chart_image,stocks)
-    img_path = "./graphimg/"+stocks.company_name+'crop.PNG'
+    chart = draw_chart(stock)
+
+    df = yf.download(tickers=stock_code, period='1d', interval='5m')
+    lists = df.tail(1).values.tolist()
+    stock_open=lists[0][0]
+    stock_high=lists[0][1] 
+    stock_low=lists[0][2] 
+    # stock_close=lists[0][3] 
+    stock_adj_close=lists[0][4] 
+    stock_volume=lists[0][5] 
+
+    vals = {'현재가':stock_open,'고가':stock_high,'저가':stock_low,'거래량':stock_volume,'수정주가':stock_adj_close}
+    # open이 진짜 찐 시가가 아니여서 임의로 현재가로 바꿔봄..
+    crop_image(stock.chart_image,stock)
+    img_path = "./graphimg/"+stock.company_name+'crop.PNG'
     #모델 예측
     predictedLabel,predictedIdx,probability = predict(img_path)
     label_list = getLabels()
     # 클라스마다 percentage로 바 그래프 만들기 
-    bar_chart = draw_bar_chart(stocks,probability,label_list)
+    bar_chart = draw_bar_chart(stock,probability,label_list)
     predictedProbability = round(float(probability[int(predictedIdx)])*100,2)
     print(predictedLabel)
-    stocks.last_pattern = predictedLabel
-    stocks.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
-    stocks.save()
+    stock.last_pattern = predictedLabel
+    stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
+    stock.save()
     #북마크에 저장
     if request.method == 'POST':
         print(request.user)
-        print(stocks)
-        bookmarkInOut(request.user,stocks)
+        print(stock)
+        bookmarkInOut(request.user,stock)
         print("북마크 저장됨")
         
     
-    return render(request, 'stock/stock_detail.html',{'companyName':stocks.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
+    return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
 
 def getIncreaseDecreaseResult(predictedLabel):
     increase = ['DoubleBottom','InverseHeadAndShoulders','r_FallingWedge','c_FallingWedge','BullishPennant','BullishRectangle']
@@ -513,33 +517,36 @@ def data_update_long() :
     yesterday = today - datetime.timedelta(1)  
     str_yesterday = str(yesterday)
 
-    stocks = Stock.objects.all().filter(stock_type='N')
+    stocks = Stock.objects.all().filter(stock_type='S')
 
     for stock in stocks :
         stock_code=stock.stock_code
-        try:
-            df = yf.download(tickers=stock_code, period='1d', interval='5m')
-            lists = df.tail(1).values.tolist()
-            stock.open=lists[0][0]
-            stock.high=lists[0][1] #
-            stock.low=lists[0][2] #
-            stock.close=lists[0][3] #
-            stock.adj_close=lists[0][4] #
-            stock.volume=lists[0][5] #
-            before_df = pdr.get_data_yahoo(stock_code, str_yesterday, str_yesterday)
-            before_lists=before_df.values.tolist() 
-            stock.before_close=before_lists[0][3]   
-            stock.save()
-
-        except:
-            print("실패")
+        if stock.open :
             pass
+        else :
+            try:
+                df = yf.download(tickers=stock_code, period='1d', interval='5m')
+                lists = df.tail(1).values.tolist()
+                stock.open=lists[0][0]
+                # stock.high=lists[0][1] 
+                # stock.low=lists[0][2] 
+                # stock.close=lists[0][3] 
+                # stock.adj_close=lists[0][4] 
+                # stock.volume=lists[0][5] 
+                before_df = pdr.get_data_yahoo(stock_code, str_yesterday, str_yesterday)
+                before_lists=before_df.values.tolist() 
+                stock.before_close=before_lists[0][3]   
+                stock.save()
+
+            except:
+                print("실패")
+                pass
             
 
 
 def data_update_short() :
     # 업데이트2 ( 등락율, 등락폭 ) 
-    stocks = Stock.objects.all()
+    stocks = Stock.objects.all().filter(stock_type='S')
     for stock in stocks :
         try:
             stock.initialize()
@@ -573,7 +580,8 @@ def get_download_stock(market_type=None):
     df = pd.read_html(download_link, header=0)[0]  # dataframe 객체 생성
     return df
 
-# kospi 종목코드 목록 다운로드
+
+# kospi 종목코드 목록 다운로드 (5000개 이상 있으나 업데이트가 너무 느려 1000개만 받아오기로 함..)
 def get_download_kospi():
     df = get_download_stock('kospi')
     # '종목코드.KS'로 처리하도록 한다.
@@ -588,25 +596,24 @@ def get_download_kosdaq():
     return df
 
 
-def cospi_initial_data_create() :
+def kospi_initial_data_create() :
         
     # kospi, kosdaq 종목코드 각각 다운로드
     kospi_df = get_download_kospi()
     kosdaq_df = get_download_kosdaq()
 
     # data frame merge
-    code_df = pd.concat([kospi_df, kosdaq_df])
+    # code_df = pd.concat([kospi_df, kosdaq_df])
 
     # data frame정리 
-    code_df = code_df[['회사명', '종목코드']]
+    kospi_df = kospi_df[['회사명', '종목코드']]
 
     # data frame title 변경 '회사명' = name, 종목코드 = 'code'
-    code_df = code_df.rename(columns={'회사명': 'name', '종목코드': 'code'})
+    kospi_df = kospi_df.rename(columns={'회사명': 'name', '종목코드': 'code'})
 
-    companys=code_df['name'].values.tolist()
-    codes=code_df['code'].values.tolist()
+    companys=kospi_df['name'].values.tolist()
+    codes=kospi_df['code'].values.tolist()
     
-    # [중요] 초기 셋팅. db삭제하거나 sqlite파일 gitignore에 있는데 pull할 시에, 아래 주석풀고 실행시켜야 함
     # create하고 나선 다시 주석처리..
     # 폐지종목 일일이 삭제해야함..
     for company, code in zip(companys, codes) :
@@ -617,7 +624,7 @@ def cospi_initial_data_create() :
 
 
 # finance-data-reader test
-def cosdaq_initial_data_create() :
+def kosdaq_initial_data_create() :
 
     stocks = fdr.StockListing('KOSDAQ')
 
