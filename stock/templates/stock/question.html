@@ -1,6 +1,6 @@
 {% extends "stock/base.html" %}
 
-{% load staticfiles%}
+{% load staticfiles %}
 
 {% block contents %}
                 <!-- Begin Page Content -->
@@ -9,14 +9,13 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">QnA</h1>
-                        <a href='{% url "question_create" %}' class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-pencil-alt fa-sm text-white-50"></i>질문작성</a>
+                        <a href='{% url "question_create" %}' class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                            <i class="fas fa-pencil-alt fa-fw text-white-50"><span class="mx-2"></i>질문작성</span>
+                        </a>
                     </div>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary"></h6>
-                        </div>
+                        
                         <div class="card-body">
                              <!-- !!!!!Notice!!!!!-->
                             <!-- 테이블 자리에 북마크 리스트/페이지네이션 정보가 들어오면 됩니다 -->
@@ -38,19 +37,22 @@
                                             <th>Comment</th>
                                         </tr>
                                     </tfoot>
+                                    
                                     <tbody>
                                         {% if question_list %}
                                             {% for question in question_list.all %}
                                                 <tr>             
                                                     <!-- 클릭시 qnaDetail로 이동 -->
                                                     <td>{{ question.id }}</td>
-                                                    <td><a href="{% url 'question_detail' question_id=question.id %}" class="btn btn-primary">{{ question.title }}</td>
+                                                    <td><a href="{% url 'question_detail' question_id=question.id %}">{{ question.title }}</td>
                                                     <td>{{ question.user }}</td>
                                                     <td>{{ question.answer_set.count }}</td>
                                                 </tr>
                                             {% endfor %}
                                         {% else %}
-                                            <h3>질문이 없습니다.</h3>
+                                                <tr>
+                                            <td colspan="4">질문이 없습니다.</td>
+                                                </tr>
                                         {% endif %}
                                     
                                         {% comment %} <tr>
@@ -97,7 +99,8 @@
 {% endblock %}
 
 <!--백에서 짠 코드-->
-{% comment %} <h1>질문게시판 메인</h1>
+{% comment %} 
+<h1>질문게시판 메인</h1>
 {% if question_list %}
     {% for question in question_list.all %}
         <ul>
@@ -108,4 +111,5 @@
     <p>질문이 없습니다.</p>
 {% endif %}
 
-<a href="{% url 'question_create' %}" class="btn btn-primary">질문 등록하기</a> {% endcomment %}
+<a href="{% url 'question_create' %}" class="btn btn-primary">질문 등록하기</a> 
+{% endcomment %}
