@@ -18,6 +18,7 @@ from PIL import Image
 import os
 import numpy as np
 from django.contrib.auth import login as login_a, authenticate
+from django.contrib import auth
 from .prediction import predict, getLabels
 # from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
@@ -37,6 +38,7 @@ def signup(request):
         user_form = RegisterForm()
     return render(request, 'stock/signup.html',{'form': user_form})
 
+@logout_message_required
 def login(request):
     if request.method =='POST':
         user_form = LoginForm(request,request.POST)
@@ -49,9 +51,10 @@ def login(request):
 
 def logout(request):
     # 로그아웃 하면 로그인 화면으로 연결
-    return render(request, 'stock/login.html')
+    auth.logout(request)
+    return redirect('login')
 
-def market(request):
+def home(request):
     stocks = Stock.objects.all().order_by('-id')
     # increase, decrease 계산하려면 아래 주석 풀기
     # 계산이 오래 걸려요. 테스트 때는 한 번 계산되면 다시 주석 설정해도 됩니다!
@@ -69,13 +72,14 @@ def market(request):
         context ={
             'stocks':search,
         }
-
-        return render(request, 'stock/market_list_for_search.html', context )
-
-    bookmarks = Bookmark.objects.filter(user=request.user).order_by('?')
+        return render(request, 'stock/market_list_for_search.html', context)
     bm_list = []
-    for bm in bookmarks:
-        bm_list.append(bm)
+    try:
+        bookmarks = Bookmark.objects.filter(user=request.user).order_by('?')
+        for bm in bookmarks:
+            bm_list.append(bm)
+    except:
+        pass
     bookmarks = stocks.filter(company_name__in=bm_list)
     increases = stocks.exclude(increase=None).order_by('-increase')[:5]
     decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
@@ -90,8 +94,19 @@ def market(request):
     increasechart = draw_chart(top)
     decreasechart = draw_chart(bottom)
 
-    return render(request, 'stock/market.html', {'bookmarks': bookmarks, 'increases': increases, 'decreases': decreases, 
-            'bookmarkchart': bookmarkchart, 'increasechart': increasechart, 'decreasechart': decreasechart})
+    # 새로운 뉴스 받아오고 싶을 때 아래 주석 풀기, 테스트 시 처음 한 번은 꼭 해야 합니다!
+    # updateNews()
+    news = News.objects.all()
+    context = {
+        'bookmarks': bookmarks,
+        'increases': increases,
+        'decreases': decreases,
+        'bookmarkchart': bookmarkchart,
+        'increasechart': increasechart,
+        'decreasechart': decreasechart,
+        'news': news,
+    }
+    return render(request, 'stock/home.html', context)
 
 def market_list_for_search(request):
     q = request.POST.get('q', "") 
@@ -133,7 +148,7 @@ def crop_image(self,stock):
         if stop == True:
             break
     bottom = i
-    pattern=graph.crop((850,40+top,945,40+bottom))
+    pattern=graph.crop((850,35+top,945,45+bottom))
     pattern.show()
     pattern.save(path+stock.company_name+'crop.PNG')
 
