@@ -45,7 +45,7 @@
                                                     <!-- 클릭시 qnaDetail로 이동 -->
                                                     <td>{{ question.id }}</td>
                                                     <td><a href="{% url 'question_detail' question_id=question.id %}" class="btn btn-primary">{{ question.title }}</td>
-                                                    <td>{{ question.user }}</td>
+                                                    <td>{{ question.user.username }}</td>
                                                     <td>{{ question.answer_set.count }}</td>
                                                 </tr>
                                             {% endfor %}
