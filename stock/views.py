@@ -25,9 +25,17 @@ import requests
 import json
 from django.utils import timezone
 from stock.decorators import *
+import FinanceDataReader as fdr
 # from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
 def main(request):
+    # nasdaq_initial_data_create()
+    data_update_long()
+    # cosdaq_initial_data_create()
+    # data_update_long()
+    # cosdaq_initial_data_create()
+    # data_update_long()
+    # cospi_initial_data_create()
     return render(request, 'stock/main.html')
 
 # 새로운 템플릿 확인용 주소 시작
@@ -86,6 +94,7 @@ def logout(request):
     return render(request, 'stock/login.html')
 
 def market(request):
+    data_update_long()
     stocks = Stock.objects.all().order_by('-id')
     # increase, decrease 계산하려면 아래 주석 풀기
     # 계산이 오래 걸려요. 테스트 때는 한 번 계산되면 다시 주석 설정해도 됩니다!
@@ -495,7 +504,52 @@ def review_create(request):
 
 
 
-#### 아래는 모두 야후 파이낸스 api 불러왔던 코드 
+### 업데이트 함수들 
+
+def data_update_long() :
+
+    # 하루 지날때마다 업데이트 하기 1
+    today = datetime.date.today()  
+    yesterday = today - datetime.timedelta(1)  
+    str_yesterday = str(yesterday)
+
+    stocks = Stock.objects.all().filter(stock_type='N')
+
+    for stock in stocks :
+        stock_code=stock.stock_code
+        try:
+            df = yf.download(tickers=stock_code, period='1d', interval='5m')
+            lists = df.tail(1).values.tolist()
+            stock.open=lists[0][0]
+            stock.high=lists[0][1] #
+            stock.low=lists[0][2] #
+            stock.close=lists[0][3] #
+            stock.adj_close=lists[0][4] #
+            stock.volume=lists[0][5] #
+            before_df = pdr.get_data_yahoo(stock_code, str_yesterday, str_yesterday)
+            before_lists=before_df.values.tolist() 
+            stock.before_close=before_lists[0][3]   
+            stock.save()
+
+        except:
+            print("실패")
+            pass
+            
+
+
+def data_update_short() :
+    # 업데이트2 ( 등락율, 등락폭 ) 
+    stocks = Stock.objects.all()
+    for stock in stocks :
+        try:
+            stock.initialize()
+            stock.calculate_rate()
+            stock.calculate_width()
+        except :
+            pass
+
+
+#### 아래는 모두 야후 파이낸스 api 불러왔던 코드 (코스닥 제외)
 
 stock_type = {
     'kospi': 'stockMkt',
@@ -503,12 +557,12 @@ stock_type = {
 }
 
 
-# 회사명으로 주식 종목 코드를 획득할 수 있도록 하는 함수
-def get_code(df, name):
-    code = df.query("name=='{}'".format(name))['code'].to_string(index=False).strip()
-    # 위와같이 code명을 가져오면 앞에 공백이 붙어있는 상황이 발생하여 앞뒤로 sript() 하여 공백 제거
-    # 한국거래소 사이트에서 주식종목 코드만 가져오겠다 라는 의미
-    return code
+# # 회사명으로 주식 종목 코드를 획득할 수 있도록 하는 함수
+# def get_code(df, name):
+#     code = df.query("name=='{}'".format(name))['code'].to_string(index=False).strip()
+#     # 위와같이 code명을 가져오면 앞에 공백이 붙어있는 상황이 발생하여 앞뒤로 sript() 하여 공백 제거
+#     # 한국거래소 사이트에서 주식종목 코드만 가져오겠다 라는 의미
+#     return code
 
 # download url 조합
 def get_download_stock(market_type=None):
@@ -534,7 +588,7 @@ def get_download_kosdaq():
     return df
 
 
-def initial_data_create() :
+def cospi_initial_data_create() :
         
     # kospi, kosdaq 종목코드 각각 다운로드
     kospi_df = get_download_kospi()
@@ -554,6 +608,7 @@ def initial_data_create() :
     
     # [중요] 초기 셋팅. db삭제하거나 sqlite파일 gitignore에 있는데 pull할 시에, 아래 주석풀고 실행시켜야 함
     # create하고 나선 다시 주석처리..
+    # 폐지종목 일일이 삭제해야함..
     for company, code in zip(companys, codes) :
         if Stock.objects.filter(company_name=company).exists() :
             pass
@@ -561,47 +616,45 @@ def initial_data_create() :
             Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
 
 
-def data_update_long() :
+# finance-data-reader test
+def cosdaq_initial_data_create() :
 
-    # 하루 지날때마다 업데이트 하기 1
-    today = datetime.date.today()  
-    yesterday = today - datetime.timedelta(1)  
-    str_yesterday = str(yesterday)
+    stocks = fdr.StockListing('KOSDAQ')
 
-    stocks = Stock.objects.all()
+    # data frame정리 
+    stocks = stocks[['Name', 'Symbol']]
+    # stocks.Symbol = stocks.Symbol.map('{:06d}.KQ'.format)
+    stocks.Symbol = stocks.Symbol+'.KQ'
 
-    for stock in stocks :
-        stock_code=stock.stock_code
-        try:
-            df = yf.download(tickers=stock_code, period='1d', interval='1h')
-            lists = df.tail(1).values.tolist()
-            stock.open=lists[0][0]
-            stock.high=lists[0][1]
-            stock.low=lists[0][2]
-            stock.close=lists[0][3]
-            stock.adj_close=lists[0][4]
-            stock.volume=lists[0][5]
-            before_df = pdr.get_data_yahoo(stock_code, str_yesterday, str_yesterday)
-            before_lists=before_df.values.tolist()
-            stock.before_close=before_lists[0][3]
-            stock.save()
+    companys = stocks['Name'].values.tolist()
+    codes = stocks['Symbol'].values.tolist()
 
-        except:
-            print("실패")
+    for company, code in zip(companys, codes) :
+        if Stock.objects.filter(company_name=company).exists() :
             pass
-            
+        else :
+            Stock.objects.create(company_name=company,stock_code=code,stock_type=code[8])
 
 
-def data_update_short() :
-    # 업데이트2 ( 등락율, 등락폭 ) 
-    stocks = Stock.objects.all()
-    for stock in stocks :
-        try:
-            stock.initialize()
-            stock.calculate_rate()
-            stock.calculate_width()
-        except :
+def nasdaq_initial_data_create() :
+
+    stocks = fdr.StockListing('NASDAQ')
+
+    # data frame정리 
+    stocks = stocks[['Name', 'Symbol']]
+
+    companys = stocks['Name'].values.tolist()
+    codes = stocks['Symbol'].values.tolist()
+
+    for company, code in zip(companys, codes) :
+        if Stock.objects.filter(company_name=company).exists() :
             pass
+        else :
+            Stock.objects.create(company_name=company,stock_code=code,stock_type='N')
+
+
+    
+
 
 
 
