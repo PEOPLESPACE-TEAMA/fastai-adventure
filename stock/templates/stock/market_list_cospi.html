@@ -8,15 +8,18 @@
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Stock Market List</h1>
     <h4 class="mb-4">Search stock item whatever you want!<br/> KOSPI </h4>
-
-
-    <h2 class=cosqi_tile >코스피 종목 목록</h2>
-
-    <form class="form-inline user" action="{% url 'market_list_for_search' %}" method="post">
+    <div class="mb-4">
+        <a href='{% url "market_list_cospi" %}' class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm">
+            <i class="text-white-50"></i>KOSPI</a>
+        <a href='{% url "market_list_cospi" %}' class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm"><i
+            class="text-white-50"></i>NASDAQ</a>  <!-- 나스닥 페이지 완성되면 링크변경하기 / 나스닥페이지에서도 넣기 -->
+    </div>
+    <!-- search 검색창 헤더로 이동 -->
+    <!-- <form class="form-inline user" action="{% url 'market_list_for_search' %}" method="post">
         {% csrf_token %}
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" value="{{q}}">
         <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
-    </form>
+    </form> -->
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -37,9 +40,9 @@
             </thead>
             <tfoot>
                 <tr class="text-primary bg-gray-100">
-                    <th>종목이름</th>
-                    <th>등락폭</th>
-                    <th>등락율</th>
+                    <th>STOCK</th>
+                    <th>FLUCTUATION</th>
+                    <th>FLUCTUATION RATE</th>
                 </tr>
             </tfoot>
             <tbody>
@@ -52,9 +55,9 @@
                     <td>{{ stock.fluctuation_width }}</td>
         
                     {% if stock.increase %}
-                    <td>{{ stock.increase }}</td>
+                    <td class="text-danger">{{ stock.increase }}</td>
                     {% else %}
-                    <td>{{ stock.decrease }}</td>
+                    <td class="text-danger">{{ stock.decrease }}</td>
                     {% endif %}
                 </tr>
                 {% endfor %}
