@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser,BaseUserManager
 
-# Create your models here.
 
 class UserManager(BaseUserManager):
     def create_user(self, email, username, is_staff=False, is_admin=False, is_active=True, confirmedEmail=False, password=None):
@@ -44,11 +43,13 @@ class User(AbstractUser):
     confirmedEmail = models.BooleanField(default=False)
     dateRegistered = models.DateTimeField(
         auto_now_add=True)
-    
     objects = UserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
+    mail_alarm_time_hour = models.IntegerField(null=True)
+    mail_alarm_time_minute = models.IntegerField(null=True)
+    
     def __str__(self):
         return "<%d %s>" %(self.pk,self.email)
     
@@ -96,6 +97,11 @@ class Stock(models.Model):
 
     chart_image = models.ImageField(default=False, upload_to="")
 
+
+    last_pattern = models.CharField(max_length=50,blank=True)       # 가장 최근에 본 패턴
+    increase_or_decrease = models.CharField(max_length=50,blank=True) # 상승인지 하락인지
+
+
     def approve(self):
         self.bookmarked = True
         self.save()
@@ -127,3 +133,39 @@ class Bookmark(models.Model):
 
     def __str__(self):
         return self.stock.company_name
+
+
+class News(models.Model):
+    newsId=models.IntegerField(verbose_name="newsId",null=True)
+    author = models.CharField(max_length=256,null=True)
+    title = models.CharField(max_length=1024,null=True)
+    description = models.CharField(max_length=2048,null=True, blank=True)
+    redirectUrl = models.CharField(max_length=128,null=True)
+    newsImage = models.ImageField(default=False, upload_to="")
+    publishedAt=models.DateTimeField(null=True)
+
+class Question(models.Model):
+    title = models.CharField(max_length=200)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    content = models.TextField()
+    create_date = models.DateTimeField()
+
+    def __str__(self):
+        return self.title
+
+class Answer(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    content = models.TextField()
+    create_date = models.DateTimeField()
+
+    def __str__(self):
+        return self.question.title
+
+class Review(models.Model):
+    title = models.CharField(max_length=200,null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    content = models.TextField()
+    create_date = models.DateTimeField()
+
+    def __str__(self):
+        return self.user, self.content, self.create_date

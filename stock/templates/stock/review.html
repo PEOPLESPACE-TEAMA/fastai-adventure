@@ -1,0 +1,62 @@
+<h1>리뷰 게시판 입니다.</h1>
+
+리뷰페이지는 간단한 거니까 리뷰리스트 페이지랑 리뷰개별 포트트 페이지 만들지 않고
+한페이지에서 해결한다 
+맨 위에는 리류를 작성 할 수 있는 폼이 있고 그 밑으로는 작성된 리뷰들을 나열해서 보여주는 식으로 구상함
+리뷰를 만들고 저장하면 바로 밑에서 최신 리뷰를 볼 수 있음 
+
+{% block content %}
+<h2>새로운 리뷰를 작성해 주세요</h2>
+<div class="container">
+    <form method="post" class="post-form my-3">
+        {% csrf_token %}
+        
+        <!-- 오류표시 Start -->
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+            {% for field in form %}
+                {% if field.errors %}
+                <strong>{{ field.label }}</strong>
+                {{ field.errors }}
+                {% endif %}
+            {% endfor %}
+            </div>
+        {% endif %}
+        <!-- 오류표시 End -->
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" class="form-control" name="title" id="title"
+                   value="{{ form.title.value|default_if_none:'' }}">
+        </div>
+        <div class="form-group">
+            <label for="content">내용</label>
+            <textarea class="form-control" name="content"
+                      id="content" rows="10">{{ form.content.value|default_if_none:'' }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">저장</button>
+    </form>
+</div>
+
+<div>
+
+    {% if not review_list %}
+            <h1>현재 등록된 리뷰가 없습니다.ㅇㅇㅇㅇ</h1>
+        {% else %}
+            {% for review in review_list.all %}
+                <div class="container"> 
+                    <div class="card">
+                        <div class="card-body">
+                            <p> 제목 {{ review.title}} </p>
+                            <p> 내용 {{review.content }}  날짜{{review.create_date}}</p>
+                        </div>
+                    </div>
+                </div>
+            <br>
+            {% endfor %}
+        {% endif %}
+</div>
+
+
+
+{% endblock %}

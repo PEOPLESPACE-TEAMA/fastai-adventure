@@ -1,0 +1,90 @@
+{% extends "stock/base.html" %}
+
+{% load staticfiles%}
+
+{% block contents %}
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">QnA</h1>
+                        <a href='{% url "qnacreate" %}' class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                class="fas fa-pencil-alt fa-sm text-white-50"></i>질문작성</a>
+                    </div>
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary"></h6>
+                        </div>
+                        <div class="card-body">
+                             <!-- !!!!!Notice!!!!!-->
+                            <!-- 테이블 자리에 북마크 리스트/페이지네이션 정보가 들어오면 됩니다 -->
+                            <div class="table-responsive ">
+                                <table class="table table-bordered table-hover " style="cursor:pointer" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr class="text-primary bg-gray-100 "> 
+                                            <th style="width: 15%;">번호</th>
+                                            <th>제목</th>
+                                            <th style="width: 15%;">작성자</th>
+                                            <th style="width: 15%;">답변수</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr class="text-primary bg-gray-100">
+                                            <th>No.</th>
+                                            <th>Title</th>
+                                            <th>User</th>
+                                            <th>Comment</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr onClick ="location.href='qnadetail' ">  
+                                            <!-- 클릭시 qnaDetail로 이동 -->
+                                            <td>1</td>
+                                            <td>How can I join personal membership?</td>
+                                            <td>helen</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+{% endblock %}

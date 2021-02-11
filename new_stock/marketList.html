@@ -11,17 +11,14 @@
 
     <title>FASTOCK - Main</title>
 
-    <!-- Custom fonts for this template -->
+    <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template -->
+    <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this page -->
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
@@ -29,8 +26,9 @@
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-          <!-- Sidebar -->
-          <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -82,7 +80,7 @@
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="AboutUs.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>About us</span></a>
             </li>
@@ -103,7 +101,7 @@
 
             <!-- Nav Item - MARKET -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="marketList.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Market</span></a>
             </li>
@@ -117,7 +115,8 @@
                 <div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Posts Screens:</h6>
-                        <a class="collapse-item" href="review_list.html">Review</a>
+                        <a class="collapse-item" href="qnaList.html">QnA</a>
+                        <a class="collapse-item" href="reviewList.html">Review</a>
                         <a class="collapse-item" href="guideline.html">Guideline</a>
                         <!-- <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
                         <div class="collapse-divider"></div>
@@ -126,7 +125,8 @@
             </li>
 
             <!-- Divider -->
-           <hr class="sidebar-divider d-none d-md-block">
+           <br class="sidebar-divider d-none d-md-block">
+           <br class="sidebar-divider d-none d-md-block">
 
            <!-- Sidebar Toggler (Sidebar) -->
            <div class="text-center d-none d-md-inline">
@@ -371,9 +371,10 @@
                              <!-- !!!!Notice!!!!-->
                             <!-- 테이블 자리에 주식시장 정보/페이지네이션 가 들어오면 됩니다 -->
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered table-hover" style="cursor:pointer"
+                                        id="dataTable" width="100%" cellspacing="0">
                                     <thead>
-                                        <tr class="text-primary table-secondary"> 
+                                        <tr class="text-primary bg-gray-100"> 
                                             <th>STOCK</th>
                                             <th>PRESENT PRICE</th>
                                             <th>FLUCTUATION</th>
@@ -381,7 +382,7 @@
                                         </tr>
                                     </thead>
                                     <tfoot>
-                                        <tr class="text-primary table-secondary"> 
+                                        <tr class="text-primary bg-gray-100"> 
                                             <th>STOCK</th>
                                             <th>PRESENT PRICE</th>
                                             <th>FLUCTUATION</th>
@@ -389,6 +390,13 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
+                                        <tr onClick ="location.href='bookmarkDetail.html'">  
+                                            <!-- 클릭시 marketDetail로 이동, 일단 북마크디테일로 설정해둠(수정해야함) -->
+                                            <td>Apple</td>
+                                            <td>500000</td>
+                                            <td class="text-danger">123</td>
+                                            <td class="text-danger">4.5↑</td>
+                                        </tr>
                                         <tr>
                                             <td>Hermione Butler</td>
                                             <td>Regional Director</td>

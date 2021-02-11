@@ -1,0 +1,115 @@
+{% extends "stock/base.html" %}
+
+{% load staticfiles %}
+
+{% block contents %}
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">QnA</h1>
+                        <a href='{% url "question_create" %}' class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                            <i class="fas fa-pencil-alt fa-fw text-white-50"><span class="mx-2"></i>질문작성</span>
+                        </a>
+                    </div>
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        
+                        <div class="card-body">
+                             <!-- !!!!!Notice!!!!!-->
+                            <!-- 테이블 자리에 북마크 리스트/페이지네이션 정보가 들어오면 됩니다 -->
+                            <div class="table-responsive ">
+                                <table class="table table-bordered table-hover " style="cursor:pointer" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr class="text-primary bg-gray-100 "> 
+                                            <th style="width: 15%;">번호</th>
+                                            <th>제목</th>
+                                            <th style="width: 15%;">작성자</th>
+                                            <th style="width: 15%;">답변수</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr class="text-primary bg-gray-100">
+                                            <th>No.</th>
+                                            <th>Title</th>
+                                            <th>User</th>
+                                            <th>Comment</th>
+                                        </tr>
+                                    </tfoot>
+                                    
+                                    <tbody>
+                                        {% if question_list %}
+                                            {% for question in question_list.all %}
+                                                <tr>             
+                                                    <!-- 클릭시 qnaDetail로 이동 -->
+                                                    <td>{{ question.id }}</td>
+                                                    <td><a href="{% url 'question_detail' question_id=question.id %}">{{ question.title }}</td>
+                                                    <td>{{ question.user.username }}</td>
+                                                    <td>{{ question.answer_set.count }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                                <tr>
+                                            <td colspan="4">질문이 없습니다.</td>
+                                                </tr>
+                                        {% endif %}
+                                    
+                                        {% comment %} <tr>
+                                            <td>2</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr> {% endcomment %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+{% endblock %}
+
+<!--백에서 짠 코드-->
+{% comment %} 
+<h1>질문게시판 메인</h1>
+{% if question_list %}
+    {% for question in question_list.all %}
+        <ul>
+        <li><h3><a href="{% url 'question_detail' question_id=question.id %}">{{ question.title }}</a></h3><span><p>{{ question.create_date }}</p></span></li>
+        </ul>
+    {% endfor %}
+{% else %}
+    <p>질문이 없습니다.</p>
+{% endif %}
+
+<a href="{% url 'question_create' %}" class="btn btn-primary">질문 등록하기</a> 
+{% endcomment %}

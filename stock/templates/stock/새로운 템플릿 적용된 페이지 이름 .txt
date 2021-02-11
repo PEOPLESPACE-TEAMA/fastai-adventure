@@ -1,0 +1,24 @@
+home 		#테스트용 url만듦
+AboutUs 		#테스트용 url만듦
+base 		#url 불필요
+
+register		#테스트용 url만듦
+forgot-password	#테스트용 url만듦
+login 		#기존 url 있음
+
+marketList	#기존 url있으나 파일이름 다른상태	
+marketDetail	#기존 url있으나 파일이름 다른상태
+
+review_create	#테스트용 url만듦
+review_list	#테스트용 url만듦
+
+bookmarkList	#기존 url있으나 파일이름 다른상태
+bookmarkDetail	#기존 url있으나 파일이름 다른상태
+
+guideline		#테스트용 url만듦
+
+가 새로운 템플릿 적용된 페이지 입니다.
+
+기존url있는데 파일 이름 다르게 해놓은건 혹시 작업중이던거 있을까봐 그랬습니다. 혹시 사라진거 있으면 구디자인 파일에서 확인해주세요.
+
+페이지들간 연결은 안되어있는 상태고 주소창에 치면 페이지 확인 가능합니다.

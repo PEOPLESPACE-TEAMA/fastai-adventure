@@ -34,7 +34,7 @@
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <!-- 윙크 이모티콘 삭제 -->
                 <!-- 작은 화면에서 글자 안 보임 -->
-                <div class="sidebar-brand-text mx-3">FASTOCK</div>
+                <div class="sidebar-brand-text mx-3 logo">FASTOCK</div>
             </a>
 
             <!-- Divider -->
@@ -80,30 +80,40 @@
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="AboutUs.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>About us</span></a>
             </li>
 
-            <!-- Nav Item - NEWS -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>News</span></a>
-            </li>
-
             <!-- Nav Item - BOOKMARK -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="bookmarkList.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Bookmark</span></a>
             </li>
 
             <!-- Nav Item - MARKET -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="marketList.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Market</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2"
+                    aria-expanded="true" aria-controls="collapse2Pages">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Posts</span>
+                </a>
+                <div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Posts Screens:</h6>
+                        <a class="collapse-item" href="review_list.html">Review</a>
+                        <a class="collapse-item" href="guideline.html">Guideline</a>
+                        <!-- <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
+                        <div class="collapse-divider"></div>
+                    </div>
+                </div>
             </li>
 
             <!-- Divider -->
@@ -344,27 +354,51 @@
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
 
-                    <!-- Content Row -->
                     <div class="row">
-
-                        <!-- Content Column -->
-                        <div class="col-lg-12 mb-8">
-
-                            <!-- Project Card Example -->
+                        <div class="col-lg-4">
+                            <!-- Basic Card Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">News</h6>
+                                    <a href="https://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=104">세계뉴스</a>
                                 </div>
                                 <div class="card-body">
+                                    The styling for this basic card example is created by using default Bootstrap
+                                    utility classes. By using utility classes, the style of the card component can be
+                                    easily modified with no need for any custom CSS!
                                 </div>
                             </div>
-                            <!-- Color System 없앰 -->
                         </div>
-                        <!-- Illustrations 자리 위쪽으로 옮김 -->
+
+                        <div class="col-lg-4">
+                            <!-- Basic Card Example -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <a href="https://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=101">경제뉴스</a>
+                                </div>
+                                <div class="card-body">
+                                    The styling for this basic card example is created by using default Bootstrap
+                                    utility classes. By using utility classes, the style of the card component can be
+                                    easily modified with no need for any custom CSS!
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <!-- Basic Card Example -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <a href="https://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=100">정치뉴스</a>
+                                </div>
+                                <div class="card-body">
+                                    The styling for this basic card example is created by using default Bootstrap
+                                    utility classes. By using utility classes, the style of the card component can be
+                                    easily modified with no need for any custom CSS!
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">
-
                         <!-- KOSPI -->
                         <div class="6 col-lg-4">
                             <div class="card shadow mb-4">
@@ -468,30 +502,75 @@
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Bookmark</h6>
                                     <div class="input-group-append">
-                                        <button class="btn btn-primary btn-l" type="button" onclick="searchStock();">MORE</button>
+                                        <a class="btn btn-primary btn-l" type="button" href="bookmarkList.html">MORE</a>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas id="myAreaChart"></canvas>
-                                    </div>
-                                    <div class="row">
-                                        <div class="card-body">
-                                            <center>
-                                                <h4>1. 삼성전자<br>2. 삼성 sds<br>3. 삼성바이오로직스<br>4. 삼성증권<br>5. 삼성중공업</h4>
-                                            </center>
-                                        </div>
-                                        <div class="card-body">
-                                            <center>
-                                                <h4>1. 삼성전자<br>2. 삼성 sds<br>3. 삼성바이오로직스<br>4. 삼성증권<br>5. 삼성중공업</h4>
-                                            </center>
-                                        </div>
+                                    <!-- !!!!!Notice!!!!!-->
+                                    <!-- 테이블 자리에 북마크 리스트/페이지네이션 정보가 들어오면 됩니다 -->
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                            <tr class="text-primary bg-gray-100">
+                                                <th>STOCK</th>
+                                                <th>PRESENT PRICE</th>
+                                                <th>FLUCTUATION</th>
+                                                <th>FLUCTUATION RATE</th>
+                                            </tr>
+                                            </thead>
+                                            <tfoot>
+                                            <tr class="text-primary bg-gray-100">
+                                                <th>STOCK</th>
+                                                <th>PRESENT PRICE</th>
+                                                <th>FLUCTUATION</th>
+                                                <th>FLUCTUATION RATE</th>
+                                            </tr>
+                                            </tfoot>
+                                            <tbody>
+                                            <tr>
+                                                <td>Apple</td>
+                                                <td>500000</td>
+                                                <td class="text-danger">123</td>
+                                                <td class="text-danger">4.5↑</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Lael Greer</td>
+                                                <td>Systems Administrator</td>
+                                                <td>London</td>
+                                                <td>21</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Jonas Alexander</td>
+                                                <td>Developer</td>
+                                                <td>San Francisco</td>
+                                                <td>30</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Shad Decker</td>
+                                                <td>Regional Director</td>
+                                                <td>Edinburgh</td>
+                                                <td>51</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Michael Bruce</td>
+                                                <td>Javascript Developer</td>
+                                                <td>Singapore</td>
+                                                <td>29</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Donna Snider</td>
+                                                <td>Customer Support</td>
+                                                <td>New York</td>
+                                                <td>27</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
-                        <!-- Pie Chart 없앰 -->
                         <!-- Content Column -->
                         <div class="col-lg-6 mb-4">
 

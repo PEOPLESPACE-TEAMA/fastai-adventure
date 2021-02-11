@@ -1,0 +1,109 @@
+{% extends "stock/base.html" %}
+
+{% block contents %}
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <!-- Page Heading -->
+                        <h1 class="h3 mb-2 text-gray-800">Guideline</h1>
+                        <h4 class="mb-4">Use Fastock most wisely! </h4>
+                        <!-- Membership Guidelin -->
+                        <div class="card shadow mb-4 ">
+                            <div class="accordion p-4" id="accordionExample">
+                                <h3>&nbsp;&nbsp;정보 토픽</h3>
+                                <div class="card">
+                                  <div class="card-header" id="headingOne">
+                                    <h2 class="mb-0">
+                                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        정보주제1
+                                      </button>
+                                    </h2>
+                                  </div>
+
+                                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        설명
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card">
+                                  <div class="card-header" id="headingTwo">
+                                    <h2 class="mb-0">
+                                      <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        정보주제2
+                                      </button>
+                                    </h2>
+                                  </div>
+                                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                    설명
+                                  </div>
+                                  </div>
+                                </div>
+                                <div class="card">
+                                  <div class="card-header" id="headingThree">
+                                    <h2 class="mb-0">
+                                      <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        정보주제3
+                                      </button>
+                                    </h2>
+                                  </div>
+                                  <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                   설명
+                                   </div>
+                                  </div>
+                                </div>
+                              </div>
+                                <div class="accordion p-4" id="accordionExample2">
+                                    <h3>&nbsp;&nbsp;멤버십</h3>
+                                    <div class="card">
+                                      <div class="card-header" id="heading2Two">
+                                        <h2 class="mb-0">
+                                          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse2One" aria-expanded="true" aria-controls="collapse2One">
+                                            개인 멤버십
+                                          </button>
+                                        </h2>
+                                      </div>
+
+                                      <div id="collapse2One" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            개인 멤버십의 가격은 매달 00000원 입니다. 개인 멤버십에 가입하면 광고 배너 없이 서비스를 이용할 수 있습니다. 등등
+                                         </div>
+                                      </div>
+                                    </div>
+                                    <div class="card">
+                                      <div class="card-header" id="heading2Two">
+                                        <h2 class="mb-0">
+                                          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse2Two" aria-expanded="false" aria-controls="collapse2Two">
+                                            기업 멤버십
+                                          </button>
+                                        </h2>
+                                      </div>
+                                      <div id="collapse2Two" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            종목의 패턴 예측을 시간단위로 제공합니다. 패턴 생성 시간과 확률을 함께 알리며 이는 사용자가 직접 설명할 수 있습니다. 등등.
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="card">
+                                      <div class="card-header" id="heading2Three">
+                                        <h2 class="mb-0">
+                                          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse2Three" aria-expanded="false" aria-controls="collapse2Three">
+                                            멤버십 신청/취소
+                                          </button>
+                                        </h2>
+                                      </div>
+                                      <div id="collapse2Three" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            멤버십 신청과 취소는 마이페이지에서 이용할 수 있습니다.
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                              
+                        </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+{% endblock %}
