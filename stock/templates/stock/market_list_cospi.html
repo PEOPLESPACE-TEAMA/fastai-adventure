@@ -10,13 +10,14 @@
     <h4 class="mb-4">Search stock item whatever you want!<br/> KOSPI </h4>
 
 
-    <h2 class=cosqi_tile >코스피 종목 목록</h2>
+    <!-- <h2 class=cosqi_tile >코스피 종목 목록</h2> -->
 
-    <form class="form-inline user" action="{% url 'market_list_for_search' %}" method="post">
+    <!-- 상단 검색으로 옮김
+        <form class="form-inline user" action="{% url 'market_list_for_search' %}" method="post">
         {% csrf_token %}
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" value="{{q}}">
         <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
-    </form>
+    </form> -->
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -100,11 +101,10 @@
         <!-- 페이징처리 끝 -->
     </div>
     </div>
-    </div>
-
-
-
 </div>
+
+
+
 {% endblock %}
 
 <!-- {% for stock in stocks %}

@@ -114,7 +114,7 @@
                 <div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Posts Screens:</h6>
-                        <a class="collapse-item" href='{% url "qnalist" %}'>QnA</a>
+                        <a class="collapse-item" href='{% url "question" %}'>QnA</a>
                         <a class="collapse-item" href="{% url 'review' %}">Review</a>
                         <a class="collapse-item" href='{% url "guideline" %}'>Guideline</a>
                         <div class="collapse-divider"></div>
@@ -153,7 +153,18 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <form
+
+                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="{% url 'market_list_for_search' %}" method="post">
+                        <div class="input-group">
+                        {% csrf_token %}
+                            <input class="form-control bg-light border-0 small" type="search" placeholder="Search" aria-label="Search" name="q" value="{{q}}">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary btn-l" type="submit"><span class="mx-2"><i class="fas fa-fw fa-search"></i></span></button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <!-- <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
                             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
@@ -162,7 +173,7 @@
                                 <button class="btn btn-primary btn-l" type="button" onclick="searchStock();">OK</button>
                             </div>
                         </div>
-                    </form>
+                    </form> -->
 
                     <!-- SEARCH ALERT : 두 글자 이상 입력해주세요-->
                     <script>
