@@ -3,15 +3,24 @@
 {% block contents %}
 
 <!-- Begin Page Content -->
-<div class="container-fluid">
+<div class="container-fluid ">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Stock Market List</h1>
+   
+    <h1 class="m-0 text-primary">Stock Market List</h1>
     <h4 class="mb-4">Search stock item whatever you want!<br/> KOSPI </h4>
+
+    <div class="mb-4 text-center"> 
+        <div></div>
+        <a href='{% url "market_list_cospi" %}' class="mr-3 d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm">
+            <i class="text-white-50"></i>KOSPI</a>
+        <a href='{% url "market_list_cospi" %}' class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm"><i
+            class="text-white-50"></i>NASDAQ</a>  <!-- 나스닥 페이지 완성되면 링크변경하기 / 나스닥페이지에서도 넣기 -->
+         <div></div>   
+    </div>
 
 
     <!-- <h2 class=cosqi_tile >코스피 종목 목록</h2> -->
-
     <!-- 상단 검색으로 옮김
         <form class="form-inline user" action="{% url 'market_list_for_search' %}" method="post">
         {% csrf_token %}
@@ -66,16 +75,16 @@
             <!-- 이전페이지 -->
             {% if posts.has_previous %}
             <li class="page-item">
-                <a class="page-link" href="?page={{ posts.previous_page_number }}">이전</a>
+                <a class="page-link" href="?page={{ posts.previous_page_number }}">prev</a>
             </li>
             {% else %}
             <li class="page-item disabled">
-                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">prev</a>
             </li>
             {% endif %}
             <!-- 페이지리스트 -->
             {% for page_number in posts.paginator.page_range %}
-            {% if page_number >= posts.number|add:-5 and page_number <= posts.number|add:5 %}
+            {% if page_number >= posts.number|add:-3 and page_number <= posts.number|add:3 %}
                 {% if page_number == posts.number %}
                 <li class="page-item active" aria-current="page">
                     <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a> <span> </span>
@@ -90,11 +99,11 @@
             <!-- 다음페이지 -->
             {% if posts.has_next %}
             <li class="page-item">
-                <a class="page-link" href="?page={{ posts.next_page_number }}">다음</a>
+                <a class="page-link" href="?page={{ posts.next_page_number }}">next</a>
             </li>
             {% else %}
             <li class="page-item disabled">
-                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">next</a>
             </li>
             {% endif %}
         </ul>
@@ -102,7 +111,6 @@
     </div>
     </div>
 </div>
-
 
 
 {% endblock %}
