@@ -11,7 +11,6 @@
                         <h1 class="h3 mb-0 text-gray-800">Home</h1>
                     </div>
                     <div class="row">
-
                         <!-- KOSPI -->
                         <div class="6 col-lg-4">
                             <div class="card shadow mb-4">
@@ -69,7 +68,7 @@
                             <!-- Basic Card Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <a href="https://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=104">세계뉴스</a>
+                                    <h6 class="m-0 font-weight-bold text-primary">세계뉴스</h6>
                                 </div>
                                 <div class="card-body">
                                     {% for n in news.all %}
@@ -87,7 +86,7 @@
                     <!-- Content Row -->
                     <div class="row">
                         <!-- Bookmark -->
-                        <div class="6 col-lg-6">
+                        <div class="6 col-lg-12">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div
@@ -150,14 +149,18 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <!-- Pie Chart 없앰 -->
-                        <!-- Content Column -->
-                        <div class="col-lg-6 mb-4">
+                    </div>
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- 상승률 TOP5 -->
+                        <div class="6 col-lg-6">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">예측 상승률 TOP5</h6>
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">상승률 TOP5</h6>
                                 </div>
+                                <!-- Card Body -->
                                 <div class="card-body">
                                     <table>
                                     <!-- {{ increasechart }} -->
@@ -165,8 +168,6 @@
                                         <thead>
                                         <tr class="text-primary bg-gray-100">
                                             <th>STOCK</th>
-                                            <th>PRESENT PRICE</th>
-                                            <th>FLUCTUATION</th>
                                             <th>FLUCTUATION RATE</th>
                                         </tr>
                                         </thead>
@@ -174,17 +175,24 @@
                                             {% for b in increases %}
                                                 <tr>
                                                     <td>{{ b.company_name }}</td>
-                                                    <td>{{ b.open }}</td>
-                                                    <td class="text-danger">{{ b.fluctuation_width }}</td>
                                                     <td class="text-danger">{{ b.increase }}↑</td>
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">예측 하락률 TOP5</h6>
+                            </div>
+                        </div>
+
+                        <!-- 하락률 TOP5 -->
+                        <div class="6 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">하락률 TOP5</h6>
                                 </div>
+                                <!-- Card Body -->
                                 <div class="card-body">
                                     <table>
                                         <table>
@@ -193,8 +201,6 @@
                                                 <thead>
                                                 <tr class="text-primary bg-gray-100">
                                                     <th>STOCK</th>
-                                                    <th>PRESENT PRICE</th>
-                                                    <th>FLUCTUATION</th>
                                                     <th>FLUCTUATION RATE</th>
                                                 </tr>
                                                 </thead>
@@ -202,22 +208,17 @@
                                                     {% for b in decreases %}
                                                         <tr>
                                                             <td>{{ b.company_name }}</td>
-                                                            <td>{{ b.open }}</td>
-                                                            <td class="text-danger">{{ b.fluctuation_width }}</td>
                                                             <td class="text-danger">{{ b.decrease }}↓</td>
                                                         </tr>
                                                     {% endfor %}
                                                 </tbody>
                                             </table>
+                                        </table>
+                                    </table>
                                 </div>
                             </div>
-
-                            <!-- Color System 없앰 -->
                         </div>
                     </div>
                 </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
+                <!-- End of Main Content -->
 {% endblock %}
