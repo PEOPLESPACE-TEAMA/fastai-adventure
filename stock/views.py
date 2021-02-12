@@ -1,14 +1,13 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
-from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm, AlarmForm,Reviewform
-from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm 
+from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm,Reviewform
 from django.views.generic import View
 
 from .models import User, Stock, Bookmark, Question, Answer, News, Review
 import pandas as pd
 import pandas_datareader as pdr
 import yfinance as yf
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plot
 import plotly
 from functools import wraps
 import plotly.express as px
@@ -108,6 +107,15 @@ def home(request):
             'stocks':search,
         }
         return render(request, 'stock/market_list_for_search.html', context)
+
+
+    df = fdr.DataReader('KS11', '2021-01-01')
+    a=df['Close'].plot()
+
+    dfi = fdr.DataReader('IXIC', '2021-01-01')
+    b=dfi['Close'].plot()
+
+
     bm_list = []
     try:
         bookmarks = Bookmark.objects.filter(user=request.user).order_by('?')
@@ -140,7 +148,12 @@ def home(request):
         'bookmarkchart': bookmarkchart,
         'increasechart': increasechart,
         'decreasechart': decreasechart,
+
+        'a':a,
+        'b':b
+
         'news': news,
+
     }
     return render(request, 'stock/home.html', context)
 
@@ -335,9 +348,9 @@ def market_list_nasdaq(request):
 def stock_detail(request,stock_code):
     print(request.user)
     stock = Stock.objects.get(stock_code = stock_code)
-    stock_list = Stock.objects.all().order_by('-id')
-    increases = stock_list.exclude(increase=None).order_by('-increase')[:5]
-    decreases = stock_list.exclude(decrease=None).order_by('decrease')[:5]
+    # stock_list = Stock.objects.all().order_by('-id')
+    # increases = stock_list.exclude(increase=None).order_by('-increase')[:5]
+    # decreases = stock_list.exclude(decrease=None).order_by('decrease')[:5]
     chart = draw_chart(stock)
 
     df = yf.download(tickers=stock_code, period='1d', interval='5m')
@@ -351,6 +364,7 @@ def stock_detail(request,stock_code):
 
     vals = {'현재가':stock_open,'고가':stock_high,'저가':stock_low,'거래량':stock_volume,'수정주가':stock_adj_close}
     # open이 진짜 찐 시가가 아니여서 임의로 현재가로 바꿔봄..
+
     crop_image(stock.chart_image,stock)
     img_path = "./graphimg/"+stock.company_name+'crop.PNG'
     #모델 예측
@@ -363,15 +377,17 @@ def stock_detail(request,stock_code):
     stock.last_pattern = predictedLabel
     stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
     stock.save()
+
     #북마크에 저장
     if request.method == 'POST':
         print(request.user)
         print(stock)
         bookmarkInOut(request.user,stock)
         print("북마크 저장됨")
+
         
     
-    return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
+    return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
 
 def getIncreaseDecreaseResult(predictedLabel):
     increase = ['DoubleBottom','InverseHeadAndShoulders','r_FallingWedge','c_FallingWedge','BullishPennant','BullishRectangle']

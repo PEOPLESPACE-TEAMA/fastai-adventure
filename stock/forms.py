@@ -40,12 +40,6 @@ class AnswerForm(forms.ModelForm):
         fields = ['content']
 
 
-class AlarmForm(forms.ModelForm):
-    # 메일 알람 시간 설정 폼
-    class Meta:
-        model = User
-        fields = ['mail_alarm_time_hour','mail_alarm_time_minute']
-
 
 class Reviewform(forms.ModelForm):
     #후기 폼
