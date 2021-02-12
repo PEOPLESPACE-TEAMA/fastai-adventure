@@ -7,7 +7,7 @@ from .models import User, Stock, Bookmark, Question, Answer, News, Review
 import pandas as pd
 import pandas_datareader as pdr
 import yfinance as yf
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plot
 import plotly
 from functools import wraps
 import plotly.express as px
@@ -105,6 +105,13 @@ def market(request):
         }
         return render(request, 'stock/market_list_for_search.html', context)
 
+    df = fdr.DataReader('KS11', '2021-01-01')
+    a=df['Close'].plot()
+
+    dfi = fdr.DataReader('IXIC', '2021-01-01')
+    b=dfi['Close'].plot()
+
+
     bookmarks = Bookmark.objects.filter(user=request.user)
     bm_list = []
     for bm in bookmarks:
@@ -130,6 +137,8 @@ def market(request):
         'bookmarkchart': bookmarkchart,
         'increasechart': increasechart,
         'decreasechart': decreasechart,
+        'a':a,
+        'b':b
     }
     return render(request, 'stock/market.html', context)
 
