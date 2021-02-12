@@ -7,7 +7,7 @@ from .models import User, Stock, Bookmark, Question, Answer, News, Review
 import pandas as pd
 import pandas_datareader as pdr
 import yfinance as yf
-import matplotlib.pyplot as plot
+import matplotlib.pyplot as plt
 import plotly
 from functools import wraps
 import plotly.express as px
@@ -33,8 +33,6 @@ def main(request):
     return render(request, 'stock/main.html')
 
 # 새로운 템플릿 확인용 주소 시작
-def home(request):
-    return render(request, 'stock/home.html')
 
 def forgot(request):
     return render(request, 'stock/forgot-password.html')
@@ -109,11 +107,13 @@ def home(request):
         return render(request, 'stock/market_list_for_search.html', context)
 
 
-    df = fdr.DataReader('KS11', '2021-01-01')
-    a=df['Close'].plot()
+    # df = fdr.DataReader('KS11', '2021-01-01')
+    # a=df['Close'].plot()
+    # aa=a.show()
 
-    dfi = fdr.DataReader('IXIC', '2021-01-01')
-    b=dfi['Close'].plot()
+    # dfi = fdr.DataReader('IXIC', '2021-01-01')
+    # b=dfi['Close'].plot()
+    # bb=b.show()
 
 
     bm_list = []
@@ -149,8 +149,8 @@ def home(request):
         'increasechart': increasechart,
         'decreasechart': decreasechart,
 
-        'a':a,
-        'b':b
+        # 'a':aa,
+        # 'b':bb,
 
         'news': news,
 
