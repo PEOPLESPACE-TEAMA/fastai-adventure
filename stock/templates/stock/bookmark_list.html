@@ -35,8 +35,13 @@
           <!-- {% for bookmark in bookmarks %}
         <div><a class = wow href="{% url 'stock_detail' stock_code=bookmark.stock.stock_code %}">{{ bookmark }}</a></div>
           {% endfor %}  -->
-
-          <div class="table-responsive">
+          {% if not review_list %}
+          <h4 class="text-center">Add your first bookmark item!
+            <a href='{% url "market_list_kospi" %}' style="font-size:medium;">Go to market</a>
+          </h4>
+          
+             {% else %}
+          <div class="table-responsive text-center">
             <h4 class="mb-4 text-primary">{{user.username}}'s Bookmark Items! </h4>
               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
@@ -53,7 +58,7 @@
                         <td>
                             <a class = wow href="{% url 'stock_detail' stock_code=bookmark.stock.stock_code %}">{{ bookmark }}</a>
                         </td>
-                        <td>{{ bookmark.stock.fluctuation_width }}</td>
+                        <td class="text-dark">{{ bookmark.stock.fluctuation_width }}</td>
             
                         {% if bookmark.stock.increase %}
                             <td class="text-danger">{{ bookmark.stock.increase }}</td>
@@ -65,6 +70,7 @@
                   </tbody>
               </table>
           </div>
+          {% endif %}
       </div>
   </div>
 
