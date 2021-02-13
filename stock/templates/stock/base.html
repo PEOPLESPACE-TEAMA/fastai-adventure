@@ -21,7 +21,8 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href='{% static "css/sb-admin-2.min.css"%}' rel="stylesheet">
+    <link href='{% static "css/sb-admin-2.min.css" %}' rel="stylesheet">
+    <!-- "css/custom.css?ver=1" -->
     {% block header %}
     {% endblock %}
 
@@ -52,7 +53,7 @@
                     <span>Home</span></a>
             </li>
 
-
+            {% if not user.is_authenticated %}
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -75,6 +76,7 @@
                     </div>
                 </div>
             </li>
+            {% endif %}
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -94,7 +96,7 @@
 
             <!-- Nav Item - MARKET -->
             <li class="nav-item">
-                <a class="nav-link" href='{% url "market_list_cospi" %}'>
+                <a class="nav-link" href='{% url "market_list_nasdaq" %}'>
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Market</span></a>
             </li>
@@ -307,7 +309,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href='{% url "login" %}'>Logout</a>
+                    <a class="btn btn-primary" href='{% url "logout" %}'>Logout</a>
                 </div>
             </div>
         </div>

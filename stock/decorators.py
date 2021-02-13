@@ -26,7 +26,6 @@ def admin_required(function):
 def logout_message_required(function):
     def wrap(request, *args, **kwargs):
         if request.user.is_authenticated:
-            # messages.info(request, "접속중인 사용자입니다.")
-            return redirect('main')
+            return HttpResponse('로그아웃 후 사용 바랍니다.')
         return function(request, *args, **kwargs)
     return wrap

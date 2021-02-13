@@ -1,7 +1,6 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
-from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm, AlarmForm,Reviewform
-from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm 
+from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm,Reviewform
 from django.views.generic import View
 
 from .models import User, Stock, Bookmark, Question, Answer, News, Review
@@ -20,6 +19,7 @@ from PIL import Image
 import os
 import numpy as np
 from django.contrib.auth import login as login_a, authenticate
+from django.contrib import auth
 from .prediction import predict, getLabels
 import requests
 import json
@@ -33,8 +33,6 @@ def main(request):
     return render(request, 'stock/main.html')
 
 # 새로운 템플릿 확인용 주소 시작
-def home(request):
-    return render(request, 'stock/home.html')
 
 def forgot(request):
     return render(request, 'stock/forgot-password.html')
@@ -73,6 +71,7 @@ def signup(request):
         user_form = RegisterForm()
     return render(request, 'stock/signup.html',{'form': user_form})
 
+@logout_message_required
 def login(request):
     if request.method =='POST':
         user_form = LoginForm(request,request.POST)
@@ -85,9 +84,10 @@ def login(request):
 
 def logout(request):
     # 로그아웃 하면 로그인 화면으로 연결
-    return render(request, 'stock/login.html')
+    auth.logout(request)
+    return redirect('login')
 
-def market(request):
+def home(request):
     stocks = Stock.objects.all().order_by('-id')
     # increase, decrease 계산하려면 아래 주석 풀기
     # 계산이 오래 걸려요. 테스트 때는 한 번 계산되면 다시 주석 설정해도 됩니다!
@@ -106,10 +106,23 @@ def market(request):
         }
         return render(request, 'stock/market_list_for_search.html', context)
 
-    bookmarks = Bookmark.objects.filter(user=request.user).order_by('?')
+
+    # df = fdr.DataReader('KS11', '2021-01-01')
+    # a=df['Close'].plot()
+    # aa=a.show()
+
+    # dfi = fdr.DataReader('IXIC', '2021-01-01')
+    # b=dfi['Close'].plot()
+    # bb=b.show()
+
+
     bm_list = []
-    for bm in bookmarks:
-        bm_list.append(bm)
+    try:
+        bookmarks = Bookmark.objects.filter(user=request.user).order_by('?')
+        for bm in bookmarks:
+            bm_list.append(bm)
+    except:
+        pass
     bookmarks = stocks.filter(company_name__in=bm_list)
     increases = stocks.exclude(increase=None).order_by('-increase')[:5]
     decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
@@ -124,6 +137,10 @@ def market(request):
     bottom = decreases[0]
     increasechart = draw_chart(top)
     decreasechart = draw_chart(bottom)
+    
+    # 새로운 뉴스 받아오고 싶을 때 아래 주석 풀기, 테스트 시 처음 한 번은 꼭 해야 합니다!
+    # updateNews()
+    news = News.objects.all()
     context = {
         'bookmarks': bookmarks,
         'increases': increases,
@@ -131,8 +148,14 @@ def market(request):
         'bookmarkchart': bookmarkchart,
         'increasechart': increasechart,
         'decreasechart': decreasechart,
+
+        # 'a':aa,
+        # 'b':bb,
+
+        'news': news,
+
     }
-    return render(request, 'stock/market.html', context)
+    return render(request, 'stock/home.html', context)
 
 def market_list_for_search(request):
     q = request.POST.get('q', "") 
@@ -174,7 +197,7 @@ def crop_image(self,stock):
         if stop == True:
             break
     bottom = i
-    pattern=graph.crop((850,40+top,945,40+bottom))
+    pattern=graph.crop((850,35+top,945,45+bottom))
     pattern.show()
     pattern.save(path+stock.company_name+'crop.PNG')
 
@@ -290,7 +313,7 @@ def updateNews():
     print(articles)
 
 
-def market_list_cospi(request):
+def market_list_kospi(request):
     # 데이터 생성 및 업데이트 할 시에만 주석 풀기
     # initial_data_create()
     # data_update_long()
@@ -314,20 +337,43 @@ def market_list_cospi(request):
 
     context = {'posts':posts,  }
     
-    return render(request, 'stock/market_list_cospi.html' ,    context)
+    return render(request, 'stock/market_list_kospi.html' ,    context)
  
-def market_list_cosdaq(request):
+def market_list_kosdaq(request):
     pass
 
 def market_list_nasdaq(request):
-    pass 
+    # 데이터 생성 및 업데이트 할 시에만 주석 풀기
+    # initial_data_create()
+    # data_update_long()
+    # data_update_short()
+    q = request.POST.get('q', "") 
+    if q:
+        stocks=Stock.objects.all()
+        search = stocks.filter(company_name__icontains=q).filter(stock_type='N')
+        context ={
+            'stocks':search,
+        }
+        return render(request, 'stock/market_list_for_search.html', context )
+
+    print(request.user)
+    # user=User.objects.all().filter(user=request.user)
+
+    stocks = Stock.objects.all().filter(stock_type='N').order_by('company_name')
+    paginator = Paginator(stocks, 20)
+    page = request.GET.get("page",'1')
+    posts = paginator.get_page(page)
+
+    context = {'posts':posts,  }
+    
+    return render(request, 'stock/market_list_nasdaq.html' ,    context)
 
 def stock_detail(request,stock_code):
     print(request.user)
     stock = Stock.objects.get(stock_code = stock_code)
-    stock_list = Stock.objects.all().order_by('-id')
-    increases = stock_list.exclude(increase=None).order_by('-increase')[:5]
-    decreases = stock_list.exclude(decrease=None).order_by('decrease')[:5]
+    # stock_list = Stock.objects.all().order_by('-id')
+    # increases = stock_list.exclude(increase=None).order_by('-increase')[:5]
+    # decreases = stock_list.exclude(decrease=None).order_by('decrease')[:5]
     chart = draw_chart(stock)
 
     df = yf.download(tickers=stock_code, period='1d', interval='5m')
@@ -341,6 +387,7 @@ def stock_detail(request,stock_code):
 
     vals = {'현재가':stock_open,'고가':stock_high,'저가':stock_low,'거래량':stock_volume,'수정주가':stock_adj_close}
     # open이 진짜 찐 시가가 아니여서 임의로 현재가로 바꿔봄..
+
     crop_image(stock.chart_image,stock)
     img_path = "./graphimg/"+stock.company_name+'crop.PNG'
     #모델 예측
@@ -353,15 +400,17 @@ def stock_detail(request,stock_code):
     stock.last_pattern = predictedLabel
     stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
     stock.save()
+
     #북마크에 저장
     if request.method == 'POST':
         print(request.user)
         print(stock)
         bookmarkInOut(request.user,stock)
         print("북마크 저장됨")
+
         
     
-    return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'decreases': decreases,'increases': increases,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
+    return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
 
 def getIncreaseDecreaseResult(predictedLabel):
     increase = ['DoubleBottom','InverseHeadAndShoulders','r_FallingWedge','c_FallingWedge','BullishPennant','BullishRectangle']

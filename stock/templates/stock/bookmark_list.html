@@ -6,9 +6,24 @@
 <div class="container-fluid">
 
   <!-- Page Heading -->
-  <h1 class="h3 mb-2 text-gray-800">Bookmark List</h1>
-  <h4 class="mb-4">Check Your Bookmark Items!<br/> KOSPI </h4>
-  <p>{{user.username}}님이 북마크한 종목들입니다!</p>
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="m-0 text-primary">Bookmark List</h1>
+    <!-- <h4 class="mb-4">{{user.username}}'s Bookmark Items! </h4> -->
+    {% if request.user.mail_alarm_time_hour %}
+        <p><a href='{% url "alarm" %}' class="d-none d-sm-inline-block btn  btn-primary shadow-sm"><i
+            class="fas fa-bell fa-sm text-white-50"></i> set notice</a></p>
+    {% else %}
+        <p><a href='{% url "alarm" %}' class="d-none d-sm-inline-block btn  btn-primary shadow-sm"><i
+            class="fas fa-bell fa-sm text-white-50"></i> set notice</a></p>
+    {% endif %}
+
+
+
+    
+  </div>
+  <!-- <h1 class="h3 mb-2 text-gray-800">Bookmark List</h1>
+  <h4 class="mb-4">Check Your Bookmark Items! </h4>
+  <p>{{user.username}}님이 북마크한 종목들입니다!</p> -->
 
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
@@ -17,73 +32,45 @@
       </div>
       <div class="card-body">
            <!-- !!!!!Notice!!!!!-->
-          <!-- 테이블 자리에 북마크 리스트/페이지네이션 정보가 들어오면 됩니다 -->
-
-          {% for bookmark in bookmarks %}
+          <!-- {% for bookmark in bookmarks %}
         <div><a class = wow href="{% url 'stock_detail' stock_code=bookmark.stock.stock_code %}">{{ bookmark }}</a></div>
-          {% endfor %} 
-
-
-
-
-          <div class="table-responsive">
+          {% endfor %}  -->
+          {% if not review_list %}
+          <h4 class="text-center">Add your first bookmark item!
+            <a href='{% url "market_list_kospi" %}' style="font-size:medium;">Go to market</a>
+          </h4>
+          
+             {% else %}
+          <div class="table-responsive text-center">
+            <h4 class="mb-4 text-primary">{{user.username}}'s Bookmark Items! </h4>
               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                       <tr class="text-primary bg-gray-100"> 
                           <th>STOCK</th>
-                          <th>PRESENT PRICE</th>
                           <th>FLUCTUATION</th>
                           <th>FLUCTUATION RATE</th>
                       </tr>
                   </thead>
-                  <tfoot>
-                      <tr class="text-primary bg-gray-100">
-                          <th>STOCK</th>
-                          <th>PRESENT PRICE</th>
-                          <th>FLUCTUATION</th>
-                          <th>FLUCTUATION RATE</th>
-                      </tr>
-                  </tfoot>
                   <tbody>
-                      <tr>
-                          <td>Apple</td>
-                          <td>500000</td>
-                          <td class="text-danger">123</td>
-                          <td class="text-danger">4.5↑</td>
-                      </tr>
-                      <tr>
-                          <td>Lael Greer</td>
-                          <td>Systems Administrator</td>
-                          <td>London</td>
-                          <td>21</td>
-                      </tr>
-                      <tr>
-                          <td>Jonas Alexander</td>
-                          <td>Developer</td>
-                          <td>San Francisco</td>
-                          <td>30</td>
-                      </tr>
-                      <tr>
-                          <td>Shad Decker</td>
-                          <td>Regional Director</td>
-                          <td>Edinburgh</td>
-                          <td>51</td>
-                      </tr>
-                      <tr>
-                          <td>Michael Bruce</td>
-                          <td>Javascript Developer</td>
-                          <td>Singapore</td>
-                          <td>29</td>
-                      </tr>
-                      <tr>
-                          <td>Donna Snider</td>
-                          <td>Customer Support</td>
-                          <td>New York</td>
-                          <td>27</td>
-                      </tr>
+                    {% for bookmark in bookmarks %}
+                    <tr>
+                        <!-- <td>{{ forloop.counter }}</td> -->
+                        <td>
+                            <a class = wow href="{% url 'stock_detail' stock_code=bookmark.stock.stock_code %}">{{ bookmark }}</a>
+                        </td>
+                        <td class="text-dark">{{ bookmark.stock.fluctuation_width }}</td>
+            
+                        {% if bookmark.stock.increase %}
+                            <td class="text-danger">{{ bookmark.stock.increase }}</td>
+                        {% else %}
+                            <td class="text-danger">{{ bookmark.stock.decrease }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %} 
                   </tbody>
               </table>
           </div>
+          {% endif %}
       </div>
   </div>
 
@@ -93,13 +80,12 @@
 </div>
 <!-- End of Main Content -->
 
-{% if request.user.mail_alarm_time_hour %}
+<!-- {% if request.user.mail_alarm_time_hour %}
     <p><a href="{% url 'alarm' %}" class="top-menu">메일 알람 수정하기</a></p>
 {% else %}
     <p><a href="{% url 'alarm' %}" class="top-menu">메일 알람 생성하기</a></p>
-{% endif %}
+{% endif %} -->
 
-<!-- {% url 'market_list_cospi' %} -->
 
 
 
