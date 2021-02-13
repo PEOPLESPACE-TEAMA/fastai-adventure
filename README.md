@@ -21,14 +21,14 @@ After installation, Create a virtual environment to install the things need to d
 
 ## what you can do now
 
-informations about our team and service from the page
-make your own account
-login & logout
-bookmark a stock item
-check predicted pattern
+informations about our team and service from the page /
+make your own account /
+login & logout /
+bookmark a stock item /
+check predicted pattern /
 
 
 ## what we need to do
 
-refine page design
+refine page design /
 replace with a better model
