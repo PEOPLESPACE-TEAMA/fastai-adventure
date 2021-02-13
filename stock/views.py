@@ -135,7 +135,7 @@ def home(request):
 
     # 매일 자정 코스피,나스닥 주가 지수 그래프 업데이트하고 싶을때 아래 주석 풀기!!
     # kospi=update_draw_chart_for_home('KS11','kospi')
-    nasdaq=update_draw_chart_for_home('IXIC','nasdaq')
+    # nasdaq=update_draw_chart_for_home('IXIC','nasdaq')
 
     context = {
         'bookmarks': bookmarks,
