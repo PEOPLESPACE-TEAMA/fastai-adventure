@@ -313,7 +313,7 @@ def updateNews():
     print(articles)
 
 
-def market_list_cospi(request):
+def market_list_kospi(request):
     # 데이터 생성 및 업데이트 할 시에만 주석 풀기
     # initial_data_create()
     # data_update_long()
@@ -337,13 +337,36 @@ def market_list_cospi(request):
 
     context = {'posts':posts,  }
     
-    return render(request, 'stock/market_list_cospi.html' ,    context)
+    return render(request, 'stock/market_list_kospi.html' ,    context)
  
-def market_list_cosdaq(request):
+def market_list_kosdaq(request):
     pass
 
 def market_list_nasdaq(request):
-    pass 
+    # 데이터 생성 및 업데이트 할 시에만 주석 풀기
+    # initial_data_create()
+    # data_update_long()
+    # data_update_short()
+    q = request.POST.get('q', "") 
+    if q:
+        stocks=Stock.objects.all()
+        search = stocks.filter(company_name__icontains=q).filter(stock_type='N')
+        context ={
+            'stocks':search,
+        }
+        return render(request, 'stock/market_list_for_search.html', context )
+
+    print(request.user)
+    # user=User.objects.all().filter(user=request.user)
+
+    stocks = Stock.objects.all().filter(stock_type='N').order_by('company_name')
+    paginator = Paginator(stocks, 20)
+    page = request.GET.get("page",'1')
+    posts = paginator.get_page(page)
+
+    context = {'posts':posts,  }
+    
+    return render(request, 'stock/market_list_nasdaq.html' ,    context)
 
 def stock_detail(request,stock_code):
     print(request.user)
