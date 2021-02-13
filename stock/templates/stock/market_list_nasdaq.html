@@ -1,0 +1,130 @@
+{% extends "stock/base.html" %}
+
+{% block contents %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid ">
+
+    <!-- Page Heading -->
+   
+    <h1 class="m-0 text-primary">Stock Market List</h1>
+    <h4 class="mb-4">Search stock item whatever you want!<br/> KOSPI </h4>
+
+    <div class="mb-4 text-center"> 
+        <div></div>
+        <a href='{% url "market_list_kospi" %}' class="mr-3 d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm">
+            <i class="text-white-50"></i>KOSPI</a>
+        <a href='{% url "market_list_nasdaq" %}' class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm"><i
+            class="text-white-50"></i>NASDAQ</a>  <!-- 나스닥 페이지 완성되면 링크변경하기 / 나스닥페이지에서도 넣기 -->
+         <div></div>   
+    </div>
+
+
+    <!-- <h2 class=cosqi_tile >코스피 종목 목록</h2> -->
+    <!-- 상단 검색으로 옮김
+        <form class="form-inline user" action="{% url 'market_list_for_search' %}" method="post">
+        {% csrf_token %}
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" value="{{q}}">
+        <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+    </form> -->
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary"></h6>
+        </div>
+        <div class="card-body">
+    <!-- <span>종목이름 <span>등락폭</span> <span>등락율(상승/하락)</span> -->
+        <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+                <tr class="text-primary bg-gray-100">
+                    <th>STOCK</th>
+                    <!--디자인상으로는 이곳에 가격-->
+                    <th>FLUCTUATION</th>
+                    <th>FLUCTUATION RATE</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr class="text-primary bg-gray-100">
+                    <th>STOCK</th>
+                    <th>FLUCTUATION</th>
+                    <th>FLUCTUATION RATE</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                {% for stock in posts %}
+                <tr>
+                    <!-- <td>{{ forloop.counter }}</td> -->
+                    <td>
+                        <a class = wow href="{% url 'stock_detail' stock_code=stock.stock_code %}">{{ stock.company_name }}</a>
+                    </td>
+                    <td>{{ stock.fluctuation_width }}</td>
+        
+                    {% if stock.increase %}
+                    <td class="text-danger">{{ stock.increase }}</td>
+                    {% else %}
+                    <td class="text-danger">{{ stock.decrease }}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- 페이징처리 시작 -->
+        <ul class="pagination justify-content-center">
+            <!-- 이전페이지 -->
+            {% if posts.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ posts.previous_page_number }}">prev</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">prev</a>
+            </li>
+            {% endif %}
+            <!-- 페이지리스트 -->
+            {% for page_number in posts.paginator.page_range %}
+            {% if page_number >= posts.number|add:-3 and page_number <= posts.number|add:3 %}
+                {% if page_number == posts.number %}
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a> <span> </span>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a> <span>  </span>
+                </li>
+                {% endif %}
+            {% endif %}
+            {% endfor %}
+            <!-- 다음페이지 -->
+            {% if posts.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ posts.next_page_number }}">next</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">next</a>
+            </li>
+            {% endif %}
+        </ul>
+        <!-- 페이징처리 끝 -->
+    </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+<!-- {% for stock in stocks %}
+<div class=increase>
+    {% if stock.increase %}
+    <span><a href="{% url 'stock_detail' stock_code=stock.stock_code %}">{{ stock.company_name }}</a></span>
+    <span>{{ stock.fluctuation_width }}</span> <span>{{stock.increase}}</span>
+</div>
+    {% else%}
+<div class=decrease>
+    <span><a href="{% url 'stock_detail' stock_code=stock.stock_code %}">{{ stock.company_name }}</a></span>
+    <span>{{ stock.fluctuation_width }}</span> <span>{{stock.decrease}}</span>
+</div>
+    {% endif %}
+{% endfor %} -->
