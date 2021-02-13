@@ -10,7 +10,14 @@
     <h1 class="m-0 text-primary">Stock Market List</h1>
     <h4 class="mb-4">Search stock item whatever you want!<br/> KOSPI </h4>
 
-   
+    <div class="mb-4 text-center"> 
+        <div></div>
+        <a href='{% url "market_list_kospi" %}' class="mr-3 d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm">
+            <i class="text-white-50"></i>KOSPI</a>
+        <a href='{% url "market_list_nasdaq" %}' class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm"><i
+            class="text-white-50"></i>NASDAQ</a>  <!-- 나스닥 페이지 완성되면 링크변경하기 / 나스닥페이지에서도 넣기 -->
+         <div></div>   
+    </div>
 
 
     <!-- <h2 class=cosqi_tile >코스피 종목 목록</h2> -->
@@ -28,16 +35,8 @@
         </div>
         <div class="card-body">
     <!-- <span>종목이름 <span>등락폭</span> <span>등락율(상승/하락)</span> -->
-        <div class="mb-4 text-center"> 
-            <div></div>
-            <a href='{% url "market_list_cospi" %}' class="mr-3 d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm">
-                <i class="text-white-50"></i>KOSPI</a>
-            <a href='{% url "market_list_cospi" %}' class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm"><i
-                class="text-white-50"></i>NASDAQ</a>  <!-- 나스닥 페이지 완성되면 링크변경하기 / 나스닥페이지에서도 넣기 -->
-            <div></div>   
-        </div>
-        <div class="table-responsive text-center">
-        <table class="table table-bordered mb-5" id="dataTable" width="100%" cellspacing="0">
+        <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr class="text-primary bg-gray-100">
                     <th>STOCK</th>
@@ -60,7 +59,7 @@
                     <td>
                         <a class = wow href="{% url 'stock_detail' stock_code=stock.stock_code %}">{{ stock.company_name }}</a>
                     </td>
-                    <td class="text-dark">{{ stock.fluctuation_width }}</td>
+                    <td>{{ stock.fluctuation_width }}</td>
         
                     {% if stock.increase %}
                     <td class="text-danger">{{ stock.increase }}</td>

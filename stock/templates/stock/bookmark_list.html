@@ -51,13 +51,6 @@
                           <th>FLUCTUATION RATE</th>
                       </tr>
                   </thead>
-                  <tfoot>
-                      <tr class="text-primary bg-gray-100">
-                          <th>STOCK</th>
-                          <th>FLUCTUATION</th>
-                          <th>FLUCTUATION RATE</th>
-                      </tr>
-                  </tfoot>
                   <tbody>
                     {% for bookmark in bookmarks %}
                     <tr>
@@ -67,10 +60,10 @@
                         </td>
                         <td class="text-dark">{{ bookmark.stock.fluctuation_width }}</td>
             
-                        {% if stock.increase %}
-                        <td class="text-danger">{{ bookmark.stock.increase }}</td>
+                        {% if bookmark.stock.increase %}
+                            <td class="text-danger">{{ bookmark.stock.increase }}</td>
                         {% else %}
-                        <td class="text-danger">{{ bookmark.stock.decrease }}</td>
+                            <td class="text-danger">{{ bookmark.stock.decrease }}</td>
                         {% endif %}
                     </tr>
                     {% endfor %} 
@@ -93,7 +86,6 @@
     <p><a href="{% url 'alarm' %}" class="top-menu">메일 알람 생성하기</a></p>
 {% endif %} -->
 
-<!-- {% url 'market_list_cospi' %} -->
 
 
 

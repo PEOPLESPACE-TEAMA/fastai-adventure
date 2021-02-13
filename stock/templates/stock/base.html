@@ -21,7 +21,8 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href='{% static "css/sb-admin-2.min.css"%}' rel="stylesheet">
+    <link href='{% static "css/sb-admin-2.min.css" %}' rel="stylesheet">
+    <!-- "css/custom.css?ver=1" -->
     {% block header %}
     {% endblock %}
 
@@ -95,7 +96,7 @@
 
             <!-- Nav Item - MARKET -->
             <li class="nav-item">
-                <a class="nav-link" href='{% url "market_list_cospi" %}'>
+                <a class="nav-link" href='{% url "market_list_nasdaq" %}'>
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Market</span></a>
             </li>
