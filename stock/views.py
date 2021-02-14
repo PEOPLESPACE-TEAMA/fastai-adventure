@@ -320,9 +320,15 @@ def market_list_kospi(request):
     paginator = Paginator(stocks, 20)
     page = request.GET.get("page",'1')
     posts = paginator.get_page(page)
+    # 마켓리스트에 상승률하락률 넣기
+    increases = stocks.exclude(increase=None).order_by('-increase')[:5]
+    decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
 
-    context = {'posts':posts,  }
-    
+    context = {'posts':posts, 
+               'increases': increases,
+               'decreases': decreases,
+     }
+
     return render(request, 'stock/market_list_kospi.html' ,    context)
  
 def market_list_kosdaq(request):
@@ -350,7 +356,14 @@ def market_list_nasdaq(request):
     page = request.GET.get("page",'1')
     posts = paginator.get_page(page)
 
-    context = {'posts':posts,  }
+    # 마켓리스트에 상승률하락률 넣기
+    increases = stocks.exclude(increase=None).order_by('-increase')[:5]
+    decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
+
+    context = {'posts':posts, 
+               'increases': increases,
+               'decreases': decreases,
+     }
     
     return render(request, 'stock/market_list_nasdaq.html' ,    context)
 
