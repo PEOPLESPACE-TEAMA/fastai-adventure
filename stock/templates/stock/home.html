@@ -66,11 +66,19 @@
                                 </div>
                                 <div class="card-body">
                                     {% for n in news.all %}
-                                        <img src="{{ n.newsImage }}" alt="newImage" width=200>
-                                        <a href="{{ n.redirectUrl }}">{{ n.title }}</a>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        {{ n.description }}
-                                        <br>
+                                        <div class="row">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <img src="{{ n.newsImage }}" alt="newImage" width=320>
+                                            <div class="news">
+                                                <h5 class="title">
+                                                    <a href="{{ n.redirectUrl }}"><br><br>&nbsp;&nbsp;&nbsp;&nbsp;{{ n.title }}</a>
+                                                </h5>
+                                                <h6 class="description">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp; {{ n.description }}
+                                                </h6>
+                                            </div>
+                                        </div>
+                                        <hr/>
                                     {% endfor %}
                                 </div>
                             </div>
