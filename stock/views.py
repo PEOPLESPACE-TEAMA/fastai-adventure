@@ -106,19 +106,9 @@ def home(request):
         }
         return render(request, 'stock/market_list_for_search.html', context)
 
-
-    # df = fdr.DataReader('KS11', '2021-01-01')
-    # a=df['Close'].plot()
-    # aa=a.show()
-
-    # dfi = fdr.DataReader('IXIC', '2021-01-01')
-    # b=dfi['Close'].plot()
-    # bb=b.show()
-
-
     bm_list = []
     try:
-        bookmarks = Bookmark.objects.filter(user=request.user).order_by('?')
+        bookmarks = Bookmark.objects.filter(user=request.user)
         for bm in bookmarks:
             bm_list.append(bm)
     except:
@@ -127,33 +117,34 @@ def home(request):
     increases = stocks.exclude(increase=None).order_by('-increase')[:5]
     decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
 
-    if bookmarks.exists():
-        bookmark = bookmarks[0]
-        bookmarkchart = draw_chart(bookmark)
-    else :
-        bookmark=" "
-        bookmarkchart=" "
-    top = increases[0]
-    bottom = decreases[0]
-    increasechart = draw_chart(top)
-    decreasechart = draw_chart(bottom)
+    # if bookmarks.exists():
+    #     bookmark = bookmarks[0]
+    #     bookmarkchart = draw_chart(bookmark)
+    # else :
+    #     bookmark=" "
+    #     bookmarkchart=" "
+
+    # top = increases[0]
+    # bottom = decreases[0]
+    # increasechart = draw_chart(top)
+    # decreasechart = draw_chart(bottom)
     
     # 새로운 뉴스 받아오고 싶을 때 아래 주석 풀기, 테스트 시 처음 한 번은 꼭 해야 합니다!
     # updateNews()
     news = News.objects.all()
+
+    # 매일 자정 코스피,나스닥 주가 지수 그래프 업데이트하고 싶을때 아래 주석 풀기!!
+    # kospi=update_draw_chart_for_home('KS11','kospi')
+    # nasdaq=update_draw_chart_for_home('IXIC','nasdaq')
+
     context = {
         'bookmarks': bookmarks,
         'increases': increases,
         'decreases': decreases,
-        'bookmarkchart': bookmarkchart,
-        'increasechart': increasechart,
-        'decreasechart': decreasechart,
-
-        # 'a':aa,
-        # 'b':bb,
-
+        # 'bookmarkchart': bookmarkchart,
+        # 'increasechart': increasechart,
+        # 'decreasechart': decreasechart,
         'news': news,
-
     }
     return render(request, 'stock/home.html', context)
 
@@ -198,7 +189,7 @@ def crop_image(self,stock):
             break
     bottom = i
     pattern=graph.crop((850,35+top,945,45+bottom))
-    pattern.show()
+    # pattern.show()
     pattern.save(path+stock.company_name+'crop.PNG')
 
 def bookmark(request):
@@ -259,15 +250,9 @@ def bookmark_list(request):
         #로그인 되어 있지 않으면 로그인 페이지로 이동 
         return redirect('login')
 
-    #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
-    # print(request.user)
-    # user = User.objects.all().filter(username = request.user.username) #유저네임 바꾸기 이 로그인 에러 있어서 일단 이렇게 했는데 레어 없으면 username = request.user.username 이나 그냥 현재 로그인 유저를 특정 할수 있게 하면 됨 
-    # print(user)
+
     bookmarks = Bookmark.objects.all().filter(user=request.user)
     print(bookmarks)
-    print(type(bookmarks))
-    for bookmark in bookmarks :
-        print(bookmark.stock.stock_code)
 
     return render(request, 'stock/bookmark_list.html',{'bookmarks':bookmarks, } )
 
@@ -284,6 +269,7 @@ def bookmarkInOut(user,stock):
         bookmark.user = user
         bookmark.stock = stock
         bookmark.save()
+
 
 
 # 하기전에 pip3 install newsapi 해주세용!
@@ -367,6 +353,8 @@ def market_list_nasdaq(request):
     context = {'posts':posts,  }
     
     return render(request, 'stock/market_list_nasdaq.html' ,    context)
+
+
 
 def stock_detail(request,stock_code):
     print(request.user)
@@ -455,6 +443,7 @@ def draw_chart(self):
     self.chart_image = path+self.company_name+'.png'
     self.save()
     return chart
+
 
 def question(request):
     question_list = Question.objects.order_by('-create_date')
@@ -603,6 +592,31 @@ def data_update_short() :
             stock.calculate_width()
         except :
             pass
+
+
+
+def update_draw_chart_for_home(self,stock_market):
+    #  오늘로부터 한달
+    df = fdr.DataReader(self, '2021-01-14')
+    size = int(df.size/6) 
+    print(size)
+    data = df.values.tolist()
+    time = df.index.tolist()
+    x=[]
+    y=[]
+    for i in time:
+        time_only = i.strftime("%H:%M:%S")
+        print("time:", time_only)
+        x.append(i)
+    for index in range(0,size):
+        y.append(data[index][0])
+    chart = get_plot(x,y)
+    fig = plt.gcf()
+    path = "./stock/templates/static/stock_market/"
+    if not os.path.isdir(path):                                                           
+        os.mkdir(path)
+    fig.savefig(path+stock_market+'.png', dpi=fig.dpi)
+    print("정상 작동!")
 
 
 #### 아래는 모두 야후 파이낸스 api 불러왔던 코드 (코스닥 제외)

@@ -29,4 +29,5 @@ urlpatterns = [
     path('review_create/',views.review_create, name='review_create'),
     path('qnalist/',views.qnalist, name='qnalist'), 
     path('qnacreate/',views.qnacreate, name='qnacreate'), 
+
 ]
