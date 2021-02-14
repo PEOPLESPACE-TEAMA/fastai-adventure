@@ -250,15 +250,9 @@ def bookmark_list(request):
         #로그인 되어 있지 않으면 로그인 페이지로 이동 
         return redirect('login')
 
-    #슈퍼계정으로 로그인 하면 로그인 되어 있다고 함 근데 일반 계정으로 로그인 하면 로그인 안되어 있다고 함 
-    # print(request.user)
-    # user = User.objects.all().filter(username = request.user.username) #유저네임 바꾸기 이 로그인 에러 있어서 일단 이렇게 했는데 레어 없으면 username = request.user.username 이나 그냥 현재 로그인 유저를 특정 할수 있게 하면 됨 
-    # print(user)
+
     bookmarks = Bookmark.objects.all().filter(user=request.user)
     print(bookmarks)
-    print(type(bookmarks))
-    for bookmark in bookmarks :
-        print(bookmark.stock.stock_code)
 
     return render(request, 'stock/bookmark_list.html',{'bookmarks':bookmarks, } )
 
