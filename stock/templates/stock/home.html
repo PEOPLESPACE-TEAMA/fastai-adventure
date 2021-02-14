@@ -66,9 +66,9 @@
                                 </div>
                                 <div class="card-body">
                                     {% for n in news.all %}
-                                        {% comment %} 아직 이미지랑 URL 오류 있습니다! {% endcomment %}
-                                        {{ n.NewsImage }}
-                                        <a href=n.RedirectUrl>{{ n.title }}</a>
+                                        <img src="{{ n.newsImage }}" alt="newImage" width=200>
+                                        <a href="{{ n.redirectUrl }}">{{ n.title }}</a>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         {{ n.description }}
                                         <br>
                                     {% endfor %}
@@ -127,7 +127,7 @@
                                         <div class="card-body">
                                             <div class="chart-area">
                                                 <div> <!--버튼 위치 수정 예정-->
-                                                    <a class="btn btn-primary btn-block" type="button"  href="{% url 'bookmark_list' %}">{{ user.username }}님, 장바구니 기능을 이용해보세요 </a>
+                                                    <a class="btn btn-primary btn-block" type="button"  href="{% url 'bookmark_list' %}"> 장바구니 기능을 이용해보세요 </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -136,7 +136,7 @@
                                     <div class="card-body">
                                         <div class="chart-area">
                                             <div> <!--버튼 위치 수정 예정-->
-                                                <a class="btn btn-primary btn-block" type="button"  href="{% url 'bookmark_list' %}">Login Required </a>
+                                                <a class="btn btn-primary btn-block" type="button"  href="{% url 'login' %}">Login Required </a>
                                             </div>
                                         </div>
                                     </div>
@@ -202,7 +202,7 @@
                                                     {% for b in decreases %}
                                                         <tr>
                                                             <td>{{ b.company_name }}</td>
-                                                            <td class="text-danger">{{ b.decrease }}↓</td>
+                                                            <td class="text-primary">{{ b.decrease }}↓</td>
                                                         </tr>
                                                     {% endfor %}
                                                 </tbody>

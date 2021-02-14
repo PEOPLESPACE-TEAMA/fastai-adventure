@@ -108,7 +108,7 @@ def home(request):
 
     bm_list = []
     try:
-        bookmarks = Bookmark.objects.filter(user=request.user).order_by('?')
+        bookmarks = Bookmark.objects.filter(user=request.user)
         for bm in bookmarks:
             bm_list.append(bm)
     except:
@@ -117,12 +117,12 @@ def home(request):
     increases = stocks.exclude(increase=None).order_by('-increase')[:5]
     decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
 
-    if bookmarks.exists():
-        bookmark = bookmarks[0]
-        # bookmarkchart = draw_chart(bookmark)
-    else :
-        bookmark=" "
-        bookmarkchart=" "
+    # if bookmarks.exists():
+    #     bookmark = bookmarks[0]
+    #     bookmarkchart = draw_chart(bookmark)
+    # else :
+    #     bookmark=" "
+    #     bookmarkchart=" "
 
     # top = increases[0]
     # bottom = decreases[0]
