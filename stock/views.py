@@ -508,17 +508,12 @@ def review(request):
     review_list = Review.objects.all().order_by('-create_date')
 
     if request.method == 'POST':
-        form = Reviewform(request.POST)
-        if form.is_valid():
-            review = form.save(commit=False)
-            review.create_date = timezone.now()
-            review.save()
-            return redirect('review')
+       pass 
+       #딜리트 어떻게 연결 해야하는지 어렵네
+       #if request.user == 
 
-    form = Reviewform()
     context = {
         'review_list' : review_list,
-        'form' : form,
     }
 
     return render(request, 'stock/review.html',context)

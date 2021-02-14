@@ -44,10 +44,14 @@
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                         </a>
+                        
                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                             aria-labelledby="dropdownMenuLink">
-                            <div class="dropdown-header">Review</div>
-                            <a class="dropdown-item" href="#">delete</a>
+                            <div class="dropdown-header">Review</div>      
+                            <form role="form" action='' method="POST">
+                                {% csrf_token %}
+                                <a type = 'submit' class="dropdown-item" href="#">delete</a>
+                            </form>     
                         </div>
                     </div>
                 </div>
