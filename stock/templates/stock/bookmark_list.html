@@ -35,12 +35,12 @@
           <!-- {% for bookmark in bookmarks %}
         <div><a class = wow href="{% url 'stock_detail' stock_code=bookmark.stock.stock_code %}">{{ bookmark }}</a></div>
           {% endfor %}  -->
-          {% if not review_list %}
+          {% if not bookmarks %}
           <h4 class="text-center">Add your first bookmark item!
             <a href='{% url "market_list_kospi" %}' style="font-size:medium;">Go to market</a>
           </h4>
           
-             {% else %}
+            {% else %}
           <div class="table-responsive text-center">
             <h4 class="mb-4 text-primary">{{user.username}}'s Bookmark Items! </h4>
               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
