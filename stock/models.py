@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser,BaseUserManager
+from django.db import IntegrityError
+
 
 
 class UserManager(BaseUserManager):
@@ -35,7 +37,7 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractUser):
-    email = models.EmailField(verbose_name='email',max_length=255,unique=True)
+    email = models.EmailField(error_messages={'unique':"This email has already been registered."},verbose_name='email',max_length=255,unique=True)
     username = models.CharField(max_length=30)
     active = models.BooleanField(default=True)
     admin = models.BooleanField(default=False)

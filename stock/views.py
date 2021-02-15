@@ -26,6 +26,9 @@ import json
 from django.utils import timezone
 from stock.decorators import *
 import FinanceDataReader as fdr
+from django.shortcuts import render_to_response
+from django.db import IntegrityError
+
 # from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
 def main(request):
@@ -59,14 +62,19 @@ def qnalist(request):
 
 
 def signup(request):
+    errorMsg=""
     if request.method == 'POST':
         user_form = RegisterForm(request.POST)
         if user_form.is_valid():
-            user=user_form.save(commit=False)
-            user.email = user_form.cleaned_data.get('email')
-            user.save()
+            try:
+                user=user_form.save(commit=False)
+                user.email = user_form.cleaned_data.get('email')
+                user.save()
+            except IntegrityError as e:
+                return render_to_response("stock/signup.html", {'form': user_form,"message": "You already have an account with this email"})             
             # 회원가입이 성공적으로 되면 로그인 페이지로 이동
             return redirect('login')
+            # errorMsg = "There is an account with this email already!"
     else:
         user_form = RegisterForm()
     return render(request, 'stock/signup.html',{'form': user_form})
