@@ -22,15 +22,13 @@
                         <div class="col-xl-8 col-lg-7">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">chart</h6>
+                                    <div class="m-0 font-weight-bold text-primary">chart</div>
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-area">
-                                        <h6 class="m-0 font-weight-bold text-primary">
                                             {% if chart %}
-                                                <img src = "data:image/png;base64, {{chart|safe}}" width="89%", height="auto">
+                                            <img src = "data:image/png;base64, {{chart|safe}}" class= "chart-img">
                                             {% endif %}
-                                        </h6>
                                     </div>
                                 </div>
                             </div>
@@ -95,11 +93,9 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-area">
-                                        <h6 class="m-0 font-weight-bold text-primary">
                                             {% if bar_chart %}
-                                                <img src = "data:image/png;base64, {{bar_chart|safe}}" width="89%", height="auto">
+                                            <img src = "data:image/png;base64, {{bar_chart|safe}}" class= "chart-img">
                                             {% endif %}
-                                        </h6>
                                     </div>
                                 </div>
                             </div>
