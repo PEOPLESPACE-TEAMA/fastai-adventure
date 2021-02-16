@@ -126,20 +126,18 @@
                                         </div>
                                     {% else %}
                                         <div class="card-body">
-                                            <div class="chart-area">
-                                                <div> <!--버튼 위치 수정 예정-->
-                                                    <a class="btn btn-primary btn-block" type="button"  href="{% url 'bookmark_list' %}"> 장바구니 기능을 이용해보세요 </a>
+                                            
+                                                <div> 
+                                                    <a class="btn btn-primary btn-block"  type="button"  href="{% url 'bookmark_list' %}"> Make your own list! </a>
                                                 </div>
-                                            </div>
+                                            
                                         </div>
                                     {% endif %}
                                 {% else %}
                                     <div class="card-body">
-                                        <div class="chart-area">
-                                            <div> <!--버튼 위치 수정 예정-->
+                                            <div> 
                                                 <a class="btn btn-primary btn-block" type="button"  href="{% url 'login' %}">Login Required </a>
                                             </div>
-                                        </div>
                                     </div>
                                 {% endif %}
                             </div>
@@ -153,7 +151,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">상승률 TOP5</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Increasing TOP5</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -187,7 +185,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">하락률 TOP5</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Decreasing TOP5</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">

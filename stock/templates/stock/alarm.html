@@ -24,11 +24,11 @@
                               <p class="card-text">
                                 <form action="" method="POST" class="text-primary">
                                     {% csrf_token %}
-                                    <p>메일은 처음 회원가입할 때 기재해주셨던 메일로 발송됩니다!</p>
-                                    <p>한시간,5분단위로 메일알람 시간대 설정 가능합니다</p>
-                                    <input type="number" min="9" max="14" step="1" value="시" name="hour"/><span>시</span>
-                                    <input type="number" min="0" max="100"  step ="5" value="분" name="minute" /><span>분</span>
-                                    <input class="btn btn-outline-primary my-4" type="submit" value="저장하기" name="submit" onclick="return confirm('Complete notice setting?');">
+                                    <p>The mail will be sent to the e-mail you wrote when you signup!</p>
+                                    <p>You can set the alarm time zone in an hour or five minutes.</p>
+                                    <input type="number" min="9" max="14" step="1" value="시" name="hour"/><span>h</span>
+                                    <input type="number" min="0" max="100"  step ="5" value="분" name="minute" /><span>min</span>
+                                    <input class="btn btn-outline-primary my-4" type="submit" value="save" name="submit" onclick="return confirm('Complete notice setting?');">
                               
                                 </form>
                               </p>

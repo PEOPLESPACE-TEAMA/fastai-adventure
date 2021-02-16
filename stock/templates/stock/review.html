@@ -14,16 +14,18 @@
 <div class="container-fluid">
 
        <!-- Page Heading -->
-       <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="mb-4 text-primary">Review</h1>
         <a href='{% url "review_create" %}' class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
             <i class="fas fa-pencil-alt fa-fw text-white-50"><span class="mx-2"></i>create review</span>
         </a>
-    </div>
+        </div>
 
     
     {% if not review_list %}
-            <h1>Create Fastok's first review!</h1>
+    <div class="card-body">
+        <h4 class="text-center">Create FASTOCK's first review!</h4>
+    </div>
         {% else %}
             {% for review in review_list.all %}
                 <!-- <div class="container"> 
