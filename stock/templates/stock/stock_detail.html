@@ -1,53 +1,110 @@
-
 {% extends "stock/base.html" %}
+
 {% block contents %}
-<h1>Stock detail</h1>
-<p>stock 하나 클릭했을 때 나오는 detail 화면입니다<p>
-    <form role="form" action='' method="POST">
-        {% csrf_token %}
-        <input type="submit" class="btn" value="Add to Bookmark" name="mybtn" onclick="return confirm('정말 북마크에 담으시겠어요? ');">
-    </form>
-<h2>{{ companyName }}</h2>
-{% if chart %}
-    <img src = "data:image/png;base64, {{chart|safe}}">
-{% endif %}
-<div class="row mt-5">
-    <div class="col-12">
-        <div class="card" style="width: 100%;">
-            <ul class="list-group list-group-flush">
-            {% for list in vals.items %}
-                <li class="list-group-item">{{ list }}</li>
-            {% endfor %}
-            </ul>
-        </div>
-    </div>
-</div>
-{% if bar_chart %}
-<img src="data:image/png;base64, {{bar_chart|safe}}">
-{% endif %}
-<p>예측된 패턴: {{ predictedLabel }}</p>
-<p>해당 패턴일 확률: {{ probability }}%<p>
+
+                    <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <form role="form" action='' method="POST">
+                        {% csrf_token %}
+                        <input type="submit" class="btn" value="Add to Bookmark" name="mybtn" onclick="return confirm('정말 북마크에 담으시겠어요? ');">
+                    </form>
+                    <ul class="list-inline"> 
+                        <li class="section-heading text-uppercase h1 fw-bolder list-inline-item">{{ companyName }}</li>  <!--종목이름-->
+                    </ul>
 
 
-<!-- <h3>상승률 top5</h3>
-{% for inc in increases.all %}
-<div class="container">
-    <div class="card">
-        <div class="card-body">
-            <p>{{ inc.company_name }}, {{ inc.increase }}</p>
-        </div>
-    </div>
-</div>
-{% endfor %}
+                    <!-- Graph & chart -->
+                    <div class="row">
 
-<h3>하락률 top5</h3>
-{% for dec in decreases.all %}
-<div class="container">
-    <div class="card">
-        <div class="card-body">
-            <p>{{ dec.company_name }}, {{ dec.decrease }}</p>
-        </div>
-    </div>
-</div>
-{% endfor %}
-{% endblock %} -->
+                        <!-- Graph -->
+                        <div class="col-xl-8 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">chart</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            {% if chart %}
+                                                <img src = "data:image/png;base64, {{chart|safe}}" width="89%", height="auto">
+                                            {% endif %}
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- chart -->
+                        <div class="col-xl-4 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">About</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <table class="table table-bordered">
+                                            {% for keys, values in vals.items %}
+                                            <tr class="text-primary bg-gray-100">
+                                                <th>{{ keys }}</th>
+                                                <td>{{ values }}</td>
+                                            </tr>
+                                                {% endfor %}
+                                        </table>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 패턴예측 -->
+
+                    <div class="row">
+
+                        <div class="col-xl-4 col-lg-7">
+
+                            <!-- 패턴 설명 -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">About Pattern</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <table class="table table-bordered">
+                                            <tr class="text-primary bg-gray-100">
+                                                <th>예측된 패턴</th>
+                                                <td>{{ predictedLabel }}</td>
+                                            </tr>
+                                            <tr class="text-primary bg-gray-100">
+                                                <th>해당 패턴일 확률</th>
+                                                <td>{{ probability }}%</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- 패턴 그래프 -->
+                        <div class="col-xl-8 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">chart</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            {% if bar_chart %}
+                                                <img src = "data:image/png;base64, {{bar_chart|safe}}" width="89%", height="auto">
+                                            {% endif %}
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+{% endblock %}
