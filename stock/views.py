@@ -312,6 +312,12 @@ def bookmarkInOut(user,stock):
         bookmark.stock = stock
         bookmark.save()
 
+def patterns_list():
+    # to-do
+    # 1. open으로 order_by -> 코스피,나스닥 별로 상위 200개만 추리기 
+    # 2. stock_detail과 매우매우 유사 .. 그래서 쉬운데 업데이트가 진짜 느릴 것 같음... (1-2시간..?)
+    # 3. html 페이지에 뿌리기 (왼쪽: 상승 / 오른쪽 : 하락 top5랑? 각 패턴별 이미지 첨부)
+    pass
 
 
 # 하기전에 pip3 install newsapi 해주세용!

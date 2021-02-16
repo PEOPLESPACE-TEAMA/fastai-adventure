@@ -5,9 +5,15 @@
                 <div class="container-fluid">
 
                     <!-- ABOUT US -->
+                    {% if user.mail_alarm_time_hour %}
                     <ul class="list-inline"> 
-                        <h1 class="mb-4 text-primary">Set Notice</h1>
+                        <h1 class="mb-4 text-primary">Update Mail Notice</h1>
                     </ul>
+                    {% else %}
+                    <ul class="list-inline"> 
+                        <h1 class="mb-4 text-primary">Set Mail Notice</h1>
+                    </ul>
+                    {% endif %}
 
                     <!-- 내용 -->
                     <!-- <div class="row"> -->
@@ -18,13 +24,15 @@
                               <p class="card-text">
                                 <form action="" method="POST" class="text-primary">
                                     {% csrf_token %}
-                                    <p>한시간,10분단위로 메일알람 시간대 설정 가능합니다</p>
+                                    <p>메일은 처음 회원가입할 때 기재해주셨던 메일로 발송됩니다!</p>
+                                    <p>한시간,5분단위로 메일알람 시간대 설정 가능합니다</p>
                                     <input type="number" min="9" max="14" step="1" value="시" name="hour"/><span>시</span>
                                     <input type="number" min="0" max="100"  step ="5" value="분" name="minute" /><span>분</span>
+                                    <input class="btn btn-outline-primary my-4" type="submit" value="저장하기" name="submit" onclick="return confirm('Complete notice setting?');">
+                              
                                 </form>
                               </p>
-                              <a class="btn btn-outline-primary my-4" type="submit" value="저장하기" name="submit" onclick="return confirm('Complete notice setting?');">save</a>
-                              <!-- <input class="btn btn-primary" type="submit" value="저장하기" name="submit" onclick="return confirm('알람 설정을 마치시겠습니까?');"> -->
+                             <!-- <input class="btn btn-primary" type="submit" value="저장하기" name="submit" onclick="return confirm('알람 설정을 마치시겠습니까?');"> -->
                             </div>
                           </div>                      
                     <!-- </div> -->
