@@ -21,6 +21,9 @@ urlpatterns = [
     path('bookmark-list/alarm', views.alarm, name='alarm'),
     path('review/', views.review, name = 'review'),
 
+    # patterns_list uri c추가!
+    path('pattens_list', views.patterns_list, name = 'patterns_list'),
+
     # 새로운 템플릿 동작 확인용
     path('home/',views.home, name='home'),
     path('forgot/',views.forgot, name='forgot-password'),

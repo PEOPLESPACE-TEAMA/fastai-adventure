@@ -71,12 +71,16 @@
                                     <div class="chart-area">
                                         <table class="table table-bordered">
                                             <tr class="text-primary bg-gray-100">
-                                                <th>예측된 패턴</th>
+                                                <th>Predicted Pattern</th>
                                                 <td>{{ predictedLabel }}</td>
                                             </tr>
                                             <tr class="text-primary bg-gray-100">
-                                                <th>해당 패턴일 확률</th>
+                                                <th>Probability to be this pattern</th>
                                                 <td>{{ probability }}%</td>
+                                            </tr>
+                                            <tr class="text-primary bg-gray-100">
+                                                <th>This pattern is a sign to...</th>
+                                                <td>{{ sign }}</td>
                                             </tr>
                                         </table>
                                     </div>

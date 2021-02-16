@@ -57,6 +57,9 @@
                             <span style="color: red">{{ field.errors }}</span>
                             {% endif %}
                             {% endfor %}
+                            {% if message %}
+                            <span style="color: red">{{ message }}</span>
+                            {% endif %}
                             <button type="submit" class="btn btn-primary btn-user btn-block">signup</button>
                         </form>
                         <hr>

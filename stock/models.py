@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser,BaseUserManager
+from django.db import IntegrityError
+
 
 
 class UserManager(BaseUserManager):
@@ -35,7 +37,7 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractUser):
-    email = models.EmailField(verbose_name='email',max_length=255,unique=True)
+    email = models.EmailField(error_messages={'unique':"This email has already been registered."},verbose_name='email',max_length=255,unique=True)
     username = models.CharField(max_length=30)
     active = models.BooleanField(default=True)
     admin = models.BooleanField(default=False)
@@ -169,3 +171,16 @@ class Review(models.Model):
 
     def __str__(self):
         return self.user, self.content, self.create_date
+
+class StockIndex(models.Model):
+    stock_type = models.CharField(max_length=200,null=True)
+    open = models.FloatField(null=True, blank=True)
+    close =models.FloatField(null=True, blank=True)
+    high =models.FloatField(null=True, blank=True)
+    low =models.FloatField(null=True, blank=True)
+    volume =models.FloatField(null=True, blank=True)
+    change =models.FloatField(null=True, blank=True)
+    updated_date = models.DateTimeField(null=True)
+
+    
+
