@@ -9,12 +9,13 @@
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="m-0 text-primary">Bookmark List</h1>
     <!-- <h4 class="mb-4">{{user.username}}'s Bookmark Items! </h4> -->
+
     {% if request.user.mail_alarm_time_hour %}
         <p><a href='{% url "alarm" %}' class="d-none d-sm-inline-block btn  btn-primary shadow-sm"><i
-            class="fas fa-bell fa-sm text-white-50"></i> set notice</a></p>
+            class="fas fa-bell fa-sm text-white-50"></i> Update Mail notice</a></p>
     {% else %}
         <p><a href='{% url "alarm" %}' class="d-none d-sm-inline-block btn  btn-primary shadow-sm"><i
-            class="fas fa-bell fa-sm text-white-50"></i> set notice</a></p>
+            class="fas fa-bell fa-sm text-white-50"></i> Set Mail Notice</a></p>
     {% endif %}
 
 

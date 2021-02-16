@@ -24,6 +24,16 @@
                                         <center>
                                             <div class="kospi_chart_month"><img src="../static/stock_market/kospi.png" width="89%", height="auto"></div>
                                             <div class="kospi_detail"></div>
+                                            {% for kospidetail in kospidetails %}
+                                                <div>업데이트 된 날짜 : {{ kospidetail.updated_date |date:"Y-m-d" }}
+                                                <div>시가 : {{ kospidetail.open }}</div>
+                                                <div>종가 : {{ kospidetail.close}}</div>
+                                                <div>최고가 :{{ kospidetail.high }}</div>
+                                                <div>최저가 :{{ kospidetail.low }}</div>
+                                                <div>거래량 : {{ kospidetail.volume }}</div>
+                                                <div>등락율 : {{ kospidetail.change }}</div>
+                                                {% endfor %}
+
                                         </center>
                                         <!-- <canvas id="myAreaChart"></canvas> -->
 
@@ -47,7 +57,19 @@
                                     <div class="chart-area">
                                         <center>
                                             <div class="nasdaq_chart_month"><img src="../static/stock_market/nasdaq.png" width="89%", height="auto"></div>
-                                            <div class="nasdaq_detail"></div>
+                                            <div class="nasdaq_detail">
+                            
+                                                {% for nasdaqdetail in nasdaqdetails %}
+                                                <div>업데이트 된 날짜(장이 열린날을 기준으로 가장 최근이라는걸 예기해야할듯 ..) : {{ nasdaqdetail.updated_date |date:"Y-m-d" }}</div>
+                                                <div>시가(open) : {{ nasdaqdetail.open }}</div>
+                                                <div>종가(close) : {{ nasdaqdetail.close}}</div>
+                                                <div>최고가(high) :{{ nasdaqdetail.high }}</div>
+                                                <div>최저가(low) :{{ nasdaqdetail.low }}</div>
+                                                <div>거래량(volume) : {{ nasdaqdetail.volume }}</div>
+                                                <div>등락율(change) : {{ nasdaqdetail.change }}</div>
+                                                {% endfor %}
+
+                                            </div>
                                         </center>
                                         <!-- <canvas id="myAreaChart"></canvas> -->
                                     </div>
@@ -87,7 +109,7 @@
                                                     <tbody>
                                                         {% for b in bookmarks %}
                                                             <tr>
-                                                                <td>{{ b.company_name }}</td>
+                                                                <td>{{ b.company_name }}
                                                                 <td>{{ b.open }}</td>
                                                                 {% if b.increase %}
                                                                     <td class="text-danger">{{ b.fluctuation_width }}</td>
@@ -147,7 +169,9 @@
                                         <tbody>
                                             {% for b in increases %}
                                                 <tr>
-                                                    <td>{{ b.company_name }}</td>
+                                                    <td>
+                                                        <a class = wow href="{% url 'stock_detail' stock_code=b.stock_code %}">{{ b.company_name }}</a>
+                                                    </td>
                                                     <td class="text-danger">{{ b.increase }}↑</td>
                                                 </tr>
                                             {% endfor %}
@@ -180,7 +204,9 @@
                                                 <tbody>
                                                     {% for b in decreases %}
                                                         <tr>
-                                                            <td>{{ b.company_name }}</td>
+                                                            <td>
+                                                                <a class = wow href="{% url 'stock_detail' stock_code=b.stock_code %}">{{ b.company_name }}</a>
+                                                            </td>
                                                             <td class="text-primary">{{ b.decrease }}↓</td>
                                                         </tr>
                                                     {% endfor %}

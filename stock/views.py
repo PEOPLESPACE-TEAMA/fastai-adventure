@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from .forms import RegisterForm, LoginForm, QuestionForm, AnswerForm,Reviewform
 from django.views.generic import View
 
-from .models import User, Stock, Bookmark, Question, Answer, News, Review
+from .models import User, Stock, Bookmark, Question, Answer, News, Review, StockIndex
 import pandas as pd
 import pandas_datareader as pdr
 import yfinance as yf
@@ -26,15 +26,22 @@ import json
 from django.utils import timezone
 from stock.decorators import *
 import FinanceDataReader as fdr
+import time
+from django.shortcuts import render_to_response
+from django.db import IntegrityError
+
 # from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
 def main(request):
-    
+    # kospi_initial_data_create()
+    # nasdaq_initial_data_create()
+    # data_update_short()
     return render(request, 'stock/main.html')
 
 # 새로운 템플릿 확인용 주소 시작
 
 def forgot(request):
+
     return render(request, 'stock/forgot-password.html')
 
 def aboutus(request):
@@ -59,14 +66,19 @@ def qnalist(request):
 
 
 def signup(request):
+    errorMsg=""
     if request.method == 'POST':
         user_form = RegisterForm(request.POST)
         if user_form.is_valid():
-            user=user_form.save(commit=False)
-            user.email = user_form.cleaned_data.get('email')
-            user.save()
+            try:
+                user=user_form.save(commit=False)
+                user.email = user_form.cleaned_data.get('email')
+                user.save()
+            except IntegrityError as e:
+                return render_to_response("stock/signup.html", {'form': user_form,"message": "You already have an account with this email"})             
             # 회원가입이 성공적으로 되면 로그인 페이지로 이동
             return redirect('login')
+            # errorMsg = "There is an account with this email already!"
     else:
         user_form = RegisterForm()
     return render(request, 'stock/signup.html',{'form': user_form})
@@ -89,17 +101,14 @@ def logout(request):
 
 def home(request):
     stocks = Stock.objects.all().order_by('-id')
-    # increase, decrease 계산하려면 아래 주석 풀기
-    # 계산이 오래 걸려요. 테스트 때는 한 번 계산되면 다시 주석 설정해도 됩니다!
-    # for stock in stocks:
-    #     try:
-    #         stock.initialize()
-    #         stock.calculate_rate()
-    #     except:
-    #         pass
+   
+    # 각 종목들 update하려면 (전일종가와 오늘시가 갱신(long) -> 상승률/하락율 등락폭 갱신(short) ) 아래 주석 풀기
+    # data_update_long()
+    # data_update_short()
+    
     q = request.POST.get('q', "") 
     if q:
-        stocks=Stock.objects.all()
+        stocks=Stock.objects.all().exlude(stock_type='SS').exclude(stock_type='NN')
         search = stocks.filter(company_name__icontains=q)
         context ={
             'stocks':search,
@@ -116,18 +125,6 @@ def home(request):
     bookmarks = stocks.filter(company_name__in=bm_list)
     increases = stocks.exclude(increase=None).order_by('-increase')[:5]
     decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
-
-    # if bookmarks.exists():
-    #     bookmark = bookmarks[0]
-    #     bookmarkchart = draw_chart(bookmark)
-    # else :
-    #     bookmark=" "
-    #     bookmarkchart=" "
-
-    # top = increases[0]
-    # bottom = decreases[0]
-    # increasechart = draw_chart(top)
-    # decreasechart = draw_chart(bottom)
     
     # 새로운 뉴스 받아오고 싶을 때 아래 주석 풀기, 테스트 시 처음 한 번은 꼭 해야 합니다!
     # updateNews()
@@ -137,16 +134,53 @@ def home(request):
     # kospi=update_draw_chart_for_home('KS11','kospi')
     # nasdaq=update_draw_chart_for_home('IXIC','nasdaq')
 
+    # 매일 자정 코스피,나스닥 시세정보 업데이트하고 싶을때 아래 주석 풀기 !!
+    # stock_index('KS11','kospi')
+    # stock_index('IXIC','nasdaq')
+
+    kospidetail = StockIndex.objects.filter(stock_type="kospi")
+    nasdaqdetail = StockIndex.objects.filter(stock_type="nasdaq")
+
+    print("진짜 완룟")
+
     context = {
         'bookmarks': bookmarks,
         'increases': increases,
         'decreases': decreases,
-        # 'bookmarkchart': bookmarkchart,
-        # 'increasechart': increasechart,
-        # 'decreasechart': decreasechart,
+        'kospidetails':kospidetail,
+        'nasdaqdetails':nasdaqdetail,
         'news': news,
     }
     return render(request, 'stock/home.html', context)
+
+def stock_index(stock,stock__type) :
+    stockindexs =StockIndex.objects.filter(stock_type=stock__type)
+    for stockindex in stockindexs :
+        stockindex.stock_type=stock__type
+        today=datetime.date.today()
+        stockindex.updated_date=today
+        df = fdr.DataReader(stock, today)
+        tuple = df.shape
+        i=1
+        if tuple[0]==0 :
+            while tuple[0]==0 :
+                before_day = today - datetime.timedelta(i)  
+                df = fdr.DataReader(stock, before_day, before_day)
+                tuple = df.shape
+                i=i+1
+            stockindex.updated_date = today - datetime.timedelta(i-1) 
+        lists = df.values.tolist()
+        stockindex.close=lists[0][0]
+        stockindex.open=lists[0][1]
+        stockindex.high=lists[0][2]
+        stockindex.low=lists[0][3]
+        stockindex.volume=lists[0][4]
+        stockindex.change=lists[0][5]
+
+        stockindex.save()
+
+    print("다했어요!")
+
 
 def market_list_for_search(request):
     q = request.POST.get('q', "") 
@@ -270,6 +304,12 @@ def bookmarkInOut(user,stock):
         bookmark.stock = stock
         bookmark.save()
 
+def patterns_list():
+    # to-do
+    # 1. open으로 order_by -> 코스피,나스닥 별로 상위 200개만 추리기 
+    # 2. stock_detail과 매우매우 유사 .. 그래서 쉬운데 업데이트가 진짜 느릴 것 같음... (1-2시간..?)
+    # 3. html 페이지에 뿌리기 (왼쪽: 상승 / 오른쪽 : 하락 top5랑? 각 패턴별 이미지 첨부)
+    pass
 
 
 # 하기전에 pip3 install newsapi 해주세용!
@@ -372,9 +412,7 @@ def market_list_nasdaq(request):
 def stock_detail(request,stock_code):
     print(request.user)
     stock = Stock.objects.get(stock_code = stock_code)
-    # stock_list = Stock.objects.all().order_by('-id')
-    # increases = stock_list.exclude(increase=None).order_by('-increase')[:5]
-    # decreases = stock_list.exclude(decrease=None).order_by('decrease')[:5]
+
     chart = draw_chart(stock)
 
     df = yf.download(tickers=stock_code, period='1d', interval='5m')
@@ -393,13 +431,21 @@ def stock_detail(request,stock_code):
     img_path = "./graphimg/"+stock.company_name+'crop.PNG'
     #모델 예측
     predictedLabel,predictedIdx,probability = predict(img_path)
-    label_list = getLabels()
+    label_list = ['Bearish Pennant', 'Bearish Rectangle', 'Bullish Pennant', 'Bullish Rectangle', 'Double Bottom', 'Double Top', 'Head and Shoulders', 'Inverse Head and Shoulders', 'Continuous Falling Wedge', 'Continuous Rising Wedge', 'Reversal Falling Wedge', 'Reversal Rising Wedge']
     # 클라스마다 percentage로 바 그래프 만들기 
     bar_chart = draw_bar_chart(stock,probability,label_list)
     predictedProbability = round(float(probability[int(predictedIdx)])*100,2)
+
     print(predictedLabel)
+
+
+    # 이부분 !!!! 따로 떼어서 페이지 하나 더 만들기
+
+    label = label_list[predictedIdx]
+
     stock.last_pattern = predictedLabel
     stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
+    sign = stock.increase_or_decrease
     stock.save()
 
     #북마크에 저장
@@ -408,10 +454,8 @@ def stock_detail(request,stock_code):
         print(stock)
         bookmarkInOut(request.user,stock)
         print("북마크 저장됨")
-
-        
-    
-    return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
+ 
+    return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'predictedLabel':label,'probability':predictedProbability,'bar_chart':bar_chart,'sign':sign})
 
 def getIncreaseDecreaseResult(predictedLabel):
     increase = ['DoubleBottom','InverseHeadAndShoulders','r_FallingWedge','c_FallingWedge','BullishPennant','BullishRectangle']
@@ -560,39 +604,41 @@ def data_update_long() :
 
     # 하루 지날때마다 업데이트 하기 1
     today = datetime.date.today()  
-    yesterday = today - datetime.timedelta(1)  
+    today = datetime.date.today() - datetime.timedelta(3)
+    yesterday = today - datetime.timedelta(4)  
     str_yesterday = str(yesterday)
 
-    stocks = Stock.objects.all().filter(stock_type='S')
+    stocks = Stock.objects.all().filter(stock_type='N')
 
     for stock in stocks :
         stock_code=stock.stock_code
-        if stock.open :
-            pass
-        else :
-            try:
-                df = yf.download(tickers=stock_code, period='1d', interval='5m')
-                lists = df.tail(1).values.tolist()
-                stock.open=lists[0][0]
-                # stock.high=lists[0][1] 
-                # stock.low=lists[0][2] 
-                # stock.close=lists[0][3] 
-                # stock.adj_close=lists[0][4] 
-                # stock.volume=lists[0][5] 
-                before_df = pdr.get_data_yahoo(stock_code, str_yesterday, str_yesterday)
-                before_lists=before_df.values.tolist() 
-                stock.before_close=before_lists[0][3]   
-                stock.save()
+        # if stock.open :
+        #     pass
+        # else :
+        try:
+            df = yf.download(tickers=stock_code, period='1d', interval='60m')
+            lists = df.tail(1).values.tolist()
+            stock.open=lists[0][0]
+            # stock.high=lists[0][1] 
+            # stock.low=lists[0][2] 
+            # stock.close=lists[0][3] 
+            # stock.adj_close=lists[0][4] 
+            # stock.volume=lists[0][5] 
+            before_df = pdr.get_data_yahoo(stock_code, str_yesterday, str_yesterday)
+            # Sleep(1)
+            before_lists=before_df.values.tolist() 
+            stock.before_close=before_lists[0][3]   
+            stock.save()
 
-            except:
-                print("실패")
-                pass
+        except:
+            print("실패")
+            pass
             
 
 
 def data_update_short() :
     # 업데이트2 ( 등락율, 등락폭 ) 
-    stocks = Stock.objects.all().filter(stock_type='S')
+    stocks = Stock.objects.all().filter(stock_type='N')
     for stock in stocks :
         try:
             stock.initialize()
@@ -605,7 +651,9 @@ def data_update_short() :
 
 def update_draw_chart_for_home(self,stock_market):
     #  오늘로부터 한달
-    df = fdr.DataReader(self, '2021-01-14')
+    today=datetime.date.today()
+    before_month = today - datetime.timedelta(30)  
+    df = fdr.DataReader(self, before_month)
     size = int(df.size/6) 
     print(size)
     data = df.values.tolist()
