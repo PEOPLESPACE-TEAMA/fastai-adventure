@@ -18,7 +18,19 @@ urlpatterns = [
     path('question/', views.question, name='question'),
     path('question/<int:question_id>/', views.question_detail, name='question_detail'),
     path('question/create/', views.question_create, name='question_create'),
-    path('answer/create/<int:question_id>/', views.answer_create, name='answer_create'),
-    path('bookmart-list/alarm', views.alarm, name='alarm'),
-    path('review/', views.review, name = 'review')
+    path('bookmark-list/alarm', views.alarm, name='alarm'),
+    path('review/', views.review, name = 'review'),
+
+    # patterns_list uri c추가!
+    path('patterns_list', views.patterns_list, name = 'patterns_list'),
+
+    # 새로운 템플릿 동작 확인용
+    path('home/',views.home, name='home'),
+    path('forgot/',views.forgot, name='forgot-password'),
+    path('guideline/',views.guideline, name='guideline'),
+    path('aboutus/',views.aboutus, name='aboutus'),
+    path('review_create/',views.review_create, name='review_create'),
+    path('qnalist/',views.qnalist, name='qnalist'), 
+    path('qnacreate/',views.qnacreate, name='qnacreate'), 
+
 ]

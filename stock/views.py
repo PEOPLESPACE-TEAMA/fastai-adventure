@@ -83,6 +83,22 @@ def market(request):
     bookmarks = stocks.filter(company_name__in=bm_list)
     increases = stocks.exclude(increase=None).order_by('-increase')[:5]
     decreases = stocks.exclude(decrease=None).order_by('decrease')[:5]
+    
+    updateNews()
+    news = News.objects.all()
+
+    # 매일 자정 코스피,나스닥 주가 지수 그래프 업데이트하고 싶을때 아래 주석 풀기!!
+    # kospi=update_draw_chart_for_home('KS11','kospi')
+    # nasdaq=update_draw_chart_for_home('IXIC','nasdaq')
+
+    # 매일 자정 코스피,나스닥 시세정보 업데이트하고 싶을때 아래 주석 풀기 !!
+    # stock_index('KS11','kospi')
+    # stock_index('IXIC','nasdaq')
+
+    kospidetail = StockIndex.objects.filter(stock_type="kospi")
+    nasdaqdetail = StockIndex.objects.filter(stock_type="nasdaq")
+
+    print("진짜 완룟")
 
     if bookmarks.exists():
         bookmark = bookmarks[0]
@@ -218,7 +234,6 @@ def bookmarkInOut(user,stock):
         bookmark.save()
 
 
-# 하기전에 pip3 install newsapi 해주세용!
 def updateNews():
     url = ('http://newsapi.org/v2/everything?'
         'q=stock&'
@@ -375,25 +390,6 @@ def question_detail(request, question_id):
         'form': form,
     }
     return render(request, 'stock/question_detail.html', context)
-
-@admin_required
-def answer_create(request, question_id):
-    question = Question.objects.get(id=question_id)
-    if request.method == 'POST':
-        form = AnswerForm(request.POST)
-        if form.is_valid():
-            answer = form.save(commit=False)
-            answer.create_date = timezone.now()
-            answer.question = question
-            answer.save()
-            return redirect('question_detail', question_id=question.id)
-    else:
-        form = AnswerForm()
-    context = {
-        'form': form,
-        'question': question,
-    }
-    return render(request, 'stock/answer_create.html', context)
 
 def question_create(request):
     if request.method == 'POST':
