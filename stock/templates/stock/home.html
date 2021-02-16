@@ -25,13 +25,13 @@
                                             <div class="kospi_chart_month"><img src="../static/stock_market/kospi.png" width="89%", height="auto"></div>
                                             <div class="kospi_detail"></div>
                                             {% for kospidetail in kospidetails %}
-                                                <div>업데이트 된 날짜 : {{ kospidetail.updated_date |date:"Y-m-d" }}
-                                                <div>시가 : {{ kospidetail.open }}</div>
-                                                <div>종가 : {{ kospidetail.close}}</div>
-                                                <div>최고가 :{{ kospidetail.high }}</div>
-                                                <div>최저가 :{{ kospidetail.low }}</div>
-                                                <div>거래량 : {{ kospidetail.volume }}</div>
-                                                <div>등락율 : {{ kospidetail.change }}</div>
+                                                <div>Date updated : {{ kospidetail.updated_date |date:"Y-m-d" }}
+                                                <div>Open : {{ kospidetail.open }}</div>
+                                                <div>Close : {{ kospidetail.close}}</div>
+                                                <div>Highest :{{ kospidetail.high }}</div>
+                                                <div>Lowest :{{ kospidetail.low }}</div>
+                                                <div>Transaction volume : {{ kospidetail.volume }}</div>
+                                                <div>Fluctuation rate : {{ kospidetail.change }}</div>
                                                 {% endfor %}
 
                                         </center>
@@ -60,13 +60,13 @@
                                             <div class="nasdaq_detail">
                             
                                                 {% for nasdaqdetail in nasdaqdetails %}
-                                                <div>업데이트 된 날짜(장이 열린날을 기준으로 가장 최근이라는걸 예기해야할듯 ..) : {{ nasdaqdetail.updated_date |date:"Y-m-d" }}</div>
-                                                <div>시가(open) : {{ nasdaqdetail.open }}</div>
-                                                <div>종가(close) : {{ nasdaqdetail.close}}</div>
-                                                <div>최고가(high) :{{ nasdaqdetail.high }}</div>
-                                                <div>최저가(low) :{{ nasdaqdetail.low }}</div>
-                                                <div>거래량(volume) : {{ nasdaqdetail.volume }}</div>
-                                                <div>등락율(change) : {{ nasdaqdetail.change }}</div>
+                                                <div>Date updated(장이 열린날을 기준으로 가장 최근이라는걸 예기해야할듯 ..) : {{ nasdaqdetail.updated_date |date:"Y-m-d" }}</div>
+                                                <div>Open : {{ nasdaqdetail.open }}</div>
+                                                <div>Close : {{ nasdaqdetail.close}}</div>
+                                                <div>Highest :{{ nasdaqdetail.high }}</div>
+                                                <div>Lowest :{{ nasdaqdetail.low }}</div>
+                                                <div>Transaction volume : {{ nasdaqdetail.volume }}</div>
+                                                <div>Fluctuation rate : {{ nasdaqdetail.change }}</div>
                                                 {% endfor %}
 
                                             </div>
@@ -151,7 +151,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Increasing TOP5</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">RISE TOP5</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -185,7 +185,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Decreasing TOP5</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">DROP TOP5</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -223,7 +223,7 @@
                             <!-- Basic Card Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">세계뉴스</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">World news</h6>
                                 </div>
                                 <div class="card-body">
                                     {% for n in news.all %}

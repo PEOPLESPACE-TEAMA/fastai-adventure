@@ -94,25 +94,3 @@
 
     <!-- End of Main Content -->
 {% endblock %}
-
-<!--백에서 짠 코드-->
-{% comment %} <h1>질문 하나 상세 게시판</h1>
-<h3>질문: {{ question }}</h3>
-<div>
-    내용: {{ question.content }}
-</div>
-
-<p>{{ question.answer_set.count }}개의 답변이 있습니다.</P>
-<div>
-    <ul>
-    {% for answer in question.answer_set.all %}
-        <li>{{ answer.content }}</li>
-    {% endfor %}
-    </ul>
-</div>
-
-<a href="{% url 'question' %}" class="btn btn-primary">돌아가기</a>
-
-{% if user.admin is True %}
-    <a href="{% url 'answer_create' question_id=question.id %}" class="btn btn-primary">답변 등록하기</a>
-{% endif %} {% endcomment %}
