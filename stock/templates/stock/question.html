@@ -8,9 +8,9 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">QnA</h1>
+                        <h1 class="mb-0 text-primary">QnA</h1>
                         <a href='{% url "question_create" %}' class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                            <i class="fas fa-pencil-alt fa-fw text-white-50"><span class="mx-2"></i>질문작성</span>
+                            <i class="fas fa-pencil-alt fa-fw text-white-50"><span class="mx-2"></i>Leave questions</span>
                         </a>
                     </div>
                     <!-- DataTales Example -->
@@ -19,14 +19,14 @@
                         <div class="card-body">
                              <!-- !!!!!Notice!!!!!-->
                             <!-- 테이블 자리에 북마크 리스트/페이지네이션 정보가 들어오면 됩니다 -->
-                            <div class="table-responsive ">
+                            <div class="table-responsive">
                                 <table class="table table-bordered table-hover " style="cursor:pointer" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr class="text-primary bg-gray-100 "> 
-                                            <th style="width: 15%;">번호</th>
-                                            <th>제목</th>
-                                            <th style="width: 15%;">작성자</th>
-                                            <th style="width: 15%;">답변수</th>
+                                            <th style="width: 15%;">No.</th>
+                                            <th>Title</th>
+                                            <th style="width: 15%;">User</th>
+                                            <th style="width: 15%;">Comment</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -51,7 +51,7 @@
                                             {% endfor %}
                                         {% else %}
                                                 <tr>
-                                            <td colspan="4">질문이 없습니다.</td>
+                                            <td colspan="4" class="text-center">There are no registered questions</td>
                                                 </tr>
                                         {% endif %}
                                     
