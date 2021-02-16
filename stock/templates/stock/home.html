@@ -87,7 +87,7 @@
                                                     <tbody>
                                                         {% for b in bookmarks %}
                                                             <tr>
-                                                                <td>{{ b.company_name }}</td>
+                                                                <td>{{ b.company_name }}
                                                                 <td>{{ b.open }}</td>
                                                                 {% if b.increase %}
                                                                     <td class="text-danger">{{ b.fluctuation_width }}</td>
@@ -147,7 +147,9 @@
                                         <tbody>
                                             {% for b in increases %}
                                                 <tr>
-                                                    <td>{{ b.company_name }}</td>
+                                                    <td>
+                                                        <a class = wow href="{% url 'stock_detail' stock_code=b.stock_code %}">{{ b.company_name }}</a>
+                                                    </td>
                                                     <td class="text-danger">{{ b.increase }}↑</td>
                                                 </tr>
                                             {% endfor %}
@@ -180,7 +182,9 @@
                                                 <tbody>
                                                     {% for b in decreases %}
                                                         <tr>
-                                                            <td>{{ b.company_name }}</td>
+                                                            <td>
+                                                                <a class = wow href="{% url 'stock_detail' stock_code=b.stock_code %}">{{ b.company_name }}</a>
+                                                            </td>
                                                             <td class="text-primary">{{ b.decrease }}↓</td>
                                                         </tr>
                                                     {% endfor %}
