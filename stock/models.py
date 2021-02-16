@@ -169,3 +169,16 @@ class Review(models.Model):
 
     def __str__(self):
         return self.user, self.content, self.create_date
+
+class StockIndex(models.Model):
+    stock_type = models.CharField(max_length=200,null=True)
+    open = models.FloatField(null=True, blank=True)
+    close =models.FloatField(null=True, blank=True)
+    high =models.FloatField(null=True, blank=True)
+    low =models.FloatField(null=True, blank=True)
+    volume =models.FloatField(null=True, blank=True)
+    change =models.FloatField(null=True, blank=True)
+    updated_date = models.DateTimeField(null=True)
+
+    
+
