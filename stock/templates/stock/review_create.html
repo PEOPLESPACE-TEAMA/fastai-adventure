@@ -1,51 +1,61 @@
-{% extends "stock/base.html "%}
+{% extends "stock/base.html"%}
 
 {% block contents %}
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+            <div class="container-fluid">
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Review</h1>
+                        <h1 class="mb-4 text-primary">Review</h1>
                     </div>
                 <div class="container">
+                    <form method="post" class="post-form my-3">
                     <!-- Content Row -->
-                    <div class="row">
-                        <!-- //이름 입력 폼 -->
-                        <div class="col-md-4"> 
+                    {% csrf_token %}
+        
+                    <!-- 오류표시 Start -->
+                    {% if form.errors %}
+                        <div class="alert alert-danger" role="alert">
+                        {% for field in form %}
+                            {% if field.errors %}
+                            <strong>{{ field.label }}</strong>
+                            {{ field.errors }}
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                    <!-- 오류표시 End -->
+                    <div class="row mx-5">
+                        <!-- 제목 입력 폼 -->
+                        <div class="col-md-8"> 
                         <div class="form-group"> 
-                        <label for="name" class="text-primary">Name</label> 
-                        <input type="text" class="form-control" name="name" id="name" placeholder="Enter name"> 
+                        <label for="name" class="text-primary">Title</label> 
+                        <input type="text" class="form-control" name="title" id="title" placeholder="Enter Title"
+                               value="{{ form.title.value|default_if_none:'' }}"> 
                         </div> 
                         </div> 
 
-
-                        <!-- //비밀번호 입력 폼  -->
-                        <div class="col-md-4"> 
-                        <div class="form-group"> 
-                        <label for="pass" class="text-primary">Password</label> 
-                        <input type="password" class="form-control" name="pass" id="pass" placeholder="Enter password"> 
-                        </div> 
-                        </div> 
-
-                        <!-- //이메일 입력 폼 -->
+                        <!-- 사용자이름 입력 폼
                         <div class="col-md-4 form-group"> 
-                        <label for="email" class="text-primary">Email address</label> 
-                        <input type="email" class="form-control" name ="email" id="email" placeholder="Enter email"> 
-                        </div> 
+                        <label for="email" class="text-primary">User</label> 
+                        <input type="email" class="form-control" name ="email" id="email" placeholder="{{user.username}}"> 
+                        </div>  -->
 
                         <!-- //글내용 입력 폼  -->
                         <div class="col-md-12 form-group">  
                         <label for="content" class="text-primary">Comment:</label> 
-                        <textarea class="form-control" rows="10" name="content" id="content"></textarea>
+                        <textarea class="form-control" rows="10" name="content" id="content">{{ form.content.value|default_if_none:'' }}</textarea>
                         </div> 
+
                         <!-- //버튼 저장하기 -->
-                        <div class="container " style='width:100px'> 
-                        <input class="btn btn-primary" type="submit" value=" save "> 
+                        <div class="container mt-4" style='width:100px'> 
+                            <button type="submit" class="btn btn-primary">save</button>
                         </div>  
             
                     </div>
+                </form>
                 </div>
+            
             </div>
                 <!-- /.container-fluid -->
 

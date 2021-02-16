@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Stock, Bookmark, Question, Answer,News
+from .models import User, Stock, Bookmark, Question, Answer,News, StockIndex
 # Register your models here.
 
 admin.site.register(User)
@@ -16,3 +16,5 @@ admin.site.register(Bookmark)
 admin.site.register(News)
 admin.site.register(Question)
 admin.site.register(Answer)
+admin.site.register(StockIndex)
+

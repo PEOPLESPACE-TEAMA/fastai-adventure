@@ -15,15 +15,15 @@
                     <!-- 내용 -->
                     
                         <!-- 1 -->
-                            <div class="card shadow mb-4">
-                                                    <div class="card-header py-3">
-                        <h3 class="m-0 font-weight-bold text-primary">{{ question }}</h3>
-                        <p class="m-0 font-weight-bold text-primary">{{ question.user.username }}</p>
-                        <p class="m-0 font-weight-bold text-primary">{{ question.create_date }}</p>
-                    </div>
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h3 class="m-0 font-weight-bold text-primary">{{ question }}</h3>
+                                <p class="m-0 font-weight-bold text-primary">{{ question.user.username }}</p>
+                                <p class="m-0 font-weight-bold text-primary">{{ question.create_date }}</p>
+                            </div>
                                 <div class="card-body">
                                     <div class="chart-area">
-                                        <h6 class="m-0 text-primary">{{ question.content }}</h6>
+                                        <div class="m-0 text-primary">{{ question.content }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -34,7 +34,13 @@
                         
                         <div class="col-xl-10 col-lg-10">
                             
-                        <p class= "m-0 text-primary">{{ question.answer_set.count }}개의 답변이 있습니다.</P>
+                        <p class= "m-0 text-primary">
+                            {%if question.answer_set.count is 0%}
+                            These is no comment
+                            {% else %}
+                            There are {{ question.answer_set.count }} comments</P>
+                            {% endif %}
+                            
                         <div>
                             <ul>
                                 {% for answer in question.answer_set.all %}
@@ -44,7 +50,7 @@
                         </div>
                         <!--목록 같은게 있음 어때요?-->
                             <a class="btn btn-primary btn-user" href='{% url "question" %}' ><i
-                                class="fas fa-list-ul fa-fw text-white-50"></i><span class="mx-2">목록</span></a>
+                                class="fas fa-reply fa-fw text-white-50"></i><span class="mx-2">return</span></a>
                         </div>
                         
                         
@@ -56,10 +62,9 @@
                                     <div class="input-group ml-2">
                                         <form class="mb-3 col-xl-10 col-lg-10">
                                             <label for="exampleFormControlTextarea1" class="form-label"></label>
-                                            <textarea class="form-control" name="content" id="content" rows="3" style="float: left; width: 90%;">
-                                                      {{ form.content.value|default_if_none:'' }}</textarea>
+                                            <textarea class="form-control" name="content" id="content" rows="3" style="float: left; width: 90%;"></textarea>
                                             <button class="btn btn-sm btn-outline-primary text-primary" type="submit" id="button-addon2" style="float: right; width:8%; " 
-                                                    onclick="button1_click();">등록</button>
+                                                    onclick="button1_click();">Registration</button>
                                         </form>
                                     </div>
                                 {% endif %}
@@ -89,25 +94,3 @@
 
     <!-- End of Main Content -->
 {% endblock %}
-
-<!--백에서 짠 코드-->
-{% comment %} <h1>질문 하나 상세 게시판</h1>
-<h3>질문: {{ question }}</h3>
-<div>
-    내용: {{ question.content }}
-</div>
-
-<p>{{ question.answer_set.count }}개의 답변이 있습니다.</P>
-<div>
-    <ul>
-    {% for answer in question.answer_set.all %}
-        <li>{{ answer.content }}</li>
-    {% endfor %}
-    </ul>
-</div>
-
-<a href="{% url 'question' %}" class="btn btn-primary">돌아가기</a>
-
-{% if user.admin is True %}
-    <a href="{% url 'answer_create' question_id=question.id %}" class="btn btn-primary">답변 등록하기</a>
-{% endif %} {% endcomment %}

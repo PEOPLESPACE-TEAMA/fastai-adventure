@@ -1,4 +1,3 @@
-
 # Created by https://www.toptal.com/developers/gitignore/api/django
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
 
@@ -154,9 +153,7 @@ dmypy.json
 # End of https://www.toptal.com/developers/gitignore/api/django
 landing_example/.
 
-<<<<<<< HEAD
+
 # Pycharm
 .idea/
-=======
 get-pip.py
->>>>>>> a9abf8ee565156a7a354e137b52f7435185a9fd7
