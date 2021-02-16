@@ -101,19 +101,11 @@ def logout(request):
 
 def home(request):
     stocks = Stock.objects.all().order_by('-id')
-    # increase, decrease 계산하려면 아래 주석 풀기
-    # for stock in stocks:
-    #     try:
-    #         stock.initialize()
-    #         stock.calculate_rate()
-    #     except:
-    #         pass
-
-    # 각 종목들 update하려면 아래 주석 풀기
+   
+    # 각 종목들 update하려면 (전일종가와 오늘시가 갱신(long) -> 상승률/하락율 등락폭 갱신(short) ) 아래 주석 풀기
     # data_update_long()
     # data_update_short()
-
-
+    
     q = request.POST.get('q', "") 
     if q:
         stocks=Stock.objects.all().exlude(stock_type='SS').exclude(stock_type='NN')
