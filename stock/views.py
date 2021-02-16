@@ -38,6 +38,7 @@ def main(request):
 # 새로운 템플릿 확인용 주소 시작
 
 def forgot(request):
+
     return render(request, 'stock/forgot-password.html')
 
 def aboutus(request):
@@ -380,9 +381,7 @@ def market_list_nasdaq(request):
 def stock_detail(request,stock_code):
     print(request.user)
     stock = Stock.objects.get(stock_code = stock_code)
-    # stock_list = Stock.objects.all().order_by('-id')
-    # increases = stock_list.exclude(increase=None).order_by('-increase')[:5]
-    # decreases = stock_list.exclude(decrease=None).order_by('decrease')[:5]
+
     chart = draw_chart(stock)
 
     df = yf.download(tickers=stock_code, period='1d', interval='5m')
@@ -401,13 +400,14 @@ def stock_detail(request,stock_code):
     img_path = "./graphimg/"+stock.company_name+'crop.PNG'
     #모델 예측
     predictedLabel,predictedIdx,probability = predict(img_path)
-    label_list = getLabels()
+    label_list = ['Bearish Pennant', 'Bearish Rectangle', 'Bullish Pennant', 'Bullish Rectangle', 'Double Bottom', 'Double Top', 'Head and Shoulders', 'Inverse Head and Shoulders', 'Continuous Falling Wedge', 'Continuous Rising Wedge', 'Reversal Falling Wedge', 'Reversal Rising Wedge']
     # 클라스마다 percentage로 바 그래프 만들기 
     bar_chart = draw_bar_chart(stock,probability,label_list)
     predictedProbability = round(float(probability[int(predictedIdx)])*100,2)
-    print(predictedLabel)
+    label = label_list[predictedIdx]
     stock.last_pattern = predictedLabel
     stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
+    sign = stock.increase_or_decrease
     stock.save()
 
     #북마크에 저장
@@ -416,10 +416,8 @@ def stock_detail(request,stock_code):
         print(stock)
         bookmarkInOut(request.user,stock)
         print("북마크 저장됨")
-
-        
-    
-    return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'predictedLabel':predictedLabel,'probability':predictedProbability,'bar_chart':bar_chart})
+ 
+    return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'predictedLabel':label,'probability':predictedProbability,'bar_chart':bar_chart,'sign':sign})
 
 def getIncreaseDecreaseResult(predictedLabel):
     increase = ['DoubleBottom','InverseHeadAndShoulders','r_FallingWedge','c_FallingWedge','BullishPennant','BullishRectangle']
