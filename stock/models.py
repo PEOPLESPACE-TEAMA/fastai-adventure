@@ -83,11 +83,6 @@ class Stock(models.Model):
     stock_code = models.CharField(max_length=20, null=True)
     stock_type = models.CharField(max_length=20, null=True)
     open = models.FloatField(null=True, blank=True)
-    high = models.FloatField(null=True, blank=True)
-    low = models.FloatField(null=True, blank=True)
-    close = models.FloatField(null=True, blank=True)
-    adj_close = models.FloatField(null=True, blank=True)
-    volume = models.IntegerField(null=True, blank=True)
 
     before_close = models.FloatField(null=True, blank=True) # 전일종가 불러옴 ( 상승률과 하락률 계산하기 위함 )
     increase = models.FloatField(null=True, blank=True) # 상승율  
@@ -95,13 +90,11 @@ class Stock(models.Model):
     
     fluctuation_width = models.FloatField(null=True, blank=True) # 등락폭 구하기
 
-    bookmarked = models.BooleanField(default=False)
-
     chart_image = models.ImageField(default=False, upload_to="")
-
 
     last_pattern = models.CharField(max_length=50,blank=True)       # 가장 최근에 본 패턴
     increase_or_decrease = models.CharField(max_length=50,blank=True) # 상승인지 하락인지
+    predict_percentage = models.FloatField(null=True, blank=True) # 예측 확률 
 
 
     def approve(self):

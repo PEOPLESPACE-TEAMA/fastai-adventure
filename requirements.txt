@@ -58,6 +58,7 @@ nbclient==0.5.1
 nbconvert==6.0.7
 nbformat==5.0.8
 nest-asyncio==1.4.3
+newsapi==0.1.1
 newspaper3k==0.2.8
 nltk==3.5
 notebook==6.1.6
