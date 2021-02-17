@@ -21,7 +21,8 @@ urlpatterns = [
     path('review/', views.review, name = 'review'),
 
     # patterns_list uri c추가!
-    path('patterns_list', views.patterns_list, name = 'patterns_list'),
+    path('patterns-list-kospi', views.patterns_list_kospi, name = 'patterns_list_kospi'),
+    path('patterns-list-nasdaq', views.patterns_list_nasdaq, name = 'patterns_list_nasdaq'),
 
     # 새로운 템플릿 동작 확인용
     path('home/',views.home, name='home'),
