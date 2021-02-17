@@ -140,8 +140,6 @@ def home(request):
     kospidetail = StockIndex.objects.filter(stock_type="kospi")
     nasdaqdetail = StockIndex.objects.filter(stock_type="nasdaq")
 
-    print("진짜 완룟")
-
     context = {
         'bookmarks': bookmarks,
         'increases': increases,
@@ -178,7 +176,6 @@ def stock_index(stock,stock__type) :
 
         stockindex.save()
 
-    print("다했어요!")
 
 
 def market_list_for_search(request):
@@ -303,12 +300,41 @@ def bookmarkInOut(user,stock):
         bookmark.stock = stock
         bookmark.save()
 
-def patterns_list():
+def patterns_list(request):
+    # kospi200s=Stock.objects.filter(stock_type='S').order_by('open')[:200]
+    # nasdaq200s=Stock.objects.filter(stock_type='N').order_by('open')[:200]
+    
+    save_patterns("FB")
+
     # to-do
-    # 1. open으로 order_by -> 코스피,나스닥 별로 상위 200개만 추리기 
-    # 2. stock_detail과 매우매우 유사 .. 그래서 쉬운데 업데이트가 진짜 느릴 것 같음... (1-2시간..?)
-    # 3. html 페이지에 뿌리기 (왼쪽: 상승 / 오른쪽 : 하락 top5랑? 각 패턴별 이미지 첨부)
-    pass
+    # 1. 모델 migrations후 db 갈아엎기 ^^..
+    # 2. for문 돌려서 얼른 db에 저장하기!
+    # 3. 패턴별로 쿼리셋 나눠서 responce 보내기 !
+    # 4. 잔다 쿨쿨 //
+    return render(request, 'stock/patterns_list.html')
+
+def save_patterns(stock_code):
+    stock = Stock.objects.get(stock_code = stock_code)
+    chart = draw_chart(stock)
+
+    df = yf.download(tickers=stock_code, period='1d', interval='5m')
+
+    crop_image(stock.chart_image,stock)
+
+    img_path = "./graphimg/"+stock.company_name+'crop.PNG'
+    #모델 예측
+    predictedLabel,predictedIdx,probability = predict(img_path)
+    # label_list = ['Bearish Pennant', 'Bearish Rectangle', 'Bullish Pennant', 'Bullish Rectangle', 'Double Bottom', 'Double Top', 'Head and Shoulders', 'Inverse Head and Shoulders', 'Continuous Falling Wedge', 'Continuous Rising Wedge', 'Reversal Falling Wedge', 'Reversal Rising Wedge']
+    
+    print("예측 라벨 :", predictedLabel)
+    print("상승이야 하락이야? ", getIncreaseDecreaseResult(predictedLabel))
+    print("찐확률?", round(float(probability[int(predictedIdx)])*100,2))
+
+    # stock.last_pattern = predictedLabel
+    # stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
+    # increase_or_decrease = stock.increase_or_decrease
+    # # sign = stock.increase_or_decrease
+    # stock.save()
 
 
 # 하기전에 pip3 install newsapi 해주세용!
@@ -437,15 +463,12 @@ def stock_detail(request,stock_code):
 
     print(predictedLabel)
 
-
-    # 이부분 !!!! 따로 떼어서 페이지 하나 더 만들기
-
     label = label_list[predictedIdx]
 
-    stock.last_pattern = predictedLabel
-    stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
-    sign = stock.increase_or_decrease
-    stock.save()
+    # stock.last_pattern = predictedLabel
+    # stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
+    # sign = stock.increase_or_decrease
+    # stock.save()
 
     #북마크에 저장
     if request.method == 'POST':
