@@ -51,7 +51,7 @@
                             <tbody>
                                  {% for instance in doublebottom %}    
                                 <tr>
-                                    <td>{{ instance.company_name }}</td>
+                                    <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
                                     <td>{{ instance.predict_percentage }}</td>
                                 </tr>
                                 {% endfor %}
@@ -80,7 +80,7 @@
                         <tbody>
                              {% for instance in inverseheadandshoulder %}    
                             <tr>
-                                <td>{{ instance.company_name }}</td>
+                                <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
                                 <td>{{ instance.predict_percentage }}</td>
                             </tr>
                             {% endfor %}
@@ -109,7 +109,7 @@
                             <tbody>
                                  {% for instance in r_fallingwedge %}    
                                 <tr>
-                                    <td>{{ instance.company_name }}</td>
+                                    <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
                                     <td>{{ instance.predict_percentage }}</td>
                                 </tr>
                                 {% endfor %}
@@ -138,7 +138,7 @@
                             <tbody>
                                 {% for instance in c_fallingwedge %}    
                                 <tr>
-                                    <td>{{ instance.company_name }}</td>
+                                    <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
                                     <td>{{ instance.predict_percentage }}</td>
                                 </tr>
                                 {% endfor %}
@@ -167,7 +167,7 @@
                         <tbody>
                              {% for instance in bullishpennant %}    
                             <tr>
-                                <td>{{ instance.company_name }}</td>
+                                <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
                                 <td>{{ instance.predict_percentage }}</td>
                             </tr>
                             {% endfor %}
@@ -197,7 +197,7 @@
                         <tbody>
                             {% for instance in bullishrectangle %}    
                             <tr>
-                                <td>{{ instance.company_name }}</td>
+                                <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
                                 <td>{{ instance.predict_percentage }}</td>
                             </tr>
                             {% endfor %}
@@ -231,7 +231,7 @@
                            <tbody>
                                 {% for instance in doubletop %}    
                                <tr>
-                                   <td>{{ instance.company_name }}</td>
+                                   <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
                                    <td>{{ instance.predict_percentage }}</td>
                                </tr>
                                {% endfor %}
@@ -260,7 +260,7 @@
                         <tbody>
                              {% for instance in headandshoulder %}    
                             <tr>
-                                <td>{{ instance.company_name }}</td>
+                                <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
                                 <td>{{ instance.predict_percentage }}</td>
                             </tr>
                             {% endfor %}
@@ -289,7 +289,7 @@
                            <tbody>
                                 {% for instance in r_risingwedge %}    
                                <tr>
-                                   <td>{{ instance.company_name }}</td>
+                                   <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
                                    <td>{{ instance.predict_percentage }}</td>
                                </tr>
                                {% endfor %}
@@ -318,7 +318,7 @@
                            <tbody>
                                {% for instance in c_risingwedge %}    
                                <tr>
-                                   <td>{{ instance.company_name }}</td>
+                                   <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
                                    <td>{{ instance.predict_percentage }}</td>
                                </tr>
                                {% endfor %}
@@ -347,7 +347,7 @@
                        <tbody>
                             {% for instance in bearishpennant %}    
                            <tr>
-                               <td>{{ instance.company_name }}</td>
+                               <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
                                <td>{{ instance.predict_percentage }}</td>
                            </tr>
                            {% endfor %}
@@ -376,7 +376,7 @@
                        <tbody>
                            {% for instance in bearishrectangle %}    
                            <tr>
-                               <td>{{ instance.company_name }}</td>
+                               <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
                                <td>{{ instance.predict_percentage }}</td>
                            </tr>
                            {% endfor %}
