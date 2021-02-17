@@ -27,10 +27,10 @@
     <!-- <span>종목이름 <span>등락폭</span> <span>등락율(상승/하락)</span> -->
         <div class="mb-4 text-center"> 
             <div></div>
-            <a href='{% url "market_list_kospi" %}' class="mr-3 d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm">
-                <i class="text-white-50"></i>KOSPI</a>
             <a href='{% url "market_list_nasdaq" %}' class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm"><i
-                class="text-white-50"></i>NASDAQ</a>  <!-- 나스닥 페이지 완성되면 링크변경하기 / 나스닥페이지에서도 넣기 -->
+                class="text-white-50"></i>NASDAQ</a>
+            <a href='{% url "market_list_kospi" %}' class="ml-3 d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm">
+                <i class="text-white-50"></i>KOSPI</a>  
             <div></div>   
         </div>
 
