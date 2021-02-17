@@ -569,9 +569,10 @@ def stock_detail(request,stock_code):
 
     label = label_list[predictedIdx]
 
+    sign = stock.increase_or_decrease
+
     # stock.last_pattern = predictedLabel
     # stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
-    # sign = stock.increase_or_decrease
     # stock.save()
 
     #북마크에 저장
