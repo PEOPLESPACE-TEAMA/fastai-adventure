@@ -222,6 +222,7 @@ def crop_image(self,stock):
     # pattern.show()
     pattern.save(path+stock.company_name+'crop.PNG')
 
+
 def bookmark(request):
     return render(request, 'stock/bookmark.html')
 
@@ -300,24 +301,127 @@ def bookmarkInOut(user,stock):
         bookmark.stock = stock
         bookmark.save()
 
-def patterns_list(request):
-    # kospi200s=Stock.objects.filter(stock_type='S').order_by('open')[:200]
-    # nasdaq200s=Stock.objects.filter(stock_type='N').order_by('open')[:200]
+def patterns_list_nasdaq(request):
+    nasdaqs=Stock.objects.filter(stock_type='N')
     
-    save_patterns("FB")
+    # 매 자정 예측 data update
+    # kospi200s=Stock.objects.filter(stock_type='S').order_by('open')[:200]
+    # for kospi200 in kospi200s :
+    #     try:
+    #         save_patterns(kospi200)
+    #     except ValueError :
+    #         pass
+    #     except KeyError :
+    #         pass
 
-    # to-do
-    # 1. 모델 migrations후 db 갈아엎기 ^^..
-    # 2. for문 돌려서 얼른 db에 저장하기!
-    # 3. 패턴별로 쿼리셋 나눠서 responce 보내기 !
-    # 4. 잔다 쿨쿨 //
-    return render(request, 'stock/patterns_list.html')
+    
+    increases=nasdaqs.filter(increase_or_decrease="increase")
 
-def save_patterns(stock_code):
-    stock = Stock.objects.get(stock_code = stock_code)
+    doublebottom=increases.filter(last_pattern="DoubleBottom").order_by('-predict_percentage')[:5]
+    inverseheadandshoulders=increases.filter(last_pattern="InverseHeadAndShoulders").order_by('-predict_percentage')[:5]
+    r_fallingwedge=increases.filter(last_pattern="r_FallingWedge").order_by('-predict_percentage')[:5]
+    c_fallingwedge=increases.filter(last_pattern="c_FallingWedge").order_by('-predict_percentage')[:5]
+    bullishpennant=increases.filter(last_pattern="BullishPennant").order_by('-predict_percentage')[:5]
+    bullishrectangle=increases.filter(last_pattern="BullishRectangle").order_by('-predict_percentage')[:5]
+
+    decreases=nasdaqs.filter(increase_or_decrease="decrease")
+
+    doubletop=decreases.filter(last_pattern="DoubleTop").order_by('-predict_percentage')[:5]
+    headandshoulders=decreases.filter(last_pattern="HeadAndShoulders").order_by('-predict_percentage')[:5]
+    r_risingwedge=decreases.filter(last_pattern="r_RisingWedge").order_by('-predict_percentage')[:5]
+    c_risingwedge=decreases.filter(last_pattern="c_RisingWedge").order_by('-predict_percentage')[:5]
+    bearishpennant=decreases.filter(last_pattern="BearishPennant").order_by('-predict_percentage')[:5]
+    bearishrectangle=decreases.filter(last_pattern="BearishRectangle").order_by('-predict_percentage')[:5]
+
+    context ={
+        'doublebottom':doublebottom,
+        'headandshoulder':headandshoulders,
+        'r_fallingwedge':r_fallingwedge,
+        'c_fallingwedge':c_fallingwedge,
+        'bullishpennant':bullishpennant,
+        'bullishrectangle':bullishrectangle,
+
+        'doubletop':doubletop,
+        'inverseheadandshoulder': inverseheadandshoulders,
+        'r_risingwedge': r_risingwedge,
+        'c_risingwedge': c_risingwedge,
+        'bearishpennant': bearishpennant,
+        'bearishrectangle': bearishrectangle,
+    }
+    
+    return render(request, 'stock/patterns_list_nasdaq.html', context=context)
+
+
+def patterns_list_kospi(request):
+
+    kospis=Stock.objects.filter(stock_type='S')
+    
+    # 매 자정 예측 data update
+    # kospi200s=Stock.objects.filter(stock_type='S').order_by('open')[:200]
+    # for kospi200 in kospi200s :
+    #     try:
+    #         save_patterns(kospi200)
+    #     except ValueError :
+    #         pass
+    #     except KeyError :
+    #         pass
+
+    
+    increases=kospis.filter(increase_or_decrease="increase")
+
+    doublebottom=increases.filter(last_pattern="DoubleBottom").order_by('-predict_percentage')[:5]
+    inverseheadandshoulders=increases.filter(last_pattern="InverseHeadAndShoulders").order_by('-predict_percentage')[:5]
+    r_fallingwedge=increases.filter(last_pattern="r_FallingWedge").order_by('-predict_percentage')[:5]
+    c_fallingwedge=increases.filter(last_pattern="c_FallingWedge").order_by('-predict_percentage')[:5]
+    bullishpennant=increases.filter(last_pattern="BullishPennant").order_by('-predict_percentage')[:5]
+    bullishrectangle=increases.filter(last_pattern="BullishRectangle").order_by('-predict_percentage')[:5]
+
+    decreases=kospis.filter(increase_or_decrease="decrease")
+
+    doubletop=decreases.filter(last_pattern="DoubleTop").order_by('-predict_percentage')[:5]
+    headandshoulders=decreases.filter(last_pattern="HeadAndShoulders").order_by('-predict_percentage')[:5]
+    r_risingwedge=decreases.filter(last_pattern="r_RisingWedge").order_by('-predict_percentage')[:5]
+    c_risingwedge=decreases.filter(last_pattern="c_RisingWedge").order_by('-predict_percentage')[:5]
+    bearishpennant=decreases.filter(last_pattern="BearishPennant").order_by('-predict_percentage')[:5]
+    bearishrectangle=decreases.filter(last_pattern="BearishRectangle").order_by('-predict_percentage')[:5]
+
+    context ={
+        'doublebottom':doublebottom,
+        'headandshoulder':headandshoulders,
+        'r_fallingwedge':r_fallingwedge,
+        'c_fallingwedge':c_fallingwedge,
+        'bullishpennant':bullishpennant,
+        'bullishrectangle':bullishrectangle,
+
+        'doubletop':doubletop,
+        'inverseheadandshoulder': inverseheadandshoulders,
+        'r_risingwedge': r_risingwedge,
+        'c_risingwedge': c_risingwedge,
+        'bearishpennant': bearishpennant,
+        'bearishrectangle': bearishrectangle,
+    }
+    
+    return render(request, 'stock/patterns_list_kospi.html', context=context)
+
+
+    
+def getIncreaseDecreaseResult(predictedLabel):
+    increase = ['DoubleBottom','InverseHeadAndShoulders','r_FallingWedge','c_FallingWedge','BullishPennant','BullishRectangle']
+    if predictedLabel in increase:
+        return 'increase'
+    else:
+        return 'decrease'
+
+
+
+
+
+
+def save_patterns(stock):
+    # stock = Stock.objects.get(stock_code = stock_code)
     chart = draw_chart(stock)
 
-    df = yf.download(tickers=stock_code, period='1d', interval='5m')
+    df = yf.download(tickers=stock.stock_code, period='1d', interval='5m')
 
     crop_image(stock.chart_image,stock)
 
@@ -326,15 +430,15 @@ def save_patterns(stock_code):
     predictedLabel,predictedIdx,probability = predict(img_path)
     # label_list = ['Bearish Pennant', 'Bearish Rectangle', 'Bullish Pennant', 'Bullish Rectangle', 'Double Bottom', 'Double Top', 'Head and Shoulders', 'Inverse Head and Shoulders', 'Continuous Falling Wedge', 'Continuous Rising Wedge', 'Reversal Falling Wedge', 'Reversal Rising Wedge']
     
-    print("예측 라벨 :", predictedLabel)
-    print("상승이야 하락이야? ", getIncreaseDecreaseResult(predictedLabel))
-    print("찐확률?", round(float(probability[int(predictedIdx)])*100,2))
+    print("예측라벨 :", predictedLabel)
+    print("상승또는하락 ", getIncreaseDecreaseResult(predictedLabel))
+    print("예측확률:", round(float(probability[int(predictedIdx)])*100,2))
 
-    # stock.last_pattern = predictedLabel
-    # stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
-    # increase_or_decrease = stock.increase_or_decrease
-    # # sign = stock.increase_or_decrease
-    # stock.save()
+    stock.last_pattern = predictedLabel
+    stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
+    stock.predict_percentage = round(float(probability[int(predictedIdx)])*100,2)
+    # sign = stock.increase_or_decrease
+    stock.save()
 
 
 # 하기전에 pip3 install newsapi 해주세용!

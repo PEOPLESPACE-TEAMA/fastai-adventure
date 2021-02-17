@@ -1,0 +1,85 @@
+
+
+<h3>상승부분!!!!</h3>
+</br>
+</br>
+<div>패턴별로 대표이미지랑 설명 한두줄 추가해달라고 회의에서 말했던 것 같아요,,,!</div>
+
+<h3>doublebottom!!!</h3>
+{% for instance in doublebottom %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>headandshoulder!!!</h3>
+{% for instance in headandshoulder %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>r_fallingwedge!!!</h3>
+{% for instance in r_fallingwedge %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>c_fallingwedge!!!</h3>
+{% for instance in c_fallingwedge %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>bullishpennant!!!</h3>
+{% for instance in bullishpennant %}
+<div>{{ instance.company_name }}</div> 
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>bullishrectangle!!!</h3>
+{% for instance in bullishrectangle %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+</br>
+</br>
+
+<h3>하락부분!!!!</h3>
+</br>
+</br>
+<h3>doubltop!!!</h3>
+{% for instance in doubletop %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>inverseheadandshoulder!!!</h3>
+{% for instance in inverseheadandshoulder %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>r_risingwedge!!!</h3>
+{% for instance in r_risingwedge %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>c_risingwedge!!!</h3>
+{% for instance in c_risingwedge %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>bearishpennant!!!</h3>
+{% for instance in bearishpennant %}
+<div>{{ instance.company_name }}</div> 
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>bearishrectangle!!!</h3>
+{% for instance in bearishrectangle %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
