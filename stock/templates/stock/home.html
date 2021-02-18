@@ -33,7 +33,6 @@
                                             {% endfor %}
                                         </center>
                                         <!-- <canvas id="myAreaChart"></canvas> -->
-
                                     </div>
                                 </div>
                             </div>
@@ -221,7 +220,7 @@
                                     {% for n in news.all %}
                                         <div class="row">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <img src="{{ n.newsImage }}" alt="newImage" width=320>
+                                            <img src="{{ n.newsImage }}" alt="newImage" width=320 style="height: 50%;">
                                             <div class="news">
                                                 <h5 class="title">
                                                     <a href="{{ n.redirectUrl }}"><br><br>&nbsp;&nbsp;&nbsp;&nbsp;{{ n.title }}</a>
