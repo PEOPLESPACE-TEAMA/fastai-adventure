@@ -10,28 +10,14 @@
     <h1 class="m-0 text-primary">Stock Market List</h1>
     <h4 class="mb-4">Search stock item whatever you want!<br/> KOSPI </h4>
 
-    <!-- <h2 class=cosqi_tile >코스피 종목 목록</h2> -->
-    <!-- 상단 검색으로 옮김
-        <form class="form-inline user" action="{% url 'market_list_for_search' %}" method="post">
-        {% csrf_token %}
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" value="{{q}}">
-        <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
-    </form> -->
 
     <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-        <!-- <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary"></h6>
-        </div> -->
-        <div class="card-body">
-    <!-- <span>종목이름 <span>등락폭</span> <span>등락율(상승/하락)</span> -->
+    <div class="card card-body shadow mb-4">
         <div class="mb-4 text-center"> 
-            <div></div>
-            <a href='{% url "market_list_nasdaq" %}' class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm"><i
-                class="text-white-50"></i>NASDAQ</a>
-            <a href='{% url "market_list_kospi" %}' class="ml-3 d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm">
-                <i class="text-white-50"></i>KOSPI</a>  
-            <div></div>   
+
+            <a href='{% url "market_list_nasdaq" %}' class="btn btn-lg btn-primary shadow-sm">NASDAQ</a>
+            <a href='{% url "market_list_kospi" %}' class="ml-3 btn btn-lg btn-primary shadow-sm">KOSPI</a>  
+
         </div>
 
         <!-- Content Row -->
@@ -39,13 +25,10 @@
             <!-- 상승률 TOP5 -->
             <div class="6 col-lg-6">
                 <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Increasing TOP5</h6>
-                    </div>
+
                     <!-- Card Body -->
                     <div class="card-body">
+                        <h3 class="text-primary text-center">Increasing TOP5</h3>
                         <table>
                         <!-- {{ increasechart }} -->
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -73,14 +56,10 @@
             <!-- 하락률 TOP5 -->
             <div class="6 col-lg-6">
                 <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Decreacing TOP5</h6>
-                    </div>
+
                     <!-- Card Body -->
                     <div class="card-body">
-                        <table>
+                        <h3 class="text-primary text-center">Decreasing TOP5</h3>
                             <table>
                                 <!-- {{ increasechart }} -->
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -132,7 +111,7 @@
                         <a class = wow href="{% url 'stock_detail' stock_code=stock.stock_code %}">{{ stock.company_name }}</a>
                     </td>
                     <td>{{ stock.fluctuation_width }}</td>
-        
+
                     {% if stock.increase %}
                     <td class="text-danger">{{ stock.increase }}</td>
                     {% else %}
@@ -180,7 +159,6 @@
             {% endif %}
         </ul>
         <!-- 페이징처리 끝 -->
-    </div>
     </div>
 </div>
 

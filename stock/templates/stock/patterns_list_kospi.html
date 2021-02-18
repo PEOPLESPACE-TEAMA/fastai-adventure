@@ -13,32 +13,28 @@
     <h4 class="mb-4">Check stocks with high prediction rates for each pattern on the stock market the day before!<br/> (Update every AM 24:00)</h4>
 
     <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-        <div class="card-body">
-    <!-- <span>종목이름 <span>등락폭</span> <span>등락율(상승/하락)</span> -->
+    <div class="card card-body shadow mb-4">
         <div class="mb-4 text-center"> 
-            <div></div>
-            <a href='{% url "patterns_list_nasdaq" %}' class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm"><i
-                class="text-white-50"></i>NASDAQ</a>  
-            <a href='{% url "patterns_list_kospi" %}' class="ml-3 d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm">
-                <i class="text-white-50"></i>KOSPI</a>
-            <div></div>
+            
+            <a href='{% url "patterns_list_nasdaq" %}' class="btn btn-primary btn-lg shadow-sm" >NASDAQ</a>
+            <a href='{% url "patterns_list_kospi" %}' class="ml-3  btn btn-primary btn-lg shadow-sm">KOSPI</a>
+            
         <br/>
         <br/>
-        <div style="background-color: rgb(16, 73, 126); width: 100%;">
-            <p class="text-center text-white py-1">Rising Graph Patterns&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;Falling Graphs Patterns</p>
-        </div>
+             
+        
         <!-- Content Row -->
         <div class="row">
             <!-- 상승률 TOP5 -->
-            <div class="6 col-lg-6" style="padding: 20px 25px;">
+            <div class="col-lg-6">
+                <h3 class="text-center py-1">Rising Graph Patterns</h3>
                 <div class="card mb-4" style="border: 0.5px rgb(184, 197, 255) dashed; padding: 1em">
-                 <!-- doublebottom -->
-                    <div class="card" >
-                        <img src="{% static 'img/doublebottom.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
-                        <div class="card-body">
-                          <h5 class="card-title text-center font-weight-bold text-primary">DoubleBottom</h5>
-                          <p class="card-text text-center">The double bottom is the end formation in a declining market. It is identical to the double top, except for the inverse relationship in price. </p>
+                <!-- doublebottom -->
+                        
+                <div class="card-body pattern">
+                            <img src="{% static 'img/doublebottom.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+                            <h5 class="card-title text-center font-weight-bold text-primary">DoubleBottom</h5>
+                            <p class="card-text text-center">The double bottom is the end formation in a declining market. It is identical to the double top, except for the inverse relationship in price. </p>
                          <table>
                             <!-- {{ increasechart }} -->
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -58,17 +54,16 @@
                             </tbody>
                             </table>
                         </table>
-                        </div>
-                      </div>
-                  <br/>
-                  <br/>
-                   <!-- inverseheadandshoulder-->
-                 <div class="card" >
-                    <img src="{% static 'img/inverseheadandshoulder.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
-                    <div class="card-body">
-                      <h5 class="card-title text-center font-weight-bold text-primary">Inverse Head and Shoulder</h5>
-                      <p class="card-text text-center">This pattern is identified when the price action of a security meets the following characteristics: the price falls to a trough and then rises; the price falls below the former trough and then rises again; </p>
-                     <table>
+                </div>
+
+
+                <!-- inverseheadandshoulder-->
+                    
+                <div class="card-body">
+                        <img src="{% static 'img/inverseheadandshoulder.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+                        <h5 class="card-title text-center font-weight-bold text-primary">Inverse Head and Shoulder</h5>
+                        <p class="card-text text-center">This pattern is identified when the price action of a security meets the following characteristics: the price falls to a trough and then rises; the price falls below the former trough and then rises again; </p>
+                    <table>
                         <!-- {{ increasechart }} -->
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
@@ -87,14 +82,13 @@
                         </tbody>
                         </table>
                     </table>
-                    </div>
-                  </div>
-              <br/>
-              <br/>
+                </div>
+
                <!-- r_fallingwedge -->
-              <div class="card" >
-                        <img src="{% static 'img/fallingwedge.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
-                        <div class="card-body">
+              
+                        
+                <div class="card-body">
+                            <img src="{% static 'img/fallingwedge.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
                           <h5 class="card-title text-center font-weight-bold text-primary">Reversal Falling Wedge</h5>
                           <p class="card-text text-center">A falling wedge found in an uptrend is considered a continuation pattern that occurs as the market contracts temporarily. It indicates the resumption of the uptrend. </p>
                          <table>
@@ -116,14 +110,11 @@
                             </tbody>
                             </table>
                         </table>
-                        </div>
-                      </div>
-                  <br/>
-                  <br/>
+                </div>
+
                    <!-- c_fallingwedge -->
-                  <div class="card" >
-                    <img src="{% static 'img/c_fallingwedge.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
-                    <div class="card-body">
+                <div class="card-body">
+                        <img src="{% static 'img/c_fallingwedge.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
                       <h5 class="card-title text-center font-weight-bold text-primary">Continuation Falling Wedge</h5>
                       <p class="card-text text-center">As a continuation pattern, the falling wedge will still slope down, but the slope will be against the prevailing uptrend.</p>
                         <table>
@@ -146,13 +137,10 @@
                             </table>
                         </table>
                         </div>
-                    </div>
-                <br/>
-                <br/>
+
                  <!-- bullishpennant -->
-                <div class="card" >
-                    <img src="{% static 'img/bullishpennant.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
-                    <div class="card-body">
+                <div class="card-body">
+                        <img src="{% static 'img/bullishpennant.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
                       <h5 class="card-title text-center font-weight-bold text-primary">Bullish Pennant</h5>
                       <p class="card-text text-center">It is a continuation pattern that marks a pause in the movement of a price halfway through a strong uptrend, giving you an opportunity to go long and profit from the rest of the price rise.</p>
                      <table>
@@ -175,13 +163,10 @@
                         </table>
                     </table>
                     </div>
-                  </div>
-              <br/>
-              <br/>
-               <!-- bullishrectangle -->
-              <div class="card" >
-                <img src="{% static 'img/bullishrectangle.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+
+               <!-- bullishrectangle -->  
                 <div class="card-body">
+                    <img src="{% static 'img/bullishrectangle.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
                   <h5 class="card-title text-center font-weight-bold text-primary">Bullish Rectangle</h5>
                   <p class="card-text text-center">Rectangles are continuation patterns that occur when a price pauses during a strong trend and temporarily bounces between two parallel levels before the trend continues.</p>
                  <table>
@@ -204,19 +189,18 @@
                         </table>
                     </table>
                     </div>
-                </div>
+                
+            </div> <!--card 점선-->
             </div>
-            <br/>
-            <br/>
-        </div>
 
             <!-- 하락률 TOP5 -->
-            <div class="6 col-lg-6" style="padding: 20px 25px;">
+            <div class="col-lg-6" >
+                <h3 class="text-center py-1">Falling Graphs Patterns</h3>
                 <div class="card mb-4" style="border: 0.5px rgb(184, 197, 255) dashed; padding: 1em">
-                <!-- doubletop -->
-                   <div class="card" >
-                       <img src="{% static 'img/doubletop.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+
+                    <!-- doubletop -->
                        <div class="card-body">
+                        <img src="{% static 'img/doubletop.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
                          <h5 class="card-title text-center font-weight-bold text-primary">DoubleTop</h5>
                          <p class="card-text text-center">The double top is a frequent price formation at the end of a bull market. It shows that demand is outpacing supply (buyers predominate) up to the first top, causing prices to rise.</p>
                         <table>
@@ -239,13 +223,11 @@
                            </table>
                        </table>
                        </div>
-                     </div>
-                 <br/>
-                 <br/>
-                 <!-- headandshoulder -->
-                 <div class="card" >
-                    <img src="{% static 'img/headandshoulder.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+                     
+
+                 <!-- headandshoulder -->  
                     <div class="card-body">
+                        <img src="{% static 'img/headandshoulder.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
                       <h5 class="card-title text-center font-weight-bold text-primary">Head and Shoulders</h5>
                       <p class="card-text text-center">This formation is simply the inverse of a Head and Shoulders Top and often indicates a change in the trend and market sentiment</p>
                      <table>
@@ -268,13 +250,10 @@
                         </table>
                     </table>
                     </div>
-                  </div>
-              <br/>
-              <br/>
-              <!-- r_risingwedge e -->
-             <div class="card" >
-                       <img src="{% static 'img/risingwedge.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+
+                    <!-- r_risingwedge e -->            
                        <div class="card-body">
+                        <img src="{% static 'img/risingwedge.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
                          <h5 class="card-title text-center font-weight-bold text-primary">Reversal Rising Wedge</h5>
                          <p class="card-text text-center">The Rising Wedge is a bearish pattern that begins wide at the bottom and contracts as prices move higher and the trading range narrows.</p>
                         <table>
@@ -297,13 +276,10 @@
                            </table>
                        </table>
                        </div>
-                     </div>
-                 <br/>
-                 <br/>
-                  <!-- c_risingwedge -->
-                 <div class="card" >
-                   <img src="{% static 'img/c_risingwedge.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+
+                  <!-- c_risingwedge -->   
                    <div class="card-body">
+                    <img src="{% static 'img/c_risingwedge.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
                      <h5 class="card-title text-center font-weight-bold text-primary">Continuation Rising Wedge</h5>
                      <p class="card-text text-center">The rising wedge can be one of the most difficult chart patterns to accurately recognize and trade. While it is a consolidation formation, the loss of upside momentum on each successive high gives the pattern its bearish bias. </p>
                        <table>
@@ -326,13 +302,10 @@
                            </table>
                        </table>
                        </div>
-                   </div>
-               <br/>
-               <br/>
+
                 <!-- bearishpennant -->
-               <div class="card" >
-                   <img src="{% static 'img/bearishpennant.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
                    <div class="card-body">
+                    <img src="{% static 'img/bearishpennant.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
                      <h5 class="card-title text-center font-weight-bold text-primary">Bearish Pennant</h5>
                      <p class="card-text text-center">Bearish pennants are continuation patterns that mark a pause in the movement of a price halfway through a strong downtrend, offering you an opportunity to go short.</p>
                     <table>
@@ -355,13 +328,10 @@
                        </table>
                    </table>
                    </div>
-                 </div>
-             <br/>
-             <br/>
-              <!-- bearishrectangle -->
-             <div class="card" >
-               <img src="{% static 'img/bearishrectangle.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+
+              <!-- bearishrectangle -->   
                <div class="card-body">
+                <img src="{% static 'img/bearishrectangle.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
                  <h5 class="card-title text-center font-weight-bold text-primary">Bearish Rectangle</h5>
                  <p class="card-text text-center"> The bearish rectangle is a continuation pattern that occurs when a price pauses during a strong downtrend and temporarily bounces between two parallel levels before the trend continues.</p>
                 <table>
@@ -384,14 +354,13 @@
                        </table>
                    </table>
                    </div>
-               </div>
-           <br/>
-           <br/>
+ 
+
         </div>
         </div>
         </div>
         </div>
-    </div>
+    
 </div>
 
 
@@ -403,7 +372,7 @@
 
 
 
-
+{% comment %}
 <h3>상승부분!!!!</h3>
 </br>
 </br>
@@ -487,3 +456,4 @@
 <div>{{ instance.predict_percentage }}</div>
 {% endfor %}
 
+{% endcomment %}

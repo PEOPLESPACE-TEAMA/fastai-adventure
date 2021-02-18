@@ -12,27 +12,26 @@
                     </div>
                     <div class="row">
                         <!-- KOSPI -->
-                        <!-- 칸을 늘리는 방법을 모르겠습니다ㅠ -->
-                        <div class="6 col-lg-6">
+                        <div class="col-lg-6">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <div class="card-header py-3 align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary"><a href='{% url "market_list_kospi" %}'>KOSPI</a></h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div class="chart-area">
+                                    <div>
                                         <center>
-                                            <div class="kospi_chart_month"><img src="../static/stock_market/kospi.png" width="89%", height="auto"></div>
-                                            <div class="kospi_detail"></div>
+                                        <img src="../static/stock_market/kospi.png"  class= "chart-img">
+                                        <div class="kospi_detail">
                                             {% for kospidetail in kospidetails %}
                                                 <div>Date updated : {{ kospidetail.updated_date |date:"Y-m-d" }}
                                                 <div>Open : {{ kospidetail.open }} &nbsp;&nbsp; Close : {{ kospidetail.close}}</div>
                                                 <div>Highest :{{ kospidetail.high }} &nbsp;&nbsp; Lowest :{{ kospidetail.low }}</div>
                                                 <div>Transaction volume : {{ kospidetail.volume }} &nbsp;&nbsp; Fluctuation rate : {{ kospidetail.change }}</div>
                                             {% endfor %}
+                                        </div>
                                         </center>
-                                        <!-- <canvas id="myAreaChart"></canvas> -->
                                     </div>
                                 </div>
                             </div>
@@ -41,19 +40,18 @@
                         <!-- KOSDAQ -->
 
                         <!-- NASDAQ -->
-                        <div class="6 col-lg-6">
+                        <div class="col-lg-6">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <div class="card-header py-3 align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary"><a href='{% url "market_list_nasdaq" %}'>NASDAQ</a></h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div class="chart-area">
+                                    <div>
                                         <center>
-                                            <div class="nasdaq_chart_month"><img src="../static/stock_market/nasdaq.png" width="89%", height="auto"></div>
-                                            <div class="nasdaq_detail">
+                                            <img src="../static/stock_market/nasdaq.png"  class= "chart-img">
+                                            <div class="kospi_detail">
                                             {% for nasdaqdetail in nasdaqdetails %}
                                                 <div>Date updated(장이 열린날을 기준으로 가장 최근이라는걸 예기해야할듯 ..) : {{ nasdaqdetail.updated_date |date:"Y-m-d" }}</div>
                                                 <div>Open : {{ nasdaqdetail.open }} &nbsp;&nbsp; Close : {{ nasdaqdetail.close}}</div>
@@ -62,7 +60,6 @@
                                             {% endfor %}
                                             </div>
                                         </center>
-                                        <!-- <canvas id="myAreaChart"></canvas> -->
                                     </div>
                                 </div>
                             </div>
