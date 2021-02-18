@@ -50,35 +50,18 @@ class EmailThread(threading.Thread):
         user = User.objects.get(email=self.email)
         print(user)
 
-        bookmarks = Bookmark.objects.filter(user__email=self.email) 
-        # print(bookmarks)
-        # print("북마크 개수!!!! :", bookmarks.count())
-
-        # a =[]
-        # line=[]
-        # for bookmark in bookmarks:
-        #     line.append(bookmark.stock.company_name)
-        #     line.append(bookmark.stock.last_pattern)
-        #     line.append(bookmark.stock.predict_percentage)
-        #     line.append(bookmark.stock.increase_or_decrease)
-        # a.append(line)
-        # print(a)
-        # # b="-".join([str(_) for _ in a])
-        # b=" ".join(map(str, a))
-        # print(b)
-
-        # time.sleep(10)
-
-
+        
 
         while(1): 
+            
+            bookmarks = Bookmark.objects.filter(user__email=self.email) 
             
             now = datetime.datetime.now()
             print(user.mail_alarm_time_hour)
             print(user.mail_alarm_time_minute)
 
             # if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_hour :
-            if now.hour == 2 and now.minute == 44 :
+            if now.hour == 2 and now.minute == 46:
 
                 title = "🎁fastock에서 " + user.username + "님께 보내는 북마크 알림 메일이 도착했어요!"
               
