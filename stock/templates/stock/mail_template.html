@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div><img src='cid:for_mail.PNG' /></div>
+    <div>저희 프로그램은 어쩌구저쩌구이며 이 메일은 알람 설정을 하신 분에게만 가는겁니다~~~ 어쩌구저꺼거줘걷ㅈ궂덕ㅈㄷ겆도언로</div>   
+    <br/>예측리포트를 읽고 매도/매수에 신중을 가해보세요. 어쩌구저꺼구 
+    <br/>
+                                       
+    {% if bookmarks %}
+        <div> {{user.username}}님께서 Bookmark 해 둔 종목은 아래와 같습니다!  </div>
+        <div> 📌예측 report📊  </div>
+        {% for bookmark in bookmarks %}
+        <div><b>{{ bookmark.stock.company_name}}</b>의 예측결과</div>
+        <div>예측 패턴:{{ bookmark.stock.last_pattern}}</div>
+        <div>예측 퍼센트:{{ bookmark.stock.predict_percentage}}</div>
+        <div>상승?하락?:{{ bookmark.stock.increase_or_decrease}}</div>
+        <hr/>
+        {% endfor %}
+    {% else %}
+        <div> 어쩌구저쩌구 설명을 쓰면 좀 있어보일것 같다.. 우라라라라라라라라라라라랄  </div>
+        <div> {{user.username}}님께서 Bookmark 해 둔 종목이 없습니다! 북마크를 한 종목이 있다면 메일이 조금 더 의미있어질 겁니다!! </div>
+    {% endif %}
+</body>
+</html>
