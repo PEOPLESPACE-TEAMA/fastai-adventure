@@ -40,17 +40,16 @@ class EmailThread(threading.Thread):
         user = User.objects.filter(email=self.email)
         bookmarks = Bookmark.objects.all().filter(user__email=user.email) 
 
-        a = [1, 2, 3]
-        >>> a.append(4)
-
         company_name=[]
         last_pattern=[]
+        predict_percentage=[]
         increase_or_decease=[] 
         total=[]
         
         for bookmark in bookmarks :
             company_name.append(bookmark.stock.company_name)
             last_pattern.append(bookmark.stock.last_pattern)
+            predict_percentage.append(bookmark.stock.predict_percentage)
             increase_or_decease.append(bookmark.stock.increase_or_decrease)
 
         
@@ -66,23 +65,22 @@ class EmailThread(threading.Thread):
 
                 title = "stocker에서 " + self.username + "님께 보내는 북마크 알림 메일이 도착했어요!"
                 contents =  "안녕안녕" # html 형식으로 보내야 깔끔할 것 같긴 함. sendMail.py 참고 . 리스트 뿌려주기 
-                # 이미지는 어떻게 보여줄 지 고민 중 ..!
                
                 msg = EmailMultiAlternatives(title, contents, to=[self.addess])
                 msg.content_subtype = 'html'
                 msg.send()
 
                 time.sleep(1)
-                print('스레드 한 개 작업 완룟!')
+                print('스레드 한 개 작업 완룟!')s
 
                 return 0
             
 
-        else :
-            # print(now.hour)
-            # print(now.minute)
-            # time.sleep(1)
-            pass
+            else :
+                print(now.hour)
+                print(now.minute)
+                time.sleep(1)
+                pass
 
 
 
@@ -101,24 +99,24 @@ for alarm_user in alarm_users :
 #이거를 shell 에서 한번 테스트 해봤는데 shell 에서 exit()해도 계속 실행 됨 그 cmd를 종료해야지 죽음 이게 웃긴게 ctr+c 도 안먹힘 
 
 
+# sendMail.py
+# from django.core.mail import EmailMessage
+# from email.mime.image import MIMEImage
+# from django.template.loader import render_to_string
+# from django.core.mail import EmailMultiAlternatives
 
-from django.core.mail import EmailMessage
-from email.mime.image import MIMEImage
-from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
+# def sendMail(title, contents, adress):
+#     '''
+#     title은 제목
+#     contents는 메일의 내용인데 여기를 html로 넣으면 됨
+#     adress는 메일을 받는 사람의 주소
+#     '''
+#     #media = 'stock/mail_template_example/regular/images'
+#     contents = render_to_string('stock/mail_template_example/regular/email.html') #일단 이렇게 하면 메일이 html로 가기는 하는데 이미지는 안들어감 이미지 포함해서 보내는 방법을 알아내야 함 
+#     email = EmailMultiAlternatives(title, contents, to=[adress])
+#     #email = EmailMessage(title, contents, to=[adress])
+#     email.content_subtype = 'html'
+#     email.send()    
 
-def sendMail(title, contents, adress):
-    '''
-    title은 제목
-    contents는 메일의 내용인데 여기를 html로 넣으면 됨
-    adress는 메일을 받는 사람의 주소
-    '''
-    #media = 'stock/mail_template_example/regular/images'
-    contents = render_to_string('stock/mail_template_example/regular/email.html') #일단 이렇게 하면 메일이 html로 가기는 하는데 이미지는 안들어감 이미지 포함해서 보내는 방법을 알아내야 함 
-    email = EmailMultiAlternatives(title, contents, to=[adress])
-    #email = EmailMessage(title, contents, to=[adress])
-    email.content_subtype = 'html'
-    email.send()    
-
-    #이거 html로 보내기는 가능한데 html파일에 있는 이미지는 같이 안보내짐 어떻게 이미지 넣어서 html로 메일 보내는지 모르겠음
-    #이미지 못 넣으면 html로 그래프를 그리는게 가능하다면 html로 그래프를 그러서 넣을수 있음녀 좋을 듯 
+#     #이거 html로 보내기는 가능한데 html파일에 있는 이미지는 같이 안보내짐 어떻게 이미지 넣어서 html로 메일 보내는지 모르겠음
+#     #이미지 못 넣으면 html로 그래프를 그리는게 가능하다면 html로 그래프를 그러서 넣을수 있음녀 좋을 듯 
