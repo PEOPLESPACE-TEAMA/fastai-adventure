@@ -31,47 +31,53 @@ from django.contrib.auth import login as login_a, authenticate
 from .prediction import predict, getLabels
 
 class EmailThread(threading.Thread):
-    def __init__(self, address, username):
-        self.addess = address
+    def __init__(self, email, username):
+        self.email = email
         threading.Thread.__init__(self)
 
     def run (self):
 
-        user = User.objects.filter(email=self.email)
-        bookmarks = Bookmark.objects.all().filter(user__email=user.email) 
+        user = User.objects.get(email=self.email)
+        print(user)
+        bookmarks = Bookmark.objects.filter(user__email=self.email) 
+        print(bookmarks)
 
         company_name=[]
         last_pattern=[]
         predict_percentage=[]
-        increase_or_decease=[] 
-        total=[]
+        increase_or_decrease=[] 
         
         for bookmark in bookmarks :
             company_name.append(bookmark.stock.company_name)
             last_pattern.append(bookmark.stock.last_pattern)
             predict_percentage.append(bookmark.stock.predict_percentage)
-            increase_or_decease.append(bookmark.stock.increase_or_decrease)
+            increase_or_decrease.append(bookmark.stock.increase_or_decrease)
 
         
             
-        print(bookmark.stock.stock_code)
-        # bookmark.stock.last_pettern  이랑 increase_or_decrease 미리 for문돌려서 미리 리스트에 담아두기
+        print(company_name)
+        print(last_pattern)
+        print(predict_percentage)
+        print(increase_or_decrease)
 
         while(1): 
             
             now = datetime.datetime.now()
+            print(user.mail_alarm_time_hour)
+            print(user.mail_alarm_time_minute)
 
             if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_hour :
 
                 title = "stocker에서 " + self.username + "님께 보내는 북마크 알림 메일이 도착했어요!"
-                contents =  "안녕안녕" # html 형식으로 보내야 깔끔할 것 같긴 함. sendMail.py 참고 . 리스트 뿌려주기 
+                contents = "20210218테스트용"
+                # "안녕안녕" # html 형식으로 보내야 깔끔할 것 같긴 함. sendMail.py 참고 . 리스트 뿌려주기 
                
                 msg = EmailMultiAlternatives(title, contents, to=[self.addess])
-                msg.content_subtype = 'html'
+                # msg.content_subtype = 'html'
                 msg.send()
 
                 time.sleep(1)
-                print('스레드 한 개 작업 완룟!')s
+                print('스레드 한 개 작업 완룟!')
 
                 return 0
             
