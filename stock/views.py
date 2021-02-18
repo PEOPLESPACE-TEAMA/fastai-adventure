@@ -553,7 +553,7 @@ def stock_detail(request,stock_code):
     stock_adj_close=lists[0][4] 
     stock_volume=lists[0][5] 
 
-    vals = {'현재가':stock_open,'고가':stock_high,'저가':stock_low,'거래량':stock_volume,'수정주가':stock_adj_close}
+    vals = {'Present price':stock_open,'High price':stock_high,'Low price':stock_low,'Trading volume':stock_volume,'Adjusted stock price average':stock_adj_close}
     # open이 진짜 찐 시가가 아니여서 임의로 현재가로 바꿔봄..
 
     crop_image(stock.chart_image,stock)
