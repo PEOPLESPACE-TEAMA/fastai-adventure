@@ -6,13 +6,14 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <div class="list-inline"> 
-                        <div class="section-heading text-uppercase h1 fw-bolder list-inline-item">{{ companyName }}</div>  <!--종목이름-->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="m-0 text-uppercase">{{ companyName }}</h1>
                         <form role="form" action='' method="POST">
                             {% csrf_token %}
-                            <input type="submit" class="btn" value="Add to Bookmark" name="mybtn" onclick="return confirm('Do you want to put it in the bookmark?');">
+                            <!-- <input type="submit" class="btn " value="Add to Bookmark" name="mybtn" onclick="return confirm('Do you want to put it in the bookmark?');"> -->
+                            <p><input  type="submit" class="d-none d-sm-inline-block btn btn-primary shadow-sm" name="mybtn" onclick="return confirm('Do you want to put it in the bookmark?');" value="Add to Bookmark"></input></p>
                         </form>
-                    </div>
+                      </div>
 
 
                     <!-- Graph & chart -->

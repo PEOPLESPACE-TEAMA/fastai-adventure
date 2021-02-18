@@ -31,58 +31,94 @@ from django.contrib.auth import login as login_a, authenticate
 from .prediction import predict, getLabels
 
 class EmailThread(threading.Thread):
-    def __init__(self, address, username):
-        self.addess = address
+    def __init__(self, email, username):
+        self.email = email
         threading.Thread.__init__(self)
 
     def run (self):
 
-        user = User.objects.filter(email=self.email)
-        bookmarks = Bookmark.objects.all().filter(user__email=user.email) 
+        user = User.objects.get(email=self.email)
+        print(user)
 
-        a = [1, 2, 3]
-        >>> a.append(4)
+        bookmarks = Bookmark.objects.filter(user__email=self.email) 
+        print(bookmarks)
+        print("북마크 개수!!!! :", bookmarks.count())
 
-        company_name=[]
-        last_pattern=[]
-        increase_or_decease=[] 
-        total=[]
+        a =[]
+        line=[]
+        for bookmark in bookmarks:
+            line.append(bookmark.stock.company_name)
+            line.append(bookmark.stock.last_pattern)
+            line.append(bookmark.stock.predict_percentage)
+            line.append(bookmark.stock.increase_or_decrease)
+        a.append(line)
+        print(a)
+        # b="-".join([str(_) for _ in a])
+        b=" ".join(map(str, a))
+        print(b)
+
+        time.sleep(10)
+
+        # a = []    # 빈 리스트 생성
+ 
+        # for i in range(3):
+        #     line = []              # 안쪽 리스트로 사용할 빈 리스트 생성
+        #     for j in range(2):
+        #         line.append(0)     # 안쪽 리스트에 0 추가
+        #     a.append(line)         # 전체 리스트에 안쪽 리스트를 추가
         
-        for bookmark in bookmarks :
-            company_name.append(bookmark.stock.company_name)
-            last_pattern.append(bookmark.stock.last_pattern)
-            increase_or_decease.append(bookmark.stock.increase_or_decrease)
+        # print(a)
 
+        # 결과 : [[0,0],[0,0],[0,0]]
+
+        # company_name=[]
+        # last_pattern=[]
+        # predict_percentage=[]
+        # increase_or_decrease=[] 
         
-            
-        print(bookmark.stock.stock_code)
-        # bookmark.stock.last_pettern  이랑 increase_or_decrease 미리 for문돌려서 미리 리스트에 담아두기
+        # for bookmark in bookmarks :
+        #     company_name.append(bookmark.stock.company_name)
+        #     last_pattern.append(bookmark.stock.last_pattern)
+        #     predict_percentage.append(bookmark.stock.predict_percentage)
+        #     increase_or_decrease.append(bookmark.stock.increase_or_decrease)
+
+        # print(company_name)
+        # print(last_pattern)
+        # print(predict_percentage)
+        # print(increase_or_decrease)
+
 
         while(1): 
             
             now = datetime.datetime.now()
+            print(user.mail_alarm_time_hour)
+            print(user.mail_alarm_time_minute)
 
-            if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_hour :
+            # if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_hour :
+            if now.hour == 17 and now.minute == 49 :
 
-                title = "stocker에서 " + self.username + "님께 보내는 북마크 알림 메일이 도착했어요!"
-                contents =  "안녕안녕" # html 형식으로 보내야 깔끔할 것 같긴 함. sendMail.py 참고 . 리스트 뿌려주기 
-                # 이미지는 어떻게 보여줄 지 고민 중 ..!
+
+                title = "stocker에서 " + user.username + "님께 보내는 북마크 알림 메일이 도착했어요!"
+                contents = '당신이 북마크했던 종목이에요!!' + b 
+                # to-do 남은것
+                # html 형식으로 보내주기 / 설명 적기 !! 
+                # 이미지 첨부 할까 말까 
                
-                msg = EmailMultiAlternatives(title, contents, to=[self.addess])
-                msg.content_subtype = 'html'
+                msg = EmailMultiAlternatives(title, contents, to=[user.email])
+                # msg.content_subtype = 'html'
                 msg.send()
 
                 time.sleep(1)
-                print('스레드 한 개 작업 완룟!')
+                print('스레드 한 개 작업 완료')
 
                 return 0
             
 
-        else :
-            # print(now.hour)
-            # print(now.minute)
-            # time.sleep(1)
-            pass
+            else :
+                print(now.hour)
+                print(now.minute)
+                time.sleep(1)
+                pass
 
 
 
@@ -99,3 +135,26 @@ for alarm_user in alarm_users :
 
 
 #이거를 shell 에서 한번 테스트 해봤는데 shell 에서 exit()해도 계속 실행 됨 그 cmd를 종료해야지 죽음 이게 웃긴게 ctr+c 도 안먹힘 
+
+
+# sendMail.py
+# from django.core.mail import EmailMessage
+# from email.mime.image import MIMEImage
+# from django.template.loader import render_to_string
+# from django.core.mail import EmailMultiAlternatives
+
+# def sendMail(title, contents, adress):
+#     '''
+#     title은 제목
+#     contents는 메일의 내용인데 여기를 html로 넣으면 됨
+#     adress는 메일을 받는 사람의 주소
+#     '''
+#     #media = 'stock/mail_template_example/regular/images'
+#     contents = render_to_string('stock/mail_template_example/regular/email.html') #일단 이렇게 하면 메일이 html로 가기는 하는데 이미지는 안들어감 이미지 포함해서 보내는 방법을 알아내야 함 
+#     email = EmailMultiAlternatives(title, contents, to=[adress])
+#     #email = EmailMessage(title, contents, to=[adress])
+#     email.content_subtype = 'html'
+#     email.send()    
+
+#     #이거 html로 보내기는 가능한데 html파일에 있는 이미지는 같이 안보내짐 어떻게 이미지 넣어서 html로 메일 보내는지 모르겠음
+#     #이미지 못 넣으면 html로 그래프를 그리는게 가능하다면 html로 그래프를 그러서 넣을수 있음녀 좋을 듯 

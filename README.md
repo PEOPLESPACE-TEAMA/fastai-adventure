@@ -24,6 +24,9 @@ After installation, Create a virtual environment to install the things need to d
 python -m venv venv
 venv\Scripts\activate
 
+# install PyTorch
+https://pytorch.org/get-started/locally/
+
 # install packages
 pip install -r requirements.txt
 

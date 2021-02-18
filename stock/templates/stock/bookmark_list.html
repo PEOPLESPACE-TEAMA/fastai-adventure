@@ -18,9 +18,6 @@
             class="fas fa-bell fa-sm text-white-50"></i> Set Mail Notice</a></p>
     {% endif %}
 
-
-
-    
   </div>
   <!-- <h1 class="h3 mb-2 text-gray-800">Bookmark List</h1>
   <h4 class="mb-4">Check Your Bookmark Items! </h4>
@@ -50,6 +47,7 @@
                           <th>STOCK</th>
                           <th>FLUCTUATION</th>
                           <th>FLUCTUATION RATE</th>
+                          <th>Mail Notice Time</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -66,6 +64,13 @@
                         {% else %}
                             <td class="text-danger">{{ bookmark.stock.decrease }}</td>
                         {% endif %}
+
+                        {% if request.user.mail_alarm_time_hour %}
+                            <td class="text-dark">{{ user.mail_alarm_time_hour}} H {{ user.mail_alarm_time_minute}} M</td>
+                        {% else %}
+                            <td class="text-dark">set notice time</td>
+                        {% endif %}
+
                     </tr>
                     {% endfor %} 
                   </tbody>

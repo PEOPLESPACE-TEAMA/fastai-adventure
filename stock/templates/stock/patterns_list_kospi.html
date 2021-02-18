@@ -1,0 +1,489 @@
+{% extends "stock/base.html" %}
+
+{% load staticfiles %}
+
+{% block contents %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid ">
+
+    <!-- Page Heading -->
+   
+    <h1 class="m-0 text-primary">Pattern Prediction -  <span class="h3">KOSPI</span></h1>
+    <h4 class="mb-4">Check stocks with high prediction rates for each pattern on the stock market the day before!<br/> (Update every AM 24:00)</h4>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+    <!-- <span>종목이름 <span>등락폭</span> <span>등락율(상승/하락)</span> -->
+        <div class="mb-4 text-center"> 
+            <div></div>
+            <a href='{% url "patterns_list_nasdaq" %}' class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm"><i
+                class="text-white-50"></i>NASDAQ</a>  
+            <a href='{% url "patterns_list_kospi" %}' class="ml-3 d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm">
+                <i class="text-white-50"></i>KOSPI</a>
+            <div></div>
+        <br/>
+        <br/>
+        <div style="background-color: rgb(16, 73, 126); width: 100%;">
+            <p class="text-center text-white py-1">Rising Graph Patterns&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;Falling Graphs Patterns</p>
+        </div>
+        <!-- Content Row -->
+        <div class="row">
+            <!-- 상승률 TOP5 -->
+            <div class="6 col-lg-6" style="padding: 20px 25px;">
+                <div class="card mb-4" style="border: 0.5px rgb(184, 197, 255) dashed; padding: 1em">
+                 <!-- doublebottom -->
+                    <div class="card" >
+                        <img src="{% static 'img/doublebottom.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+                        <div class="card-body">
+                          <h5 class="card-title text-center font-weight-bold text-primary">DoubleBottom</h5>
+                          <p class="card-text text-center">The double bottom is the end formation in a declining market. It is identical to the double top, except for the inverse relationship in price. </p>
+                         <table>
+                            <!-- {{ increasechart }} -->
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr class=" bg-gray-100">
+                                    <th>STOCK</th>
+                                    <th>PREDICTION(%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                 {% for instance in doublebottom %}    
+                                <tr>
+                                    <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                    <td>{{ instance.predict_percentage }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            </table>
+                        </table>
+                        </div>
+                      </div>
+                  <br/>
+                  <br/>
+                   <!-- inverseheadandshoulder-->
+                 <div class="card" >
+                    <img src="{% static 'img/inverseheadandshoulder.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+                    <div class="card-body">
+                      <h5 class="card-title text-center font-weight-bold text-primary">Inverse Head and Shoulder</h5>
+                      <p class="card-text text-center">This pattern is identified when the price action of a security meets the following characteristics: the price falls to a trough and then rises; the price falls below the former trough and then rises again; </p>
+                     <table>
+                        <!-- {{ increasechart }} -->
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr class=" bg-gray-100">
+                                <th>STOCK</th>
+                                <th>PREDICTION(%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                             {% for instance in inverseheadandshoulder %}    
+                            <tr>
+                                <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                <td>{{ instance.predict_percentage }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </table>
+                    </div>
+                  </div>
+              <br/>
+              <br/>
+               <!-- r_fallingwedge -->
+              <div class="card" >
+                        <img src="{% static 'img/fallingwedge.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+                        <div class="card-body">
+                          <h5 class="card-title text-center font-weight-bold text-primary">Reversal Falling Wedge</h5>
+                          <p class="card-text text-center">A falling wedge found in an uptrend is considered a continuation pattern that occurs as the market contracts temporarily. It indicates the resumption of the uptrend. </p>
+                         <table>
+                            <!-- {{ increasechart }} -->
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr class=" bg-gray-100">
+                                    <th>STOCK</th>
+                                    <th>PREDICTION(%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                 {% for instance in r_fallingwedge %}    
+                                <tr>
+                                    <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                    <td>{{ instance.predict_percentage }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            </table>
+                        </table>
+                        </div>
+                      </div>
+                  <br/>
+                  <br/>
+                   <!-- c_fallingwedge -->
+                  <div class="card" >
+                    <img src="{% static 'img/c_fallingwedge.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+                    <div class="card-body">
+                      <h5 class="card-title text-center font-weight-bold text-primary">Continuation Falling Wedge</h5>
+                      <p class="card-text text-center">As a continuation pattern, the falling wedge will still slope down, but the slope will be against the prevailing uptrend.</p>
+                        <table>
+                            <!-- {{ increasechart }} -->
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr class=" bg-gray-100">
+                                    <th>STOCK</th>
+                                    <th>PREDICTION(%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for instance in c_fallingwedge %}    
+                                <tr>
+                                    <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                    <td>{{ instance.predict_percentage }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            </table>
+                        </table>
+                        </div>
+                    </div>
+                <br/>
+                <br/>
+                 <!-- bullishpennant -->
+                <div class="card" >
+                    <img src="{% static 'img/bullishpennant.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+                    <div class="card-body">
+                      <h5 class="card-title text-center font-weight-bold text-primary">Bullish Pennant</h5>
+                      <p class="card-text text-center">It is a continuation pattern that marks a pause in the movement of a price halfway through a strong uptrend, giving you an opportunity to go long and profit from the rest of the price rise.</p>
+                     <table>
+                        <!-- {{ bullishpennant }} -->
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr class=" bg-gray-100">
+                                <th>STOCK</th>
+                                <th>PREDICTION(%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                             {% for instance in bullishpennant %}    
+                            <tr>
+                                <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                <td>{{ instance.predict_percentage }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </table>
+                    </div>
+                  </div>
+              <br/>
+              <br/>
+               <!-- bullishrectangle -->
+              <div class="card" >
+                <img src="{% static 'img/bullishrectangle.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+                <div class="card-body">
+                  <h5 class="card-title text-center font-weight-bold text-primary">Bullish Rectangle</h5>
+                  <p class="card-text text-center">Rectangles are continuation patterns that occur when a price pauses during a strong trend and temporarily bounces between two parallel levels before the trend continues.</p>
+                 <table>
+                    <!-- {{ increasechart }} -->
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr class=" bg-gray-100">
+                            <th>STOCK</th>
+                            <th>PREDICTION(%)</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                            {% for instance in bullishrectangle %}    
+                            <tr>
+                                <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                <td>{{ instance.predict_percentage }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </table>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <br/>
+        </div>
+
+            <!-- 하락률 TOP5 -->
+            <div class="6 col-lg-6" style="padding: 20px 25px;">
+                <div class="card mb-4" style="border: 0.5px rgb(184, 197, 255) dashed; padding: 1em">
+                <!-- doubletop -->
+                   <div class="card" >
+                       <img src="{% static 'img/doubletop.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+                       <div class="card-body">
+                         <h5 class="card-title text-center font-weight-bold text-primary">DoubleTop</h5>
+                         <p class="card-text text-center">The double top is a frequent price formation at the end of a bull market. It shows that demand is outpacing supply (buyers predominate) up to the first top, causing prices to rise.</p>
+                        <table>
+                           <!-- {{ increasechart }} -->
+                           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                               <thead>
+                               <tr class=" bg-gray-100">
+                                   <th>STOCK</th>
+                                   <th>PREDICTION(%)</th>
+                               </tr>
+                           </thead>
+                           <tbody>
+                                {% for instance in doubletop %}    
+                               <tr>
+                                   <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                   <td>{{ instance.predict_percentage }}</td>
+                               </tr>
+                               {% endfor %}
+                           </tbody>
+                           </table>
+                       </table>
+                       </div>
+                     </div>
+                 <br/>
+                 <br/>
+                 <!-- headandshoulder -->
+                 <div class="card" >
+                    <img src="{% static 'img/headandshoulder.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+                    <div class="card-body">
+                      <h5 class="card-title text-center font-weight-bold text-primary">Head and Shoulders</h5>
+                      <p class="card-text text-center">This formation is simply the inverse of a Head and Shoulders Top and often indicates a change in the trend and market sentiment</p>
+                     <table>
+                        <!-- {{ increasechart }} -->
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr class=" bg-gray-100">
+                                <th>STOCK</th>
+                                <th>PREDICTION(%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                             {% for instance in headandshoulder %}    
+                            <tr>
+                                <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                <td>{{ instance.predict_percentage }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </table>
+                    </div>
+                  </div>
+              <br/>
+              <br/>
+              <!-- r_risingwedge e -->
+             <div class="card" >
+                       <img src="{% static 'img/risingwedge.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+                       <div class="card-body">
+                         <h5 class="card-title text-center font-weight-bold text-primary">Reversal Rising Wedge</h5>
+                         <p class="card-text text-center">The Rising Wedge is a bearish pattern that begins wide at the bottom and contracts as prices move higher and the trading range narrows.</p>
+                        <table>
+                           <!-- {{ increasechart }} -->
+                           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                               <thead>
+                               <tr class=" bg-gray-100">
+                                   <th>STOCK</th>
+                                   <th>PREDICTION(%)</th>
+                               </tr>
+                           </thead>
+                           <tbody>
+                                {% for instance in r_risingwedge %}    
+                               <tr>
+                                   <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                   <td>{{ instance.predict_percentage }}</td>
+                               </tr>
+                               {% endfor %}
+                           </tbody>
+                           </table>
+                       </table>
+                       </div>
+                     </div>
+                 <br/>
+                 <br/>
+                  <!-- c_risingwedge -->
+                 <div class="card" >
+                   <img src="{% static 'img/c_risingwedge.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+                   <div class="card-body">
+                     <h5 class="card-title text-center font-weight-bold text-primary">Continuation Rising Wedge</h5>
+                     <p class="card-text text-center">The rising wedge can be one of the most difficult chart patterns to accurately recognize and trade. While it is a consolidation formation, the loss of upside momentum on each successive high gives the pattern its bearish bias. </p>
+                       <table>
+                           <!-- {{ increasechart }} -->
+                           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                               <thead>
+                               <tr class=" bg-gray-100">
+                                   <th>STOCK</th>
+                                   <th>PREDICTION(%)</th>
+                               </tr>
+                           </thead>
+                           <tbody>
+                               {% for instance in c_risingwedge %}    
+                               <tr>
+                                   <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                   <td>{{ instance.predict_percentage }}</td>
+                               </tr>
+                               {% endfor %}
+                           </tbody>
+                           </table>
+                       </table>
+                       </div>
+                   </div>
+               <br/>
+               <br/>
+                <!-- bearishpennant -->
+               <div class="card" >
+                   <img src="{% static 'img/bearishpennant.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+                   <div class="card-body">
+                     <h5 class="card-title text-center font-weight-bold text-primary">Bearish Pennant</h5>
+                     <p class="card-text text-center">Bearish pennants are continuation patterns that mark a pause in the movement of a price halfway through a strong downtrend, offering you an opportunity to go short.</p>
+                    <table>
+                       <!-- {{ bearishpennant }} -->
+                       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                           <thead>
+                           <tr class=" bg-gray-100">
+                               <th>STOCK</th>
+                               <th>PREDICTION(%)</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                            {% for instance in bearishpennant %}    
+                           <tr>
+                               <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                               <td>{{ instance.predict_percentage }}</td>
+                           </tr>
+                           {% endfor %}
+                       </tbody>
+                       </table>
+                   </table>
+                   </div>
+                 </div>
+             <br/>
+             <br/>
+              <!-- bearishrectangle -->
+             <div class="card" >
+               <img src="{% static 'img/bearishrectangle.png' %}" class="card-img-top" alt="..." style="width:15em; margin:0 auto">
+               <div class="card-body">
+                 <h5 class="card-title text-center font-weight-bold text-primary">Bearish Rectangle</h5>
+                 <p class="card-text text-center"> The bearish rectangle is a continuation pattern that occurs when a price pauses during a strong downtrend and temporarily bounces between two parallel levels before the trend continues.</p>
+                <table>
+                   <!-- {{ increasechart }} -->
+                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                       <thead>
+                       <tr class=" bg-gray-100">
+                           <th>STOCK</th>
+                           <th>PREDICTION(%)</th>
+                       </tr>
+                   </thead>
+                       <tbody>
+                           {% for instance in bearishrectangle %}    
+                           <tr>
+                               <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                               <td>{{ instance.predict_percentage }}</td>
+                           </tr>
+                           {% endfor %}
+                       </tbody>
+                       </table>
+                   </table>
+                   </div>
+               </div>
+           <br/>
+           <br/>
+        </div>
+        </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+<h3>상승부분!!!!</h3>
+</br>
+</br>
+<div>패턴별로 대표이미지랑 설명 한두줄 추가해달라고 회의에서 말했던 것 같아요,,,!</div>
+
+<h3>doublebottom!!!</h3>
+{% for instance in doublebottom %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>headandshoulder!!!</h3>
+{% for instance in headandshoulder %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>r_fallingwedge!!!</h3>
+{% for instance in r_fallingwedge %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>c_fallingwedge!!!</h3>
+{% for instance in c_fallingwedge %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>bullishpennant!!!</h3>
+{% for instance in bullishpennant %}
+<div>{{ instance.company_name }}</div> 
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>bullishrectangle!!!</h3>
+{% for instance in bullishrectangle %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+</br>
+</br>
+
+<h3>하락부분!!!!</h3>
+</br>
+</br>
+<h3>doubltop!!!</h3>
+{% for instance in doubletop %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>inverseheadandshoulder!!!</h3>
+{% for instance in inverseheadandshoulder %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>r_risingwedge!!!</h3>
+{% for instance in r_risingwedge %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>c_risingwedge!!!</h3>
+{% for instance in c_risingwedge %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>bearishpennant!!!</h3>
+{% for instance in bearishpennant %}
+<div>{{ instance.company_name }}</div> 
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+
+<h3>bearishrectangle!!!</h3>
+{% for instance in bearishrectangle %}
+<div>{{ instance.company_name }}</div>
+<div>{{ instance.predict_percentage }}</div>
+{% endfor %}
+

@@ -17,12 +17,12 @@ urlpatterns = [
     path('question/', views.question, name='question'),
     path('question/<int:question_id>/', views.question_detail, name='question_detail'),
     path('question/create/', views.question_create, name='question_create'),
-    path('answer/create/<int:question_id>/', views.answer_create, name='answer_create'),
     path('bookmark-list/alarm', views.alarm, name='alarm'),
     path('review/', views.review, name = 'review'),
 
     # patterns_list uri c추가!
-    path('pattens_list', views.patterns_list, name = 'patterns_list'),
+    path('patterns-list-kospi', views.patterns_list_kospi, name = 'patterns_list_kospi'),
+    path('patterns-list-nasdaq', views.patterns_list_nasdaq, name = 'patterns_list_nasdaq'),
 
     # 새로운 템플릿 동작 확인용
     path('home/',views.home, name='home'),
