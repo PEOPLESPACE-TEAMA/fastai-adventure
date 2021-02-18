@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&family=Noto+Serif+KR:wght@300&family=Sunflower:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
         .hello {
             font-family: 'Noto Serif KR', serif;
@@ -19,36 +19,37 @@
 </head>
 <body>
     
-    <div><img src='cid:for_mail.PNG' width="15%", height="10%"/></div>
-    <div style="font-family: 'Noto Serif KR', serif;" >우린 fastock입니다! 저희 프로그램은 어쩌구저쩌구이며 이 메일은 알람 설정을 하신 분에게만 가는겁니다~~~</div>   
-    <div style="font-family: 'Noto Serif KR', serif;">설정시간에 맞추어 매일 매일 예측리포트를 보내드립니다. 해당 레포트 열람은 무료이며 멤버쉽전환시(?) 패턴변동에 따라 메일알람을 드립니다(??) </div>
-    <div style="font-family: 'Noto Serif KR', serif;">예측리포트를 읽고 매도/매수에 신중을 가해보세요. 어쩌구저쩌구. 내용은 생각이 잘 안납니다. 조금만 더 생각해볼게요.! 문장이 더 길었으면 좋겠네용..</div>
+    
+    <div ><img src='cid:for_mail.PNG' width="10%", height="5%"/></div>
     <br/>
                                        
     {% if bookmarks %}
-        <div style="font-family: 'Noto Serif KR', serif;" style="border-radius: 5px;padding: 0.6em 1em;background: #F1F1F3;"> 📊Prediction Report </div>
-        <div style="font-family: 'Noto Serif KR', serif;"> <b>{{user.username}}</b>님께서 Bookmark한 종목(들)은 아래와 같습니다!  </div>
+        <div style="font-size: 18px; font-family: 'Roboto', sans-serif; border-radius: 5px;padding: 0.6em 1em;background: #F1F1F3;"> 📊 Prediction Report </div>
+        <br/>
+        <div style="font-family: 'Roboto', sans-serif;text-indent: 2em;"> <b>{{user.username}}</b>님께서 Bookmark한 종목(들)은 아래와 같습니다!  </div>
+        <hr/>
         <br/>
         {% for bookmark in bookmarks %}
-        <div style="font-family: 'Noto Serif KR', serif;" ><b>{{ bookmark.stock.company_name}}</b>종목의 예측결과</div>
-        <div style="font-family: 'Noto Serif KR', serif;">예측 패턴:{{ bookmark.stock.last_pattern}}</div>
-        <div style="font-family: 'Noto Serif KR', serif;">예측 퍼센트:{{ bookmark.stock.predict_percentage}}</div>
-        <div style="font-family: 'Noto Serif KR', serif;">상승?하락?:{{ bookmark.stock.increase_or_decrease}}<hr/></div>
+        <div style="font-size: 13px; font-family: 'Roboto', sans-serif;text-indent: 2em;" ><b>{{ bookmark.stock.company_name}}</b>종목의 예측결과</div>
+        <div style="font-size: 13px;font-family: 'Roboto', sans-serif;text-indent: 3em;">예측 패턴:{{ bookmark.stock.last_pattern}}</div>
+        <div style="font-size: 13px;font-family: 'Roboto', sans-serif;text-indent: 3em;">예측 퍼센트:{{ bookmark.stock.predict_percentage}}</div>
+        <div style="font-size: 13px;font-family: 'Roboto', sans-serif;text-indent: 3em;">상승?하락?:{{ bookmark.stock.increase_or_decrease}}<hr/></div>
         
         {% endfor %}
-        <br/>
-        <br/>
-        <div style="font-family: 'Noto Serif KR', serif;"> 자세한 정보가 더 궁금하다면? 👉https://www.fastock.com</div>
+        
     {% else %}
-        <div style="font-family: 'Noto Serif KR', serif;" style="border-radius: 5px;padding: 0.6em 1em;background: #F1F1F3;"> 📊Prediction Report </div>
-        </br>
-        <div style="font-family: 'Noto Serif KR', serif;"> {{user.username}}님께서 Bookmark 해 둔 종목이 없습니다!</div>
-        <div style="font-family: 'Noto Serif KR', serif;"> 북마크를 한 종목이 있다면 메일이 조금 더 의미있어질 겁니다!! </div>
+        <div style="font-size: 18px; font-family: 'Roboto', sans-serif; border-radius: 5px;padding: 0.6em 1em;background: #F1F1F3;"> 📊Prediction Report </div>
         <br/>
-        <br/>
-        <div style="font-family: 'Noto Serif KR', serif;"> 지금 바로 bookmark 하러 가기 👉https://www.fastock.com</div>
+        <div style="font-size: 13px;font-family: 'Roboto', sans-serif;text-indent: 2em;"> <b>{{user.username}}</b>님께서 Bookmark 해 둔 종목이 없습니다!</div>
+        <div style="font-size: 13px;font-family: 'Roboto', sans-serif;text-indent: 2em;"> 북마크를 한 종목이 있다면 메일이 조금 더 의미있어질 겁니다!! </div>
+    
     {% endif %}
-    <div style="font-family: 'Noto Serif KR', serif;">☎ 문의 autota87@gmail.com 또는 사이트의 질문게시판을 활용해주세요! </div>
-    <div style="font-family: 'Noto Serif KR', serif; text-indent: 0.5em;">@fastock</div>
+    
+    <br/>
+    <br/>
+
+    <div style="font-family: 'Roboto', sans-serif;"> 자세한 정보가 더 궁금하다면? 👉https://www.fastock.com</div>
+    <div style="font-family: 'Roboto', sans-serif;">☎ 문의 autota87@gmail.com 또는 사이트의 질문게시판을 활용해주세요! </div>
+    <div style="float:left; font-family: 'Roboto', sans-serif;" >- fastock 드림 -</div>
 </body>
 </html>

@@ -60,10 +60,10 @@ class EmailThread(threading.Thread):
             print(user.mail_alarm_time_hour)
             print(user.mail_alarm_time_minute)
 
-            # if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_hour :
-            if now.hour == 3 and now.minute == 56:
+            if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_hour :
+            # if now.hour == 4 and now.minute == 45 :
 
-                title = "🎁fastock에서 " + user.username + "님께 보내는 북마크 알림 메일이 도착했어요!"
+                title = "🔔 fastock에서 " + user.username + "님께 보내는 북마크 알림 메일이 도착했어요!"
               
 
                 html_content = render_to_string('stock/mail_template.html', context ={'bookmarks':bookmarks, 'user':user}) # render with dynamic value
