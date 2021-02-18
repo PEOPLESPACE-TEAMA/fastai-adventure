@@ -8,6 +8,7 @@
                     {% if user.mail_alarm_time_hour %}
                     <ul class="list-inline"> 
                         <h1 class="mb-4 text-primary">Update Mail Notice</h1>
+                        <div>현재 설정 시간 : {{ user.mail_alarm_time_hour}} H {{ user.mail_alarm_time_minute}} M</div>
                     </ul>
                     {% else %}
                     <ul class="list-inline"> 
