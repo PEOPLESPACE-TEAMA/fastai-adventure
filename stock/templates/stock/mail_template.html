@@ -7,14 +7,14 @@
     <title>Document</title>
 </head>
 <body>
-    <div><img src='cid:for_mail.PNG' width:30% height:30% /></div>
+    <div><img src='cid:for_mail.PNG' width="20%", height="15%"/></div>
     <div>저희 프로그램은 어쩌구저쩌구이며 이 메일은 알람 설정을 하신 분에게만 가는겁니다~~~ 어쩌구저꺼거줘걷ㅈ궂덕ㅈㄷ겆도언로</div>   
     <br/>예측리포트를 읽고 매도/매수에 신중을 가해보세요. 어쩌구저꺼구 
     <br/>
                                        
     {% if bookmarks %}
         <div> {{user.username}}님께서 Bookmark 해 둔 종목은 아래와 같습니다!  </div>
-        <div> 📌예측 report📊  </div>
+        <h4> 📌예측 report📊  </h4>
         {% for bookmark in bookmarks %}
         <div><b>{{ bookmark.stock.company_name}}</b>의 예측결과</div>
         <div>예측 패턴:{{ bookmark.stock.last_pattern}}</div>

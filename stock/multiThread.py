@@ -55,13 +55,13 @@ class EmailThread(threading.Thread):
         while(1): 
             
             bookmarks = Bookmark.objects.filter(user__email=self.email) 
-            
+
             now = datetime.datetime.now()
             print(user.mail_alarm_time_hour)
             print(user.mail_alarm_time_minute)
 
             # if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_hour :
-            if now.hour == 2 and now.minute == 46:
+            if now.hour == 2 and now.minute == 51:
 
                 title = "🎁fastock에서 " + user.username + "님께 보내는 북마크 알림 메일이 도착했어요!"
               
