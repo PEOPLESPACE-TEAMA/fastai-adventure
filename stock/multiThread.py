@@ -39,26 +39,54 @@ class EmailThread(threading.Thread):
 
         user = User.objects.get(email=self.email)
         print(user)
+
         bookmarks = Bookmark.objects.filter(user__email=self.email) 
         print(bookmarks)
+        print("북마크 개수!!!! :", bookmarks.count())
 
-        company_name=[]
-        last_pattern=[]
-        predict_percentage=[]
-        increase_or_decrease=[] 
-        
-        for bookmark in bookmarks :
-            company_name.append(bookmark.stock.company_name)
-            last_pattern.append(bookmark.stock.last_pattern)
-            predict_percentage.append(bookmark.stock.predict_percentage)
-            increase_or_decrease.append(bookmark.stock.increase_or_decrease)
+        a =[]
+        line=[]
+        for bookmark in bookmarks:
+            line.append(bookmark.stock.company_name)
+            line.append(bookmark.stock.last_pattern)
+            line.append(bookmark.stock.predict_percentage)
+            line.append(bookmark.stock.increase_or_decrease)
+        a.append(line)
+        print(a)
+        # b="-".join([str(_) for _ in a])
+        b=" ".join(map(str, a))
+        print(b)
 
+        time.sleep(10)
+
+        # a = []    # 빈 리스트 생성
+ 
+        # for i in range(3):
+        #     line = []              # 안쪽 리스트로 사용할 빈 리스트 생성
+        #     for j in range(2):
+        #         line.append(0)     # 안쪽 리스트에 0 추가
+        #     a.append(line)         # 전체 리스트에 안쪽 리스트를 추가
         
-            
-        print(company_name)
-        print(last_pattern)
-        print(predict_percentage)
-        print(increase_or_decrease)
+        # print(a)
+
+        # 결과 : [[0,0],[0,0],[0,0]]
+
+        # company_name=[]
+        # last_pattern=[]
+        # predict_percentage=[]
+        # increase_or_decrease=[] 
+        
+        # for bookmark in bookmarks :
+        #     company_name.append(bookmark.stock.company_name)
+        #     last_pattern.append(bookmark.stock.last_pattern)
+        #     predict_percentage.append(bookmark.stock.predict_percentage)
+        #     increase_or_decrease.append(bookmark.stock.increase_or_decrease)
+
+        # print(company_name)
+        # print(last_pattern)
+        # print(predict_percentage)
+        # print(increase_or_decrease)
+
 
         while(1): 
             
@@ -66,18 +94,22 @@ class EmailThread(threading.Thread):
             print(user.mail_alarm_time_hour)
             print(user.mail_alarm_time_minute)
 
-            if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_hour :
+            # if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_hour :
+            if now.hour == 17 and now.minute == 49 :
 
-                title = "stocker에서 " + self.username + "님께 보내는 북마크 알림 메일이 도착했어요!"
-                contents = "20210218테스트용"
-                # "안녕안녕" # html 형식으로 보내야 깔끔할 것 같긴 함. sendMail.py 참고 . 리스트 뿌려주기 
+
+                title = "stocker에서 " + user.username + "님께 보내는 북마크 알림 메일이 도착했어요!"
+                contents = '당신이 북마크했던 종목이에요!!' + b 
+                # to-do 남은것
+                # html 형식으로 보내주기 / 설명 적기 !! 
+                # 이미지 첨부 할까 말까 
                
-                msg = EmailMultiAlternatives(title, contents, to=[self.addess])
+                msg = EmailMultiAlternatives(title, contents, to=[user.email])
                 # msg.content_subtype = 'html'
                 msg.send()
 
                 time.sleep(1)
-                print('스레드 한 개 작업 완룟!')
+                print('스레드 한 개 작업 완료')
 
                 return 0
             

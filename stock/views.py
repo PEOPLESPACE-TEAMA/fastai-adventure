@@ -30,7 +30,7 @@ import time
 from django.shortcuts import render_to_response
 from django.db import IntegrityError
 
-from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
+# from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
 def main(request):
     # kospi_initial_data_create()
@@ -567,9 +567,10 @@ def stock_detail(request,stock_code):
     label = label_list[predictedIdx]
     sign = getIncreaseDecreaseResult(predictedLabel)
 
-    # stock.last_pattern = predictedLabel
-    # stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
-    # stock.save()
+    stock.last_pattern = predictedLabel
+    stock.predict_percentage=predictedProbability
+    stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
+    stock.save()
 
     #북마크에 저장
     if request.method == 'POST':
