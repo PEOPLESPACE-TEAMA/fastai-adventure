@@ -6,40 +6,41 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="m-0 text-uppercase">{{ companyName }}</h1>
-                        <form role="form" action='' method="POST">
-                            {% csrf_token %}
-                            <!-- <input type="submit" class="btn " value="Add to Bookmark" name="mybtn" onclick="return confirm('Do you want to put it in the bookmark?');"> -->
-                            <p><input  type="submit" class="d-none d-sm-inline-block btn btn-primary shadow-sm" name="mybtn" onclick="return confirm('Do you want to put it in the bookmark?');" value="Add to Bookmark"></input></p>
-                        </form>
-                      </div>
+                    <form role="form" action='' method="POST">
+                        {% csrf_token %}
+                        <input type="submit" class="btn" value="Add to Bookmark" name="mybtn" onclick="return confirm('정말 북마크에 담으시겠어요? ');">
+                    </form>
+                    <ul class="list-inline"> 
+                        <li class="section-heading text-uppercase h1 fw-bolder list-inline-item">{{ companyName }}</li>  <!--종목이름-->
+                    </ul>
 
 
                     <!-- Graph & chart -->
                     <div class="row">
 
-                        <!-- chart -->
+                        <!-- Graph -->
                         <div class="col-xl-8 col-lg-7">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <div class="m-0 font-weight-bold text-primary">chart</div>
+                                    <h6 class="m-0 font-weight-bold text-primary">Chart</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-area">
+                                        <h6 class="m-0 font-weight-bold text-primary">
                                             {% if chart %}
-                                            <img src = "data:image/png;base64, {{chart|safe}}" class= "chart-img">
+                                                <img src = "data:image/png;base64, {{chart|safe}}" width="89%", height="auto">
                                             {% endif %}
+                                        </h6>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- about -->
+                        <!-- chart -->
                         <div class="col-xl-4 col-lg-7">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">About</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">About Chart</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-area">
@@ -72,16 +73,12 @@
                                     <div class="chart-area">
                                         <table class="table table-bordered">
                                             <tr class="text-primary bg-gray-100">
-                                                <th>Predicted Pattern</th>
+                                                <th>Predicted pattern</th>
                                                 <td>{{ predictedLabel }}</td>
                                             </tr>
                                             <tr class="text-primary bg-gray-100">
-                                                <th>Probability to be this pattern</th>
+                                                <th>Percentage</th>
                                                 <td>{{ probability }}%</td>
-                                            </tr>
-                                            <tr class="text-primary bg-gray-100">
-                                                <th>This pattern is a sign to...</th>
-                                                <td>{{ sign }}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -94,13 +91,15 @@
                         <div class="col-xl-8 col-lg-7">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">chart</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Pattern</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-area">
+                                        <h6 class="m-0 font-weight-bold text-primary">
                                             {% if bar_chart %}
-                                            <img src = "data:image/png;base64, {{bar_chart|safe}}" class= "chart-img">
+                                                <img src = "data:image/png;base64, {{bar_chart|safe}}" width="89%", height="auto">
                                             {% endif %}
+                                        </h6>
                                     </div>
                                 </div>
                             </div>
