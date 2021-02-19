@@ -47,23 +47,21 @@ class EmailThread(threading.Thread):
 
     def run (self):
 
-        user = User.objects.get(email=self.email)
-        print(user)
-
-        
 
         while(1): 
             
+            user = User.objects.get(email=self.email)
+            sprint(user)
             bookmarks = Bookmark.objects.filter(user__email=self.email) 
 
             now = datetime.datetime.now()
             print(user.mail_alarm_time_hour)
             print(user.mail_alarm_time_minute)
 
-            # if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_hour :
-            if now.hour == 12 and now.minute == 51 :
+            if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_hour :
+            # if now.hour == 12 and now.minute == 51 :
 
-                title = "🔔 "+user.username + ". Bookmark Prediction Mail has arrived from fastock!"
+                title = "🔔 "+user.username + ". Bookmark Prediction Mail has arrived from FASTOCK!"
               
 
                 html_content = render_to_string('stock/mail_template.html', context ={'bookmarks':bookmarks, 'user':user}) # render with dynamic value
