@@ -47,13 +47,11 @@ class EmailThread(threading.Thread):
 
     def run (self):
 
-        user = User.objects.get(email=self.email)
-        print(user)
-
-        
 
         while(1): 
             
+            user = User.objects.get(email=self.email)
+            sprint(user)
             bookmarks = Bookmark.objects.filter(user__email=self.email) 
 
             now = datetime.datetime.now()
@@ -61,9 +59,9 @@ class EmailThread(threading.Thread):
             print(user.mail_alarm_time_minute)
 
             if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_hour :
-            # if now.hour == 4 and now.minute == 45 :
+            # if now.hour == 12 and now.minute == 51 :
 
-                title = "🔔 fastock에서 " + user.username + "님께 보내는 북마크 알림 메일이 도착했어요!"
+                title = "🔔 "+user.username + ". Bookmark Prediction Mail has arrived from FASTOCK!"
               
 
                 html_content = render_to_string('stock/mail_template.html', context ={'bookmarks':bookmarks, 'user':user}) # render with dynamic value
@@ -86,16 +84,6 @@ class EmailThread(threading.Thread):
 
                 msg.send(fail_silently=False)
 
-
-                # title = "stocker에서 " + user.username + "님께 보내는 북마크 알림 메일이 도착했어요!"
-                # contents = '당신이 북마크했던 종목이에요!! ( 부가 설명 더 쓰기 ) ( 영어로 바꾸기 ) ' + b 
-                # # to-do 남은것
-                # # html 형식으로 보내주기 / 설명 적기 !! 
-                # # 이미지 첨부 할까 말까 
-               
-                # msg = EmailMultiAlternatives(title, contents, to=[user.email])
-                # # msg.content_subtype = 'html'
-                # msg.send()
 
                 time.sleep(1)
                 print('스레드 한 개 작업 완료')
