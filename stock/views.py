@@ -572,6 +572,8 @@ def stock_detail(request,stock_code):
     stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
     stock.save()
 
+    bookmark_exist = Bookmark.objects.all().filter(user=request.user,stock=stock)
+    
     #북마크에 저장
     if request.method == 'POST':
         print(request.user)
@@ -579,7 +581,7 @@ def stock_detail(request,stock_code):
         bookmarkInOut(request.user,stock)
         print("북마크 저장됨")
  
-    return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'predictedLabel':label,'probability':predictedProbability,'bar_chart':bar_chart,'sign':sign})
+    return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'predictedLabel':label,'probability':predictedProbability,'bar_chart':bar_chart,'sign':sign,'bookmark_exist':bookmark_exist})
 
 def getIncreaseDecreaseResult(predictedLabel):
     increase = ['DoubleBottom','InverseHeadAndShoulders','r_FallingWedge','c_FallingWedge','BullishPennant','BullishRectangle']
