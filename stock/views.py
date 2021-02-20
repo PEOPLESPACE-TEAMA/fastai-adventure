@@ -560,7 +560,10 @@ def stock_detail(request,stock_code):
     img_path = "./graphimg/"+stock.company_name+'crop.PNG'
     #모델 예측
     predictedLabel,predictedIdx,probability = predict(img_path)
-    label_list = ['Bearish Pennant', 'Bearish Rectangle', 'Bullish Pennant', 'Bullish Rectangle', 'Double Bottom', 'Double Top', 'Head and Shoulders', 'Inverse Head and Shoulders', 'Continuous Falling Wedge', 'Continuous Rising Wedge', 'Reversal Falling Wedge', 'Reversal Rising Wedge']
+    #label_list = ['Bearish Pennant', 'Bearish Rectangle', 'Bullish Pennant', 'Bullish Rectangle', 'Double Bottom', 'Double Top', 'Head and Shoulders', 'Inverse Head and Shoulders', 'Continuous Falling Wedge', 'Continuous Rising Wedge', 'Reversal Falling Wedge', 'Reversal Rising Wedge']
+    label_list = ['Continuous Falling', 'Continuous Rising', 'Double Bottom', 'Double Top', 'Head and Shoulders', 'Inverse Head and Shoulders', 'Reversal FallingWedge', 'Reversal RisingWedge']
+    print(predictedLabel)
+    print(getLabels())
     # 클라스마다 percentage로 바 그래프 만들기 
     bar_chart = draw_bar_chart(stock,probability,label_list)
     predictedProbability = round(float(probability[int(predictedIdx)])*100,2)
