@@ -8,7 +8,11 @@
                     <!-- Page Heading -->
                     <form role="form" action='' method="POST">
                         {% csrf_token %}
+                        {% if bookmark_exist %}
+                        <input type="submit" class="btn" value="Delete to Bookmark" name="mybtn" onclick="return confirm('정말 북마크에서 삭제하시겠습니까? ');">
+                        {% else %}
                         <input type="submit" class="btn" value="Add to Bookmark" name="mybtn" onclick="return confirm('정말 북마크에 담으시겠어요? ');">
+                        {% endif %}
                     </form>
                     <ul class="list-inline"> 
                         <li class="section-heading text-uppercase h1 fw-bolder list-inline-item">{{ companyName }}</li>  <!--종목이름-->
