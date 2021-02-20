@@ -304,7 +304,7 @@ def bookmarkInOut(user,stock):
 def patterns_list_nasdaq(request):
     nasdaqs=Stock.objects.filter(stock_type='N')
     
-    # # 매 자정 예측 data update
+    # 매 자정 예측 data update ( 라벨이름이 바뀌어서 꼭 주석 풀고 한 번씩 진행해주세요!! )
     # nasdaq200s=Stock.objects.filter(stock_type='N').order_by('open')[:200]
     # for nasdaq200 in nasdaq200s :
     #     try:
@@ -348,7 +348,7 @@ def patterns_list_kospi(request):
 
     kospis=Stock.objects.filter(stock_type='S')
     
-    # # 매 자정 예측 data update
+    # 매 자정 예측 data update ( 라벨이름이 바뀌어서 꼭 주석 풀고 한 번씩 진행해주세요!! )
     # kospi200s=Stock.objects.filter(stock_type='S').order_by('open')[:200]
     # for kospi200 in kospi200s :
     #     try:
