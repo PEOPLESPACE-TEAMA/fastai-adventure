@@ -45,12 +45,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                 {% for instance in doublebottom %}    
-                                <tr>
-                                    <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
-                                    <td>{{ instance.predict_percentage }}</td>
-                                </tr>
-                                {% endfor %}
+                                {% if doublebottom %}
+                                    {% for instance in doublebottom %}    
+                                    <tr>
+                                        <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                        <td>{{ instance.predict_percentage }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else %}
+                                <p>There are no stocks showing that pattern.</p>
+                                {% endif %}
                             </tbody>
                             </table>
                         </table>
@@ -73,12 +77,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                             {% for instance in inverseheadandshoulder %}    
-                            <tr>
-                                <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
-                                <td>{{ instance.predict_percentage }}</td>
-                            </tr>
-                            {% endfor %}
+                            {% if inverseheadandshoulder %}
+                                {% for instance in inverseheadandshoulder %}    
+                                <tr>
+                                    <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                    <td>{{ instance.predict_percentage }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                            <p>There are no stocks showing that pattern.</p>
+                            {% endif %}
                         </tbody>
                         </table>
                     </table>
@@ -101,12 +109,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for instance in reversalfallingwedge %}    
-                                <tr>
-                                    <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
-                                    <td>{{ instance.predict_percentage }}</td>
-                                </tr>
-                                {% endfor %}
+                                {% if reversalfallingwedge %}
+                                    {% for instance in reversalfallingwedge %}    
+                                    <tr>
+                                        <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                        <td>{{ instance.predict_percentage }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                <p>There are no stocks showing that pattern.</p>
+                                {% endif %}
                             </tbody>
                             </table>
                         </table>
@@ -127,12 +139,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for instance in continuousfalling %}    
-                                <tr>
-                                    <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
-                                    <td>{{ instance.predict_percentage }}</td>
-                                </tr>
-                                {% endfor %}
+                                {% if continuousfalling  %}
+                                    {% for instance in continuousfalling %}    
+                                    <tr>
+                                        <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                        <td>{{ instance.predict_percentage }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                <p>There are no stocks showing that pattern.</p>
+                                {% endif %}
+                                
                             </tbody>
                             </table>
                         </table>
@@ -163,12 +180,16 @@
                                </tr>
                            </thead>
                            <tbody>
-                                {% for instance in doubletop %}    
-                               <tr>
-                                   <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
-                                   <td>{{ instance.predict_percentage }}</td>
-                               </tr>
-                               {% endfor %}
+                               {% if doubletop %}
+                                    {% for instance in doubletop %}    
+                                    <tr>
+                                        <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                        <td>{{ instance.predict_percentage }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                <p>There are no stocks showing that pattern.</p>
+                                {% endif %}
                            </tbody>
                            </table>
                        </table>
@@ -190,12 +211,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                             {% for instance in headandshoulder %}    
-                            <tr>
-                                <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
-                                <td>{{ instance.predict_percentage }}</td>
-                            </tr>
-                            {% endfor %}
+                            {% if headandshoulder %}
+                                {% for instance in headandshoulder %}    
+                                <tr>
+                                    <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                    <td>{{ instance.predict_percentage }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                            <p>There are no stocks showing that pattern.</p>
+                            {% endif %}
                         </tbody>
                         </table>
                     </table>
@@ -216,12 +241,17 @@
                                </tr>
                            </thead>
                            <tbody>
-                                {% for instance in reversalrisingwedge %}    
-                               <tr>
-                                   <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
-                                   <td>{{ instance.predict_percentage }}</td>
-                               </tr>
-                               {% endfor %}
+                                {% if reversalrisingwedge %}
+                                    {% for instance in reversalrisingwedge %}    
+                                    <tr>
+                                    <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                    <td>{{ instance.predict_percentage }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                <p>There are no stocks showing that pattern.</p>
+                                {% endif %}
+                                
                            </tbody>
                            </table>
                        </table>
@@ -242,12 +272,17 @@
                                </tr>
                            </thead>
                            <tbody>
-                               {% for instance in continuousrising %}    
-                               <tr>
-                                   <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
-                                   <td>{{ instance.predict_percentage }}</td>
-                               </tr>
-                               {% endfor %}
+                                {% if continuousrising %}
+                                    {% for instance in continuousrising %}    
+                                    <tr>
+                                    <td><a class = wow href="{% url 'stock_detail' stock_code=instance.stock_code %}">{{ instance.company_name }}</a></td>
+                                    <td>{{ instance.predict_percentage }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                <p>There are no stocks showing that pattern.</p>
+                                {% endif %}
+
                            </tbody>
                            </table>
                        </table>
