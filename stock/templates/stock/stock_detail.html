@@ -9,9 +9,9 @@
                     <form role="form" action='' method="POST">
                         {% csrf_token %}
                         {% if bookmark_exist %}
-                        <input type="submit" class="btn" value="Delete to Bookmark" name="mybtn" onclick="return confirm('정말 북마크에서 삭제하시겠습니까? ');">
+                        <input type="submit" class="btn" value="Delete to Bookmark" name="mybtn" onclick="return confirm('Are you sure to delete this stock from bookmark list? ');">
                         {% else %}
-                        <input type="submit" class="btn" value="Add to Bookmark" name="mybtn" onclick="return confirm('정말 북마크에 담으시겠어요? ');">
+                        <input type="submit" class="btn" value="Add to Bookmark" name="mybtn" onclick="return confirm('Are you sure to add this stock to bookmark list? ');">
                         {% endif %}
                     </form>
                     <ul class="list-inline"> 
@@ -32,7 +32,7 @@
                                     <div class="chart-area">
                                         <h6 class="m-0 font-weight-bold text-primary">
                                             {% if chart %}
-                                                <img src = "data:image/png;base64, {{chart|safe}}" width="89%", height="auto">
+                                                <center><img src = "data:image/png;base64, {{chart|safe}}" width="76%", height="auto"></center>
                                             {% endif %}
                                         </h6>
                                     </div>
