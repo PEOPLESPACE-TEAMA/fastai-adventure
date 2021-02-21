@@ -548,8 +548,11 @@ def stock_detail(request,stock_code):
     stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
     stock.save()
 
-    bookmark_exist = Bookmark.objects.all().filter(user=request.user,stock=stock)
-    
+    try:
+        bookmark_exist = Bookmark.objects.all().filter(user=request.user,stock=stock)
+    except:
+        bookmark_exist = ''
+
     #북마크에 저장
     if request.method == 'POST':
         print(request.user)
@@ -665,7 +668,7 @@ def review(request):
 def review_create(request):
     
     if not request.user.is_authenticated:
-        return redirect(signup)
+        return redirect(login)
 
     if request.method == 'POST':
         form = Reviewform(request.POST)
