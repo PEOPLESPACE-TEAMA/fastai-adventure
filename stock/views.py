@@ -301,6 +301,7 @@ def bookmarkInOut(user,stock):
         bookmark.stock = stock
         bookmark.save()
 
+
 def patterns_list_nasdaq(request):
     nasdaqs=Stock.objects.filter(stock_type='N')
     
