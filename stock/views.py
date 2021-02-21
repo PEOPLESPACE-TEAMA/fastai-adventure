@@ -668,7 +668,7 @@ def review(request):
 def review_create(request):
     
     if not request.user.is_authenticated:
-        return redirect(signup)
+        return redirect(login)
 
     if request.method == 'POST':
         form = Reviewform(request.POST)
