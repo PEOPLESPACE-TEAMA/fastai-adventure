@@ -39,11 +39,6 @@ def main(request):
     return render(request, 'stock/main.html')
 
 # 새로운 템플릿 확인용 주소 시작
-
-def forgot(request):
-
-    return render(request, 'stock/forgot-password.html')
-
 def aboutus(request):
     return render(request, 'stock/AboutUs.html')
 
