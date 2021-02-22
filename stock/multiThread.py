@@ -47,21 +47,13 @@ class EmailThread(threading.Thread):
 
     def run (self):
 
-        # alarm_users=User.objects.exclude(mail_alarm_time_hour=None)
-
-        # sleep = [] # 메일 보냈는지 확인을 시키면 되자나 
-        
-        # for user in alarm_user:
-        #     sleep.append(0)
-        #     print(sleep)
-        
-        # print("개수" , len(sleep))
 
         while(1): 
             
             alarm_users=User.objects.exclude(mail_alarm_time_hour=None)
             print("유저수" , len(alarm_users))
-
+            
+            time.sleep(2)
 
             for user in alarm_users :
 
