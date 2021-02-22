@@ -29,7 +29,6 @@ urlpatterns = [
 
     # 새로운 템플릿 동작 확인용
     path('home/',views.home, name='home'),
-    path('forgot/',views.forgot, name='forgot-password'),
     path('guideline/',views.guideline, name='guideline'),
     path('aboutus/',views.aboutus, name='aboutus'),
     path('review_create/',views.review_create, name='review_create'),

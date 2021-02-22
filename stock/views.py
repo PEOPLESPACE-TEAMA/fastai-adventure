@@ -30,7 +30,9 @@ import time
 from django.shortcuts import render_to_response
 from django.db import IntegrityError
 
-# from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
+
+#from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요.
+
 
 def main(request):
     # (전일종가와 오늘시가 갱신(long) -> 상승률/하락율 등락폭 갱신(short) ) 아래 주석 풀기
@@ -39,11 +41,6 @@ def main(request):
     return render(request, 'stock/main.html')
 
 # 새로운 템플릿 확인용 주소 시작
-
-def forgot(request):
-
-    return render(request, 'stock/forgot-password.html')
-
 def aboutus(request):
     return render(request, 'stock/AboutUs.html')
 
@@ -560,7 +557,7 @@ def stock_detail(request,stock_code):
     return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'predictedLabel':label,'probability':predictedProbability,'bar_chart':bar_chart,'sign':sign,'bookmark_exist':bookmark_exist})
 
 def getIncreaseDecreaseResult(predictedLabel):
-    increase = ['DoubleBottom','InverseHeadAndShoulders','ContinuousFalling','ReversalFallingWedge']
+    increase = ['ContinuousFalling',  'DoubleBottom','InverseHeadAndShoulders', 'ReversalFallingWedge']
     if predictedLabel in increase:
         return 'increase'
     else:
