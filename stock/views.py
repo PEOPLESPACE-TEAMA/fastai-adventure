@@ -30,12 +30,14 @@ import time
 from django.shortcuts import render_to_response
 from django.db import IntegrityError
 
+
 #from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요.
 
+
 def main(request):
-    # kospi_initial_data_create()
-    # nasdaq_initial_data_create()
-    # data_update_short()
+    # (전일종가와 오늘시가 갱신(long) -> 상승률/하락율 등락폭 갱신(short) ) 아래 주석 풀기
+    # data_update_long()  # 시가, 전날 종가 업데이트하는 것
+    # data_update_short() # 위에 업데이트 된걸로 등락율, 등락폭 구하는 것 
     return render(request, 'stock/main.html')
 
 # 새로운 템플릿 확인용 주소 시작
@@ -98,10 +100,6 @@ def logout(request):
 
 def home(request):
     stocks = Stock.objects.all().order_by('-id')
-   
-    # 각 종목들 update하려면 (전일종가와 오늘시가 갱신(long) -> 상승률/하락율 등락폭 갱신(short) ) 아래 주석 풀기
-    # data_update_long()
-    # data_update_short()
     
     q = request.POST.get('q', "") 
     if q:
@@ -297,6 +295,7 @@ def bookmarkInOut(user,stock):
         bookmark.user = user
         bookmark.stock = stock
         bookmark.save()
+
 
 def patterns_list_nasdaq(request):
     nasdaqs=Stock.objects.filter(stock_type='N')
