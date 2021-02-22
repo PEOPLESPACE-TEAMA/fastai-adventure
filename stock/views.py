@@ -30,12 +30,14 @@ import time
 from django.shortcuts import render_to_response
 from django.db import IntegrityError
 
+
 #from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요.
 
+
 def main(request):
-    # kospi_initial_data_create()
-    # nasdaq_initial_data_create()
-    # data_update_short()
+    # (전일종가와 오늘시가 갱신(long) -> 상승률/하락율 등락폭 갱신(short) ) 아래 주석 풀기
+    # data_update_long()  # 시가, 전날 종가 업데이트하는 것
+    # data_update_short() # 위에 업데이트 된걸로 등락율, 등락폭 구하는 것 
     return render(request, 'stock/main.html')
 
 # 새로운 템플릿 확인용 주소 시작
@@ -70,7 +72,7 @@ def signup(request):
                 user.email = user_form.cleaned_data.get('email')
                 user.save()
             except IntegrityError as e:
-                return render_to_response("stock/signup.html", {'form': user_form,"message": "You already have an account with this email"})             
+                return render(request,"stock/signup.html", {'form': user_form,"message": "You already have an account with this email"})             
             # 회원가입이 성공적으로 되면 로그인 페이지로 이동
             return redirect('login')
             # errorMsg = "There is an account with this email already!"
@@ -85,6 +87,8 @@ def login(request):
         if user_form.is_valid():
             login_a(request, user_form.get_user(), backend='django.contrib.auth.backends.ModelBackend') 
             return redirect('home')
+        else:
+           return render(request,"stock/login.html", {'form': user_form,"message": "Please check your email and password again"}) 
     else:
         user_form = LoginForm()
     return render(request, 'stock/login.html',{'form': user_form})
@@ -96,10 +100,6 @@ def logout(request):
 
 def home(request):
     stocks = Stock.objects.all().order_by('-id')
-   
-    # 각 종목들 update하려면 (전일종가와 오늘시가 갱신(long) -> 상승률/하락율 등락폭 갱신(short) ) 아래 주석 풀기
-    # data_update_long()
-    # data_update_short()
     
     q = request.POST.get('q', "") 
     if q:
@@ -295,6 +295,7 @@ def bookmarkInOut(user,stock):
         bookmark.user = user
         bookmark.stock = stock
         bookmark.save()
+
 
 def patterns_list_nasdaq(request):
     nasdaqs=Stock.objects.filter(stock_type='N')
@@ -558,7 +559,7 @@ def stock_detail(request,stock_code):
     return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'predictedLabel':label,'probability':predictedProbability,'bar_chart':bar_chart,'sign':sign,'bookmark_exist':bookmark_exist})
 
 def getIncreaseDecreaseResult(predictedLabel):
-    increase = ['DoubleBottom','InverseHeadAndShoulders','ContinuousFalling','ReversalFallingWedge']
+    increase = ['ContinuousFalling',  'DoubleBottom','InverseHeadAndShoulders', 'ReversalFallingWedge']
     if predictedLabel in increase:
         return 'increase'
     else:
