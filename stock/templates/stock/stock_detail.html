@@ -37,7 +37,7 @@
                                     <div class="chart-area">
                                         <h6 class="m-0 font-weight-bold text-primary">
                                             {% if chart %}
-                                                <center><img src = "data:image/png;base64, {{chart|safe}}" width="76%", height="auto"></center>
+                                                <center><img src = "data:image/png;base64, {{chart|safe}}" width="60%" height="60%"></center>
                                             {% endif %}
                                         </h6>
                                     </div>
@@ -52,40 +52,36 @@
                                     <h6 class="m-0 font-weight-bold text-primary">About Chart</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div class="chart-area">
-                                        <table class="table table-bordered">
-                                            {% for keys, values in vals.items %}
-                                            <tr class="text-primary bg-gray-100">
-                                                <th>{{ keys }}</th>
-                                                <td>{{ values }}</td>
-                                            </tr>
-                                                {% endfor %}
-                                        </table>
-                                        </div>
+                                    <div class="table-responsive text-center">
+                                    <table class="table table-bordered" id="dataTable" width="90%"cellspacing="0">
+                                        {% for keys, values in vals.items %}
+                                        <tr class="text-primary bg-gray-100">
+                                            <th>{{ keys }}</th>
+                                            <td>{{ values }}</td>
+                                        </tr>
+                                            {% endfor %}
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    </div>
+
 
                     <!-- 패턴예측 -->
-
                     <div class="row">
-
                         <div class="col-xl-4 col-lg-7">
-
                             <!-- 패턴 설명 -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">About Pattern</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div class="chart-area">
-                                        <table class="table table-bordered">
+                                    <div class="table-responsive text-center">
+                                        <table class="table table-bordered" id="dataTable" width="90%" cellspacing="0">
                                             <tr class="text-primary bg-gray-100">
                                                 <th>Predicted pattern</th>
                                                 <td>{{ predictedLabel }}({{ sign }})</td>
-
-
                                             </tr>
                                             <tr class="text-primary bg-gray-100">
                                                 <th>Percentage</th>
@@ -98,17 +94,18 @@
                         </div>
 
 
+                        
                         <!-- 패턴 그래프 -->
                         <div class="col-xl-8 col-lg-7">
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3">
+                                <div class="card-header ">
                                     <h6 class="m-0 font-weight-bold text-primary">Pattern</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-area">
-                                        <h6 class="m-0 font-weight-bold text-primary">
+                                        <h6 class="m-0 p-0 font-weight-bold text-primary">
                                             {% if bar_chart %}
-                                                <img src = "data:image/png;base64, {{bar_chart|safe}}" width="89%", height="auto">
+                                                <center><img src = "data:image/png;base64, {{bar_chart|safe}}" width=65% /></center>
                                             {% endif %}
                                         </h6>
                                     </div>
