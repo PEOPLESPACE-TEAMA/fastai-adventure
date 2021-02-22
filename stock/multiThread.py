@@ -51,14 +51,14 @@ class EmailThread(threading.Thread):
         while(1): 
             
             user = User.objects.get(email=self.email)
-            sprint(user)
+            
             bookmarks = Bookmark.objects.filter(user__email=self.email) 
 
             now = datetime.datetime.now()
-            print(user.mail_alarm_time_hour)
-            print(user.mail_alarm_time_minute)
+            
 
-            if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_hour :
+            if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_minute :
+                
             # if now.hour == 12 and now.minute == 51 :
 
                 title = "🔔 "+user.username + ". Bookmark Prediction Mail has arrived from FASTOCK!"
@@ -96,6 +96,7 @@ class EmailThread(threading.Thread):
                 print(now.minute)
                 time.sleep(1)
                 pass
+            # time.sleep(1)
 
 
 
@@ -106,6 +107,7 @@ class EmailThread(threading.Thread):
 
 # 알람 성정한 user 객체 수 만큼  for문 돌리기 
 alarm_users=User.objects.exclude(mail_alarm_time_hour=None)
+print(alarm_users)
 
 for alarm_user in alarm_users :
     EmailThread(alarm_user.email,alarm_user.username).start()  #start()가 run메서드를 호출함

@@ -9,9 +9,15 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="mb-0 text-primary">QnA</h1>
-                        <a href='{% url "question_create" %}' class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                            <i class="fas fa-pencil-alt fa-fw text-white-50"><span class="mx-2"></i>Leave questions</span>
-                        </a>
+                        {% if user.is_authenticated %}
+                            <a href='{% url "question_create" %}' class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                                <i class="fas fa-pencil-alt fa-fw text-white-50"><span class="mx-2"></i>Leave questions</span>
+                            </a>
+                        {% else %}
+                            <a href='{% url "login" %}' class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                                <i class="fas fa-pencil-alt fa-fw text-white-50"><span class="mx-2"></i>Leave questions</span>
+                            </a>
+                        {% endif %}
                     </div>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">

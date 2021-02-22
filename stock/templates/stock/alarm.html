@@ -27,8 +27,8 @@
                                     {% csrf_token %}
                                     <p>The mail will be sent to the e-mail you wrote when you signup!</p>
                                     <p>You can set the alarm time zone in an hour or five minutes.</p>
-                                    <input type="number" min="9" max="14" step="1" value="시" name="hour"/><span>h</span>
-                                    <input type="number" min="0" max="55"  step ="5" value="분" name="minute" /><span>min</span>
+                                    <input type="number" min="9" max="23" step="1" value="시" name="hour"/><span>h</span>
+                                    <input type="number" min="0" max="59"  step ="1" value="분" name="minute" /><span>min</span>
                                     <input class="btn btn-outline-primary my-4" type="submit" value="save" name="submit" onclick="return confirm('Complete notice setting?');">
                               
                                 </form>

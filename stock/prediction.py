@@ -23,7 +23,7 @@ import platform
 '''
 
 #패스 설정 모델은 그냥 임시로 아무거나 넣은거임 나중에 바꿔야함
-path = Path("./resnet18.pkl") #모델 경로를 mamge.py 하고 같은 디렉토리에 있어야함
+path = Path("./export.pkl") #모델 경로를 mamge.py 하고 같은 디렉토리에 있어야함
 assert path.exists()
 
 

@@ -3,6 +3,9 @@ from django.urls import path, include
 
 #app_name='stock'
 
+
+
+
 urlpatterns = [
     path('', views.main, name='main'),
     path('signup/', views.signup, name='signup'),
@@ -34,3 +37,4 @@ urlpatterns = [
     path('qnacreate/',views.qnacreate, name='qnacreate'), 
 
 ]
+

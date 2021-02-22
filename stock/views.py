@@ -30,7 +30,7 @@ import time
 from django.shortcuts import render_to_response
 from django.db import IntegrityError
 
-# from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
+from .multiThread import EmailThread #비동기 메일 처리 기능 사용하는 사람만 주석 풀고 사용하세요. 테스트 끝나고 푸시 할때는 다시 주석처리 해주세요. 
 
 def main(request):
     # kospi_initial_data_create()
@@ -304,11 +304,11 @@ def bookmarkInOut(user,stock):
 def patterns_list_nasdaq(request):
     nasdaqs=Stock.objects.filter(stock_type='N')
     
-    # 매 자정 예측 data update
-    # kospi200s=Stock.objects.filter(stock_type='S').order_by('open')[:200]
-    # for kospi200 in kospi200s :
+    # 매 자정 예측 data update ( 라벨이름이 바뀌어서 꼭 주석 풀고 한 번씩 진행해주세요!! )
+    # nasdaq200s=Stock.objects.filter(stock_type='N').order_by('open')[:200]
+    # for nasdaq200 in nasdaq200s :
     #     try:
-    #         save_patterns(kospi200)
+    #         save_patterns(nasdaq200)
     #     except ValueError :
     #         pass
     #     except KeyError :
@@ -319,34 +319,26 @@ def patterns_list_nasdaq(request):
 
     doublebottom=increases.filter(last_pattern="DoubleBottom").order_by('-predict_percentage')[:5]
     inverseheadandshoulders=increases.filter(last_pattern="InverseHeadAndShoulders").order_by('-predict_percentage')[:5]
-    r_fallingwedge=increases.filter(last_pattern="r_FallingWedge").order_by('-predict_percentage')[:5]
-    c_fallingwedge=increases.filter(last_pattern="c_FallingWedge").order_by('-predict_percentage')[:5]
-    bullishpennant=increases.filter(last_pattern="BullishPennant").order_by('-predict_percentage')[:5]
-    bullishrectangle=increases.filter(last_pattern="BullishRectangle").order_by('-predict_percentage')[:5]
+    reversalfallingwedge=increases.filter(last_pattern="ReversalFallingWedge").order_by('-predict_percentage')[:5]
+    continuousfalling=increases.filter(last_pattern="ContinuousFalling").order_by('-predict_percentage')[:5]
 
     decreases=nasdaqs.filter(increase_or_decrease="decrease")
 
     doubletop=decreases.filter(last_pattern="DoubleTop").order_by('-predict_percentage')[:5]
     headandshoulders=decreases.filter(last_pattern="HeadAndShoulders").order_by('-predict_percentage')[:5]
-    r_risingwedge=decreases.filter(last_pattern="r_RisingWedge").order_by('-predict_percentage')[:5]
-    c_risingwedge=decreases.filter(last_pattern="c_RisingWedge").order_by('-predict_percentage')[:5]
-    bearishpennant=decreases.filter(last_pattern="BearishPennant").order_by('-predict_percentage')[:5]
-    bearishrectangle=decreases.filter(last_pattern="BearishRectangle").order_by('-predict_percentage')[:5]
+    reversalrisingwedge=decreases.filter(last_pattern="ReversalRisingWedge").order_by('-predict_percentage')[:5]
+    continuousrising=decreases.filter(last_pattern="ContinuousRising").order_by('-predict_percentage')[:5]
 
     context ={
         'doublebottom':doublebottom,
         'headandshoulder':headandshoulders,
-        'r_fallingwedge':r_fallingwedge,
-        'c_fallingwedge':c_fallingwedge,
-        'bullishpennant':bullishpennant,
-        'bullishrectangle':bullishrectangle,
+        'reversalfallingwedge':reversalfallingwedge,
+        'continuousfalling':continuousfalling,
 
         'doubletop':doubletop,
         'inverseheadandshoulder': inverseheadandshoulders,
-        'r_risingwedge': r_risingwedge,
-        'c_risingwedge': c_risingwedge,
-        'bearishpennant': bearishpennant,
-        'bearishrectangle': bearishrectangle,
+        'reversalrisingwedge': reversalrisingwedge,
+        'continuousrising': continuousrising,
     }
     
     return render(request, 'stock/patterns_list_nasdaq.html', context=context)
@@ -356,7 +348,7 @@ def patterns_list_kospi(request):
 
     kospis=Stock.objects.filter(stock_type='S')
     
-    # 매 자정 예측 data update
+    # 매 자정 예측 data update ( 라벨이름이 바뀌어서 꼭 주석 풀고 한 번씩 진행해주세요!! )
     # kospi200s=Stock.objects.filter(stock_type='S').order_by('open')[:200]
     # for kospi200 in kospi200s :
     #     try:
@@ -366,53 +358,34 @@ def patterns_list_kospi(request):
     #     except KeyError :
     #         pass
 
-    
+
     increases=kospis.filter(increase_or_decrease="increase")
 
     doublebottom=increases.filter(last_pattern="DoubleBottom").order_by('-predict_percentage')[:5]
     inverseheadandshoulders=increases.filter(last_pattern="InverseHeadAndShoulders").order_by('-predict_percentage')[:5]
-    r_fallingwedge=increases.filter(last_pattern="r_FallingWedge").order_by('-predict_percentage')[:5]
-    c_fallingwedge=increases.filter(last_pattern="c_FallingWedge").order_by('-predict_percentage')[:5]
-    bullishpennant=increases.filter(last_pattern="BullishPennant").order_by('-predict_percentage')[:5]
-    bullishrectangle=increases.filter(last_pattern="BullishRectangle").order_by('-predict_percentage')[:5]
+    reversalfallingwedge=increases.filter(last_pattern="ReversalFallingWedge").order_by('-predict_percentage')[:5]
+    continuousfalling=increases.filter(last_pattern="ContinuousFalling").order_by('-predict_percentage')[:5]
 
     decreases=kospis.filter(increase_or_decrease="decrease")
 
     doubletop=decreases.filter(last_pattern="DoubleTop").order_by('-predict_percentage')[:5]
     headandshoulders=decreases.filter(last_pattern="HeadAndShoulders").order_by('-predict_percentage')[:5]
-    r_risingwedge=decreases.filter(last_pattern="r_RisingWedge").order_by('-predict_percentage')[:5]
-    c_risingwedge=decreases.filter(last_pattern="c_RisingWedge").order_by('-predict_percentage')[:5]
-    bearishpennant=decreases.filter(last_pattern="BearishPennant").order_by('-predict_percentage')[:5]
-    bearishrectangle=decreases.filter(last_pattern="BearishRectangle").order_by('-predict_percentage')[:5]
+    reversalrisingwedge=decreases.filter(last_pattern="ReversalRisingWedge").order_by('-predict_percentage')[:5]
+    continuousrising=decreases.filter(last_pattern="ContinuousRising").order_by('-predict_percentage')[:5]
 
     context ={
         'doublebottom':doublebottom,
         'headandshoulder':headandshoulders,
-        'r_fallingwedge':r_fallingwedge,
-        'c_fallingwedge':c_fallingwedge,
-        'bullishpennant':bullishpennant,
-        'bullishrectangle':bullishrectangle,
+        'reversalfallingwedge':reversalfallingwedge,
+        'continuousfalling':continuousfalling,
 
         'doubletop':doubletop,
         'inverseheadandshoulder': inverseheadandshoulders,
-        'r_risingwedge': r_risingwedge,
-        'c_risingwedge': c_risingwedge,
-        'bearishpennant': bearishpennant,
-        'bearishrectangle': bearishrectangle,
+        'reversalrisingwedge': reversalrisingwedge,
+        'continuousrising': continuousrising,
     }
     
     return render(request, 'stock/patterns_list_kospi.html', context=context)
-
-
-    
-def getIncreaseDecreaseResult(predictedLabel):
-    increase = ['DoubleBottom','InverseHeadAndShoulders','r_FallingWedge','c_FallingWedge','BullishPennant','BullishRectangle']
-    if predictedLabel in increase:
-        return 'increase'
-    else:
-        return 'decrease'
-
-
 
 
 
@@ -428,8 +401,8 @@ def save_patterns(stock):
     img_path = "./graphimg/"+stock.company_name+'crop.PNG'
     #모델 예측
     predictedLabel,predictedIdx,probability = predict(img_path)
-    # label_list = ['Bearish Pennant', 'Bearish Rectangle', 'Bullish Pennant', 'Bullish Rectangle', 'Double Bottom', 'Double Top', 'Head and Shoulders', 'Inverse Head and Shoulders', 'Continuous Falling Wedge', 'Continuous Rising Wedge', 'Reversal Falling Wedge', 'Reversal Rising Wedge']
     
+
     print("예측라벨 :", predictedLabel)
     print("상승또는하락 ", getIncreaseDecreaseResult(predictedLabel))
     print("예측확률:", round(float(probability[int(predictedIdx)])*100,2))
@@ -560,7 +533,10 @@ def stock_detail(request,stock_code):
     img_path = "./graphimg/"+stock.company_name+'crop.PNG'
     #모델 예측
     predictedLabel,predictedIdx,probability = predict(img_path)
-    label_list = ['Bearish Pennant', 'Bearish Rectangle', 'Bullish Pennant', 'Bullish Rectangle', 'Double Bottom', 'Double Top', 'Head and Shoulders', 'Inverse Head and Shoulders', 'Continuous Falling Wedge', 'Continuous Rising Wedge', 'Reversal Falling Wedge', 'Reversal Rising Wedge']
+    #label_list = ['Bearish Pennant', 'Bearish Rectangle', 'Bullish Pennant', 'Bullish Rectangle', 'Double Bottom', 'Double Top', 'Head and Shoulders', 'Inverse Head and Shoulders', 'Continuous Falling Wedge', 'Continuous Rising Wedge', 'Reversal Falling Wedge', 'Reversal Rising Wedge']
+    label_list = ['Continuous Falling', 'Continuous Rising', 'Double Bottom', 'Double Top', 'Head and Shoulders', 'Inverse Head and Shoulders', 'Reversal FallingWedge', 'Reversal RisingWedge']
+    print(predictedLabel)
+    print(getLabels())
     # 클라스마다 percentage로 바 그래프 만들기 
     bar_chart = draw_bar_chart(stock,probability,label_list)
     predictedProbability = round(float(probability[int(predictedIdx)])*100,2)
@@ -572,8 +548,11 @@ def stock_detail(request,stock_code):
     stock.increase_or_decrease = getIncreaseDecreaseResult(predictedLabel)
     stock.save()
 
-    bookmark_exist = Bookmark.objects.all().filter(user=request.user,stock=stock)
-    
+    try:
+        bookmark_exist = Bookmark.objects.all().filter(user=request.user,stock=stock)
+    except:
+        bookmark_exist = ''
+
     #북마크에 저장
     if request.method == 'POST':
         print(request.user)
@@ -584,11 +563,15 @@ def stock_detail(request,stock_code):
     return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'predictedLabel':label,'probability':predictedProbability,'bar_chart':bar_chart,'sign':sign,'bookmark_exist':bookmark_exist})
 
 def getIncreaseDecreaseResult(predictedLabel):
-    increase = ['DoubleBottom','InverseHeadAndShoulders','r_FallingWedge','c_FallingWedge','BullishPennant','BullishRectangle']
+    increase = ['DoubleBottom','InverseHeadAndShoulders','ContinuousFalling','ReversalFallingWedge']
     if predictedLabel in increase:
         return 'increase'
     else:
         return 'decrease'
+
+        
+  
+
 
 def draw_bar_chart(self,probability,label_list):
     prob_list =[]
@@ -685,7 +668,7 @@ def review(request):
 def review_create(request):
     
     if not request.user.is_authenticated:
-        return redirect(signup)
+        return redirect(login)
 
     if request.method == 'POST':
         form = Reviewform(request.POST)
