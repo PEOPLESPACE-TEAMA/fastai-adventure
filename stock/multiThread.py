@@ -52,7 +52,7 @@ class EmailThread(threading.Thread):
             
             alarm_users=User.objects.exclude(mail_alarm_time_hour=None)
             print("유저수" , len(alarm_users))
-            
+
             time.sleep(2)
 
             for user in alarm_users :
@@ -96,7 +96,7 @@ class EmailThread(threading.Thread):
                     msg.send(fail_silently=False)
                     print('스레드 한 개 작업 완료')
 
-                    time.sleep(48)
+                    time.sleep(55)
                     # sleep[index]=1
                     
                     # else :
