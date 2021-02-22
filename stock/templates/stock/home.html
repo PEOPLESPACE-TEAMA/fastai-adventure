@@ -53,7 +53,7 @@
                                             <img src="../static/stock_market/nasdaq.png"  class= "chart-img">
                                             <div class="kospi_detail">
                                             {% for nasdaqdetail in nasdaqdetails %}
-                                                <div>Date updated(장이 열린날을 기준으로 가장 최근이라는걸 예기해야할듯 ..) : {{ nasdaqdetail.updated_date |date:"Y-m-d" }}</div>
+                                                <div>Date updated : {{ nasdaqdetail.updated_date |date:"Y-m-d" }}</div>
                                                 <div>Open : {{ nasdaqdetail.open }} &nbsp;&nbsp; Close : {{ nasdaqdetail.close}}</div>
                                                 <div>Highest :{{ nasdaqdetail.high }} &nbsp;&nbsp; Lowest :{{ nasdaqdetail.low }}</div>
                                                 <div>Transaction volume : {{ nasdaqdetail.volume }} &nbsp;&nbsp; Fluctuation rate : {{ nasdaqdetail.change }}</div>
