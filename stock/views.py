@@ -129,7 +129,7 @@ def home(request):
     # nasdaq=update_draw_chart_for_home('IXIC','nasdaq')
 
     # 매일 자정 코스피,나스닥 시세정보 업데이트하고 싶을때 아래 주석 풀기 !!
-    # stock_index('KS11','kospi')
+    stock_index('KS11','kospi')
     # stock_index('IXIC','nasdaq')
 
     kospidetail = StockIndex.objects.filter(stock_type="kospi")
