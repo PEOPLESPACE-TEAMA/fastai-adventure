@@ -558,7 +558,7 @@ def stock_detail(request,stock_code):
     return render(request, 'stock/stock_detail.html',{'companyName':stock.company_name, 'vals': vals,'chart':chart,'predictedLabel':label,'probability':predictedProbability,'bar_chart':bar_chart,'sign':sign,'bookmark_exist':bookmark_exist})
 
 def getIncreaseDecreaseResult(predictedLabel):
-    increase = ['DoubleBottom','InverseHeadAndShoulders','ContinuousFalling','ReversalFallingWedge']
+    increase = ['ContinuousFalling',  'DoubleBottom','InverseHeadAndShoulders', 'ReversalFallingWedge']
     if predictedLabel in increase:
         return 'increase'
     else:
