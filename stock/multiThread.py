@@ -55,7 +55,8 @@ class EmailThread(threading.Thread):
             bookmarks = Bookmark.objects.filter(user__email=self.email) 
 
             now = datetime.datetime.now()
-            
+
+            time.sleep(2)
 
             if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_minute :
                 
