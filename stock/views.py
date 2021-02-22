@@ -36,7 +36,7 @@ from django.db import IntegrityError
 
 def main(request):
     # (전일종가와 오늘시가 갱신(long) -> 상승률/하락율 등락폭 갱신(short) ) 아래 주석 풀기
-    # data_update_long()  # 시가, 전날 종가 업데이트하는 것
+    data_update_long()  # 시가, 전날 종가 업데이트하는 것
     # data_update_short() # 위에 업데이트 된걸로 등락율, 등락폭 구하는 것 
     return render(request, 'stock/main.html')
 
@@ -129,7 +129,7 @@ def home(request):
     # nasdaq=update_draw_chart_for_home('IXIC','nasdaq')
 
     # 매일 자정 코스피,나스닥 시세정보 업데이트하고 싶을때 아래 주석 풀기 !!
-    # stock_index('KS11','kospi')
+    stock_index('KS11','kospi')
     # stock_index('IXIC','nasdaq')
 
     kospidetail = StockIndex.objects.filter(stock_type="kospi")
@@ -690,27 +690,31 @@ def data_update_long() :
 
     # 하루 지날때마다 업데이트 하기 1
     today = datetime.date.today()  
-    today = datetime.date.today() - datetime.timedelta(3)
-    yesterday = today - datetime.timedelta(4)  
+    yesterday = today - datetime.timedelta(3)  
     str_yesterday = str(yesterday)
 
     stocks = Stock.objects.all().filter(stock_type='N')
 
     for stock in stocks :
         stock_code=stock.stock_code
+        print(stock_code)
         # if stock.open :
         #     pass
         # else :
         try:
-            df = yf.download(tickers=stock_code, period='1d', interval='60m')
+            df = yf.download(tickers=stock_code, period='1d', interval='5m')
+            print("1")
             lists = df.tail(1).values.tolist()
+            print("2")
             stock.open=lists[0][0]
+            print("3")
             # stock.high=lists[0][1] 
             # stock.low=lists[0][2] 
             # stock.close=lists[0][3] 
             # stock.adj_close=lists[0][4] 
             # stock.volume=lists[0][5] 
-            before_df = pdr.get_data_yahoo(stock_code, str_yesterday, str_yesterday)
+            before_df = pdr.get_data_yahoo(stock_code, yesterday, yesterday)
+            print("4")
             # Sleep(1)
             before_lists=before_df.values.tolist() 
             stock.before_close=before_lists[0][3]   
