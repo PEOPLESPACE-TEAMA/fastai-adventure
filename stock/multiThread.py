@@ -41,61 +41,88 @@ from email.mime.image import MIMEImage
 
 
 class EmailThread(threading.Thread):
-    def __init__(self, email, username):
-        self.email = email
+    def __init__(self):
+        # self.email = email
         threading.Thread.__init__(self)
 
     def run (self):
 
+        # alarm_users=User.objects.exclude(mail_alarm_time_hour=None)
+
+        # sleep = [] # 메일 보냈는지 확인을 시키면 되자나 
+        
+        # for user in alarm_user:
+        #     sleep.append(0)
+        #     print(sleep)
+        
+        # print("개수" , len(sleep))
 
         while(1): 
             
-            user = User.objects.get(email=self.email)
-            
-            bookmarks = Bookmark.objects.filter(user__email=self.email) 
+            alarm_users=User.objects.exclude(mail_alarm_time_hour=None)
+            print("유저수" , len(alarm_users))
 
-            now = datetime.datetime.now()
 
-            print(user.username)
-            print(user.mail_alarm_time_hour)
-            print("똑같은데..")
+            for user in alarm_users :
 
-            time.sleep(2)
+                bookmarks = Bookmark.objects.filter(user__email=user.email) 
+                print(bookmarks)
 
-            if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_minute :
+                now = datetime.datetime.now()
+
+                print(user.username)
+                print(user.mail_alarm_time_hour,"시")
+                print(user.mail_alarm_time_minute,"분")
+
+                time.sleep(2)
+
+                if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_minute :
+
+                    # if sleep[index] == 0 :
+
+                    title = "🔔 "+user.username + ". Bookmark Prediction Mail has arrived from FASTOCK!"
                 
-            # if now.hour == 12 and now.minute == 51 :
 
-                title = "🔔 "+user.username + ". Bookmark Prediction Mail has arrived from FASTOCK!"
-              
+                    html_content = render_to_string('stock/mail_template.html', context ={'bookmarks':bookmarks, 'user':user}) # render with dynamic value
+                    text_content = strip_tags(html_content)
+                    
+                    # create the email, and attach the HTML version as well.
+                    
+                    msg = EmailMultiAlternatives(title, text_content,  to=[user.email])
+                    msg.mixed_subtype = 'related'
+                    msg.attach_alternative(html_content, "text/html")
 
-                html_content = render_to_string('stock/mail_template.html', context ={'bookmarks':bookmarks, 'user':user}) # render with dynamic value
-                text_content = strip_tags(html_content)
-                
-                # create the email, and attach the HTML version as well.
-                
-                msg = EmailMultiAlternatives(title, text_content,  to=[user.email])
-                msg.mixed_subtype = 'related'
-                msg.attach_alternative(html_content, "text/html")
+                    img_dir = 'stock/templates/static/logo/'
+                    image = 'for_mail.PNG'
+                    file_path = os.path.join(img_dir, image)
+                    with open(file_path, 'rb' ) as f:
+                        img = MIMEImage(f.read())
+                        img.add_header('Content-ID', '<{name}>'.format(name=image))
+                        img.add_header('Content-Disposition', 'inline', filename=image)
+                    msg.attach(img)
 
-                img_dir = 'stock/templates/static/logo/'
-                image = 'for_mail.PNG'
-                file_path = os.path.join(img_dir, image)
-                with open(file_path, 'rb' ) as f:
-                    img = MIMEImage(f.read())
-                    img.add_header('Content-ID', '<{name}>'.format(name=image))
-                    img.add_header('Content-Disposition', 'inline', filename=image)
-                msg.attach(img)
+                    msg.send(fail_silently=False)
+                    print('스레드 한 개 작업 완료')
 
-                msg.send(fail_silently=False)
-                print('스레드 한 개 작업 완료')
+                    time.sleep(48)
+                    # sleep[index]=1
+                    
+                    # else :
+                    #     print("이미 메일을 보냈어요!")   아니 왜 안댐 ;;
+                    #     pass
+                    
+                    # print('시작 - time sleep 50 초 기다림')
+                    # start = time.time()
+                    # time.sleep(50)
+                    # end = time.time()
+                    # print('종료 시간 측정 결과 :', end - start)
+                    # pass
 
-                return 0
-            
 
             else :
-                print(now.hour)
-                print(now.minute)
+                pass
+                # print(now.hour)
+                # print(now.minute)
                 # time.sleep(1)
                 
             # time.sleep(1)
@@ -108,9 +135,10 @@ class EmailThread(threading.Thread):
 
 
 # 알람 성정한 user 객체 수 만큼  for문 돌리기 
-alarm_users=User.objects.exclude(mail_alarm_time_hour=None)
-print(alarm_users)
+# alarm_users=User.objects.exclude(mail_alarm_time_hour=None)
+# print(alarm_users)
 
-for alarm_user in alarm_users :
-    EmailThread(alarm_user.email,alarm_user.username).start()  #start()가 run메서드를 호출함
+# for alarm_user in alarm_users :
+#     EmailThread(alarm_user.email,alarm_user.username).start()  #start()가 run메서드를 호출함
 
+EmailThread().start()  #start()가 run메서드를 호출함
