@@ -31,15 +31,14 @@
                         <h5 class="m-0 font-weight-bold text-primary">Rising Graph Patterns</h5>
                     </div>
                     <div >
-                        <div class="card mb-4" style="border: 0.5px rgb(184, 197, 255) dashed; padding: 1em">
                                 <!-- doublebottom-->
-                                 <div class="card-body">
+                                <div class="card-body">
                                       <img src="{% static 'img/doublebottom.png' %}" class="card-img-top" alt="..." style="width:50%; margin:0 auto">
                                        <h5 class="card-title text-center font-weight-bold text-primary">DoubleBottom</h5>
                                        <p class="card-text text-center">TThe double bottom is the end formation in a declining market. It is identical to the double top, except for the inverse relationship in price.</p>
-                                <table>
+                                <div class="table-responsive text-center">
                                     <!-- {{ increasechart }} -->
-                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                         <tr class=" bg-gray-100">
                                             <th>STOCK</th>
@@ -58,16 +57,17 @@
                                         <p>There are no stocks showing that pattern.</p>
                                         {% endif %}
                                     </tbody>
-                            </table>
-                        </table>
+                                    </table>
+                                </div>
+                        
                     </div>
 
                         <!-- inverseheadandshoulder-->
-                        <div class="card-body">
+                        <div class="card-body table-res">
                                 <img src="{% static 'img/inverseheadandshoulder.png' %}" class="card-img-top" alt="..." style="width:50%; margin:0 auto">
                                 <h5 class="card-title text-center font-weight-bold text-primary">Inverse Head and Shoulder</h5>
                                 <p class="card-text text-center">This pattern is identified when the price action of a security meets the following characteristics: the price falls to a trough and then rises; the price falls below the former trough and then rises again; </p>
-                            <table>
+                            <div class="table-responsive text-center">
                                 <!-- {{ increasechart }} -->
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
@@ -89,15 +89,16 @@
                                     {% endif %}
                                 </tbody>
                                 </table>
-                            </table>
+                            </div>
+                            
                         </div>
         
                        <!-- r_fallingwedge -->
                         <div class="card-body">
-                                    <img src="{% static 'img/fallingwedge.png' %}" class="card-img-top" alt="..." style="width:50%; margin:0 auto; margin-bottom: 7px;">
-                                  <h5 class="card-title text-center font-weight-bold text-primary">Revarsal Falling Wedge</h5>
-                                  <p class="card-text text-center">A falling wedge found in an uptrend is considered a continuation pattern that occurs as the market contracts temporarily. It indicates the resumption of the uptrend. </p>
-                                 <table>
+                                <img src="{% static 'img/fallingwedge.png' %}" class="card-img-top" alt="..." style="width:50%; margin:0 auto; margin-bottom: 7px;">
+                                <h5 class="card-title text-center font-weight-bold text-primary">Revarsal Falling Wedge</h5>
+                                <p class="card-text text-center">A falling wedge found in an uptrend is considered a continuation pattern that occurs as the market contracts temporarily. It indicates the resumption of the uptrend. </p>
+                                <div class="table-responsive text-center">
                                     <!-- {{ increasechart }} -->
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
@@ -119,7 +120,8 @@
                                         {% endif %}
                                     </tbody>
                                     </table>
-                                </table>
+                                </div>
+                                
                         </div>
         
                            <!-- c_fallingwedge -->
@@ -129,7 +131,7 @@
                                 <img src="{% static 'img/bullishpennant.png' %}" class="card-img-top" alt="..." style="width:30%; margin:0 auto">
                               <h5 class="card-title text-center font-weight-bold text-primary" style="margin-top: 7px;">Continuatious Falling</h5>
                               <p class="card-text text-center">The falling three methods pattern is important because it shows traders that the bulls still do not have enough conviction to reverse the trend and it is used by some active traders as a signal to initiate new, or add to their existing, short positions.</p>
-                                <table>
+                                <div class="table-responsive text-center">
                                     <!-- {{ increasechart }} -->
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
@@ -152,11 +154,10 @@
                                         
                                     </tbody>
                                     </table>
-                                </table>
+                                </div>
                                 </div>
                             </div>
                         </div>
-                </div>
             </div>
 
             <!-- KOSDAQ -->
@@ -170,12 +171,12 @@
                     </div>
                     <!-- 하락률 TOP5 -->
             <div >
-                <div class="card mb-4" style="border: 0.5px rgb(184, 197, 255) dashed; padding: 1em">
                        <div class="card-body">
                         <img src="{% static 'img/doubletop.png' %}" class="card-img-top" alt="..." style="width:45%; margin:0 auto">
                          <h5 class="card-title text-center font-weight-bold text-primary">DoubleTop</h5>
                          <p class="card-text text-center">The double top is a frequent price formation at the end of a bull market. It shows that demand is outpacing supply (buyers predominate) up to the first top, causing prices to rise.</p>
-                        <table>
+                       
+                        <div class="table-responsive text-center">
                            {{ increasechart }}
                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                <thead>
@@ -197,14 +198,15 @@
                                 {% endif %}
                            </tbody>
                            </table>
-                       </table>
+                        </div>
+                      
                        </div>
 
                     <div class="card-body">
-                        <img src="{% static 'img/headandshoulder.png' %}" class="card-img-top" alt="..." style="width:50%; margin:0 auto">
-                      <h5 class="card-title text-center font-weight-bold text-primary">Head and Shoulders</h5>
-                      <p class="card-text text-center">This formation is simply the inverse of a Head and Shoulders Top and often indicates a change in the trend and market sentiment</p>
-                     <table>
+                    <img src="{% static 'img/headandshoulder.png' %}" class="card-img-top" alt="..." style="width:50%; margin:0 auto">
+                    <h5 class="card-title text-center font-weight-bold text-primary">Head and Shoulders</h5>
+                    <p class="card-text text-center">This formation is simply the inverse of a Head and Shoulders Top and often indicates a change in the trend and market sentiment</p>
+                    <div class="table-responsive text-center">
                         {{ increasechart }}
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
@@ -226,7 +228,7 @@
                             {% endif %}
                         </tbody>
                         </table>
-                    </table> 
+                    </div>
                     </div>
 
                     <!-- r_risingwedge   -->
@@ -234,7 +236,7 @@
                         <img src="{% static 'img/risingwedge.png' %}" class="card-img-top" alt="..." style="width:50%; margin:0 auto; margin-bottom: 7px;">
                          <h5 class="card-title text-center font-weight-bold text-primary">Reversal Rising Wedge</h5>
                          <p class="card-text text-center">The Rising Wedge is a bearish pattern that begins wide at the bottom and contracts as prices move higher and the trading range narrows.</p>
-                        <table>
+                        <div class="table-responsive text-center">
                            {{ increasechart }}
                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                <thead>
@@ -257,8 +259,8 @@
                                 
                            </tbody>
                            </table>
-                       </table>
-                       </div>
+                        </div>
+                        </div>
 
                   <!-- c_risingwedge    -->
                    <div class="card-body">
@@ -267,7 +269,7 @@
                     <img src="{% static 'img/c_risingwedge.png' %}" class="card-img-top" alt="..." style="width:30%; margin:0 auto;">
                      <h5 class="card-title text-center font-weight-bold text-primary" style="margin-top: 7px;">Continuatious Rising</h5>
                      <p class="card-text text-center">The rising three methods may be more effective if the initial bullish candlestick's wicks, denoting the high and low traded price for that period, are shallow.</p>
-                       <table>
+                        <div class="table-responsive text-center">
                            {{ increasechart }}
                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                <thead>
@@ -290,7 +292,7 @@
 
                            </tbody>
                            </table>
-                       </table>
+                        </div>
                        </div>
  
 
@@ -301,99 +303,6 @@
         </div>
         </div>
         </div>
-        </div>
         
 
 {% endblock %}
-
-
-
-
-
-
-
-{% comment %}
-<h3>상승부분!!!!</h3>
-</br>
-</br>
-<div>패턴별로 대표이미지랑 설명 한두줄 추가해달라고 회의에서 말했던 것 같아요,,,!</div>
-
-<h3>doublebottom!!!</h3>
-{% for instance in doublebottom %}
-<div>{{ instance.company_name }}</div>
-<div>{{ instance.predict_percentage }}</div>
-{% endfor %}
-
-<h3>headandshoulder!!!</h3>
-{% for instance in headandshoulder %}
-<div>{{ instance.company_name }}</div>
-<div>{{ instance.predict_percentage }}</div>
-{% endfor %}
-
-<h3>r_fallingwedge!!!</h3>
-{% for instance in r_fallingwedge %}
-<div>{{ instance.company_name }}</div>
-<div>{{ instance.predict_percentage }}</div>
-{% endfor %}
-
-<h3>c_fallingwedge!!!</h3>
-{% for instance in c_fallingwedge %}
-<div>{{ instance.company_name }}</div>
-<div>{{ instance.predict_percentage }}</div>
-{% endfor %}
-
-<h3>bullishpennant!!!</h3>
-{% for instance in bullishpennant %}
-<div>{{ instance.company_name }}</div> 
-<div>{{ instance.predict_percentage }}</div>
-{% endfor %}
-
-<h3>bullishrectangle!!!</h3>
-{% for instance in bullishrectangle %}
-<div>{{ instance.company_name }}</div>
-<div>{{ instance.predict_percentage }}</div>
-{% endfor %}
-
-</br>
-</br>
-
-<h3>하락부분!!!!</h3>
-</br>
-</br>
-<h3>doubltop!!!</h3>
-{% for instance in doubletop %}
-<div>{{ instance.company_name }}</div>
-<div>{{ instance.predict_percentage }}</div>
-{% endfor %}
-
-<h3>inverseheadandshoulder!!!</h3>
-{% for instance in inverseheadandshoulder %}
-<div>{{ instance.company_name }}</div>
-<div>{{ instance.predict_percentage }}</div>
-{% endfor %}
-
-<h3>r_risingwedge!!!</h3>
-{% for instance in r_risingwedge %}
-<div>{{ instance.company_name }}</div>
-<div>{{ instance.predict_percentage }}</div>
-{% endfor %}
-
-<h3>c_risingwedge!!!</h3>
-{% for instance in c_risingwedge %}
-<div>{{ instance.company_name }}</div>
-<div>{{ instance.predict_percentage }}</div>
-{% endfor %}
-
-<h3>bearishpennant!!!</h3>
-{% for instance in bearishpennant %}
-<div>{{ instance.company_name }}</div> 
-<div>{{ instance.predict_percentage }}</div>
-{% endfor %}
-
-<h3>bearishrectangle!!!</h3>
-{% for instance in bearishrectangle %}
-<div>{{ instance.company_name }}</div>
-<div>{{ instance.predict_percentage }}</div>
-{% endfor %}
-
-{% endcomment %}
