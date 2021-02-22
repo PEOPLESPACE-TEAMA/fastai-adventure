@@ -72,7 +72,7 @@ def signup(request):
                 user.email = user_form.cleaned_data.get('email')
                 user.save()
             except IntegrityError as e:
-                return render_to_response("stock/signup.html", {'form': user_form,"message": "You already have an account with this email"})             
+                return render(request,"stock/signup.html", {'form': user_form,"message": "You already have an account with this email"})             
             # 회원가입이 성공적으로 되면 로그인 페이지로 이동
             return redirect('login')
             # errorMsg = "There is an account with this email already!"
@@ -87,6 +87,8 @@ def login(request):
         if user_form.is_valid():
             login_a(request, user_form.get_user(), backend='django.contrib.auth.backends.ModelBackend') 
             return redirect('home')
+        else:
+           return render(request,"stock/login.html", {'form': user_form,"message": "Please check your email and password again"}) 
     else:
         user_form = LoginForm()
     return render(request, 'stock/login.html',{'form': user_form})
