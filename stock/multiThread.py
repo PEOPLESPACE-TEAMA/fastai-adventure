@@ -47,7 +47,6 @@ class EmailThread(threading.Thread):
 
     def run (self):
 
-
         while(1): 
             
             user = User.objects.get(email=self.email)
@@ -56,15 +55,16 @@ class EmailThread(threading.Thread):
 
             now = datetime.datetime.now()
 
-            print(user.username)
-            print(user.mail_alarm_time_hour)
-            print("똑같은데..")
-
             time.sleep(2)
 
+            print(user.username)
+            print(user.mail_alarm_time_hour)
+            print(type(user.mail_alarm_time_hour))
+            print(user.mail_alarm_time_minute)
+            print(type(user.mail_alarm_time_minute))
+            print("똑같은데..")
+
             if now.hour == user.mail_alarm_time_hour and now.minute == user.mail_alarm_time_minute :
-                
-            # if now.hour == 12 and now.minute == 51 :
 
                 title = "🔔 "+user.username + ". Bookmark Prediction Mail has arrived from FASTOCK!"
               
@@ -94,8 +94,9 @@ class EmailThread(threading.Thread):
             
 
             else :
-                print(now.hour)
-                print(now.minute)
+                pass
+                # print(now.hour)
+                # print(now.minute)
                 # time.sleep(1)
                 
             # time.sleep(1)
