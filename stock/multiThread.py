@@ -96,7 +96,7 @@ class EmailThread(threading.Thread):
                     msg.send(fail_silently=False)
                     print('스레드 한 개 작업 완료')
 
-                    time.sleep(55)
+                    # time.sleep(55)
                     # sleep[index]=1
                     
                     # else :
