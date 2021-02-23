@@ -51,6 +51,8 @@ class User(AbstractUser):
 
     mail_alarm_time_hour = models.IntegerField(null=True)
     mail_alarm_time_minute = models.IntegerField(null=True)
+
+    mail_flag = models.BooleanField(defualt=False)
     
     def __str__(self):
         return "<%d %s>" %(self.pk,self.email)
