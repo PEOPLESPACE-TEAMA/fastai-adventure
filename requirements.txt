@@ -108,7 +108,7 @@ smart-open==3.0.0
 soupsieve==2.1
 spacy==3.0.1
 spacy-legacy==3.0.1
-sqlparse==0.4.1
+sqlparse==0.4.2
 srsly==2.4.0
 terminado==0.9.1
 testpath==0.4.4
