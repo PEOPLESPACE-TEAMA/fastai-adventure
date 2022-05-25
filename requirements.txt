@@ -81,7 +81,7 @@ prompt-toolkit==3.0.8
 pycparser==2.20
 pydantic==1.7.3
 Pygments==2.7.3
-PyJWT==2.0.0
+PyJWT==2.4.0
 pylint==2.6.0
 pynliner==0.8.0
 pyparsing==2.4.7
