@@ -53,7 +53,7 @@ lxml==4.6.2
 MarkupSafe==1.1.1
 matplotlib==3.3.4
 mccabe==0.6.1
-mistune==0.8.4
+mistune==2.0.3
 multitasking==0.0.9
 murmurhash==1.0.5
 nbclient==0.5.1
