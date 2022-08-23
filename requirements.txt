@@ -57,7 +57,7 @@ mistune==0.8.4
 multitasking==0.0.9
 murmurhash==1.0.5
 nbclient==0.5.1
-nbconvert==6.0.7
+nbconvert==6.5.1
 nbformat==5.0.8
 nest-asyncio==1.4.3
 newsapi==0.1.1
